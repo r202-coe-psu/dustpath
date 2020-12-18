@@ -1,5 +1,6 @@
 .vscode
 *.cfg
+node_modules
 *.egg-info
 *.pyc
 __pycache__
