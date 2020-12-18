@@ -1,0 +1,182 @@
+<style>
+  .fa-caret-down {
+    float: right;
+    padding-right: 8px;
+  }
+
+  .dropdown-container {
+    display: none;
+    background-color: #262626;
+    padding-left: 8px;
+  }
+</style>
+
+<div class="ui">
+  <div class="header item">
+    <span style="font-size: 24px">{{ config['APP_TITLE'] }}</span>
+  </div>
+  {% if current_user.is_authenticated %}
+  <a href="{{ url_for('dashboard.index') }}" class="item">
+    <i class="home icon"></i> หน้าหลัก
+  </a>
+  <a class="item" href="{{ url_for('accounts.profile', user_id=current_user.id) }}">
+    <i class="user icon"></i>โปรไฟล์
+  </a>
+  <a class=" ui item secondary ">การค้นหา <i class="dropdown icon"></i>
+    <i class="search circle icon "></i>
+  </a>
+  <div class="dropdown-container">
+    <a href="{{ url_for('admin.users.volunteers', node_number=-1) }}" class="item">
+      <i class="address card icon"></i>
+      ค้นหาอาสาทุเรียน
+    </a>
+    <a href="{{ url_for('gardeners.gardeners',node_number=-1) }}" class="item">
+      <i class="address card icon"></i>
+      ค้นหาเกษตรกร
+    </a>
+    <a href="{{ url_for('associates.associates') }}" class="item">
+      <i class="users icon"></i>
+      ค้นหาภาคีเครือข่าย
+    </a>
+  </div>
+  <a class="item" href="{{ url_for('overview.index') }}">
+    <i class="chart line icon"></i>ภาพรวมโครงการ
+  </a>
+  <a class=" ui item secondary ">เอกสาร <i class="dropdown icon"></i>
+    <i class="file icon "></i>
+  </a>
+  <div class="dropdown-container">
+    <a class="item" href="{{ url_for('data_operations.index') }}">
+      <i class="file icon"></i>เอกสารการดำเนินโครงการ
+    </a>
+    <a class="item" href="{{ url_for('data_sheets.index') }}">
+      <i class="file icon"></i>เอกสาร และ E-Book
+    </a>
+  </div>
+  <a class=" ui item secondary ">แผนที่ <i class="dropdown icon"></i>
+    <i class="map icon"></i>
+  </a>
+  <div class="dropdown-container">
+    <a href="{{ url_for('maps.gardens') }}" class="item" target="_blank">
+      <i class="map marker alternate icon"></i>แผนที่ติดตามแปลง
+    </a>
+    <a href="http://pidthong.maps.arcgis.com/apps/webappviewer/index.html?id=1c956e7871834f21aabb6d209d038db0&fbclid=IwAR0KqAiv8bZMOTX4_G6WQ79e7XBpJyDX1NcipT66XpvD-nf77ZyO9lLakVA"
+      class="item" target="_blank">
+      <i class="map marker alternate icon"></i>แผนที่ภูมิศาสตร์โครงการ
+    </a>
+  </div>
+
+  {% if current_user.is_volunteer() %}
+  <a class=" ui item secondary ">ตรวจสอบการบันทึกผล <i class="dropdown icon"></i>
+    <i class="users icon "></i>
+  </a>
+  <div class="dropdown-container">
+    <a href="{{ url_for('admin.reports.index') }}" class="item">
+      รายงานการบันทึก
+    </a>
+    <a href="{{ url_for('recording_report.report') }}" class="item">
+      ผลการบันทึกล่าสุด
+    </a>
+  </div>
+  {% endif %}
+
+  <!--Dropdown-->
+  {% if current_user.is_admin() %}
+  <a class=" ui item secondary ">ตรวจสอบการบันทึกผล <i class="dropdown icon"></i>
+    <i class="users icon "></i>
+  </a>
+  <div class="dropdown-container">
+    <a href="{{ url_for('admin.reports.index') }}" class="item">
+      รายงานการบันทึก
+    </a>
+    <a href="{{ url_for('recording_report.report') }}" class="item">
+      ผลการบันทึกล่าสุด
+    </a>
+  </div>
+  <a class=" ui item secondary ">ผู้ดูแล <i class="dropdown icon"></i>
+    <i class="user circle icon "></i>
+  </a>
+  <div class="dropdown-container">
+    <a href="{{ url_for('gardeners.register') }}" class="item">
+      <i class="user icon"></i>รับสมัครเกษตรกร
+    </a>
+    <a class=" ui item secondary ">บันทึกการอบรม<i class="dropdown icon"></i>
+      <i class="bell icon "></i>
+    </a>
+    <div class="dropdown-container">
+      <a href="{{ url_for('gardeners.workshop',type_number=1) }}" class="item">
+        ครั้งที่ 1 ระยะเตรียมต้น
+      </a>
+      <a href="{{ url_for('gardeners.workshop',type_number=2) }}" class="item">
+        ครั้งที่ 2 ระยะดอกทุเรียน
+      </a>
+      <a href="{{ url_for('gardeners.workshop',type_number=3) }}" class="item">
+        ครั้งที่ 3 ระยะติดผล
+      </a>
+      <a href="{{ url_for('gardeners.workshop',type_number=4) }}" class="item">
+        ครั้งที่ 4 ระยะเก็บเกี่ยว
+      </a>
+    </div>
+    <a class=" ui item secondary ">การแจ้งเตือนเกษตรกร <i class="dropdown icon"></i>
+      <i class="bell icon "></i>
+    </a>
+    <div class="dropdown-container">
+      <a href="{{ url_for('gardeners.phase_noncompliance', durian_phase='leaf phase', type_number=1) }}" class="item">
+        ระยะเตรียมต้น-สะสมอาหาร
+      </a>
+      <a href="{{ url_for('gardeners.phase_noncompliance', durian_phase='flower phase', type_number=1) }}" class="item">
+        ระยะสร้างดอก
+      </a>
+      <a href="{{ url_for('gardeners.phase_noncompliance', durian_phase='fruit phase', type_number=1) }}" class="item">
+        ระยะติดผล
+      </a>
+      <a href="{{ url_for('gardeners.phase_noncompliance', durian_phase='harvest phase', type_number=1) }}"
+        class="item">
+        ระยะเก็บเกี่ยว
+      </a>
+    </div>
+    <a href="{{ url_for('admin.users.index') }}" class="item">
+      <i class="address card icon"></i>ค้นหาผู้ใช้
+    </a>
+    <a href="{{ url_for('gardeners.non_active_gardeners') }}" class="item">
+      <i class="address card icon"></i>กู้คืนเกษตรกร
+    </a>
+    <a href="{{ url_for('working_reports.report') }}" class="item">
+      ประวัติผลบันทึกการปฏิบัติงาน
+    </a>
+    <a class=" ui item secondary ">นำข้อมูลออก <i class="dropdown icon"></i>
+      <i class="download icon "></i>
+    </a>
+    <div class="dropdown-container">
+      <a href="{{ url_for('data_exports.index') }}" class="item">
+        ข้อมูลการบันทึกแปลง
+      </a>
+      <a href="{{ url_for('data_exports.export_gardeners') }}" class="item">
+        ข้อมูลเกษตรกร
+      </a>
+      <a href="{{ url_for('data_exports.export_gardens') }}" class="item">
+        ข้อมูลแปลง
+      </a>
+      <a href="{{ url_for('data_exports.export_volunteers') }}" class="item">
+        ข้อมูลอาสาทุเรียน
+      </a>
+      <a href="{{ url_for('data_exports.export_associates') }}" class="item">
+        ข้อมูลภาคีเครือข่าย
+      </a>
+      <a href="{{
+        url_for('data_exports.export_tree_reports') }}" class="item">
+        ข้อมูลการบันทึกรายต้น
+      </a>
+    </div>
+    <a href="{{ url_for('admin.system_settings.index') }}" class="item">
+      <i class="cog icon"></i>ตั้งค่าระบบ
+    </a>
+  </div>
+  {% endif %}
+  <!--END Dropdown-->
+  <a href="{{ url_for('accounts.logout') }}" class="item">
+    <i class="power off icon"></i>
+    ออกจากระบบ
+  </a>
+  {% endif %}
+</div>

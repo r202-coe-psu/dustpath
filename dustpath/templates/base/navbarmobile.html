@@ -1,0 +1,21 @@
+<!-- <div class="ui sidebar large vertical left menu overlay visible"> -->
+
+<div class="ui sidebar large vertical menu visible">
+  <div class="header item">
+    <span style="font-size: 24px">{{ config['APP_TITLE'] }}</span>
+  </div>
+  {% if current_user.is_authenticated  %}
+  <a href="{{ url_for('dashboard.index') }}" class="item">
+    <i class="home icon"></i> หน้าหลัก
+  </a>
+  {% if current_user.is_admin() %}
+  <a href="{{ url_for('admin.index') }}" class="item">
+    <i class="user shield icon"></i>
+    ผู้ดูแล
+  </a>
+  {% endif %}
+  {% endif %}
+
+</div>
+
+<!-- </div> -->
