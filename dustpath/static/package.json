@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "brython": "^3.9.0"
+    "brython": "^3.9.0",
+    "leaflet": "^1.7.1"
   }
 }

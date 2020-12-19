@@ -14,4 +14,4 @@ module = Blueprint('main', __name__, url_prefix='/')
 
 @module.route('/')
 def index():
-    return redirect(url_for('users.record'))
+    return render_template('main/index.html')

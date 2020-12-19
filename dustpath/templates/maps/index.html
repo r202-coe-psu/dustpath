@@ -1,0 +1,29 @@
+{% extends '/base/base-map.html' %}
+{% block body %}
+<div class="ui vertical masthead segment" style="background-color: cornsilk;width: 100%; height: 100%;">
+    <div id="mapid" style="z-index:1;"></div>
+</div>
+    
+
+<script type="text/python">
+from browser import alert, document, window, html, ajax, timer
+import javascript as js
+import datetime
+
+# Access the leaflet.js API
+leaflet = window.L
+
+openstreet = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    "maxZoom": 19,
+	"attribution": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+})
+
+center = {{center}}
+zoom = {{zoom}}
+map = leaflet.map('mapid', {
+    "center":center,
+    "zoom":zoom,
+    "layers":openstreet
+})
+</script>
+{% endblock %}

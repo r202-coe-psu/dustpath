@@ -2,7 +2,8 @@ import datetime
 
 from . import (
     index,
-    users)
+    users,
+    maps)
 
 
 def add_date_url(url):
@@ -30,6 +31,7 @@ def register_blueprint(app):
         [
             index,
             users,
+            maps,
         ])
 
     for blueprint in blueprints:
