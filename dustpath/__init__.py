@@ -12,7 +12,7 @@ def create_app():
     app.config.from_object("dustpath.default_settings")
     app.config.from_envvar("DUSTPATH_SETTINGS", silent=True)
 
-    # models.init_db(app)
+    models.init_db(app)
     views.register_blueprint(app)
 
     return app

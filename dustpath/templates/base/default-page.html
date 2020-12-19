@@ -5,38 +5,7 @@
 </div>
 
 <div class="ui fixed main menu">
-  {% if current_user.is_authenticated %}
-  <a class="launch icon item">
-    <i class="content icon"></i>
-  </a>
-  {% endif %}
-  <div class="item">
-    <a id="link" href="{{ url_for('main.index') }}" style="color: black;">
-      {{ config['APP_TITLE'] }}
-    </a>
-  </div>
-  {% if current_user.is_authenticated  %}
-  <div class="item right floated">
-    <div class="ui avatar image">
-      <img src="{{current_user.picture_url }}">
-    </div>
-    <div class="middle aligned content">
-      <div class="header">
-        <a id="link" href="{{ url_for('accounts.profile', user_id=current_user.id) }}" style="color: black;">
-          {{ current_user.firstname }}
-          {{ current_user.lastname }}
-        </a>
-      </div>
-    </div>
-  </div>
-  {% else %}
-  <div class="item right floated">
-    <a class="ui icon top right pointing small" href="{{url_for('accounts.login')}}">
-      <i class="sign in alternate icon"></i>
-      <span class="text">เข้าสู่หน้าหลัก</span>
-    </a>  
-  </div>
-  {% endif %}
+  Menu
 </div>
 
 <div class="pusher" style="min-height: 84% !important;">

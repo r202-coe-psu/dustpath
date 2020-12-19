@@ -1,6 +1,25 @@
-wheel
 flake8
+werkzeug
 flask
 flask-mongoengine
+flask-login
+flask-principal
+flask-restx
+flask_marshmallow
+flask_jwt_extended
+flask-caching
+pillow
+loginpass
+authlib
+utm
+bokeh==1.4.0
+pandas
+email_validator
+
+#migrate and export db
+xlrd
+xlsxwriter
 watchdog
 brython
+wheel
+

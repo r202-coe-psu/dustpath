@@ -1,3 +1,3 @@
 #!/bin/sh
 
-FLASK_ENV=development MYAPP_SETTINGS=$(pwd)/dustpath.cfg DEBUG=1 dustpath-web -d
+FLASK_ENV=development DUSTPATH_SETTINGS=$(pwd)/dustpath.cfg DEBUG=1 dustpath-web -d
