@@ -14,7 +14,7 @@ module = Blueprint('maps', __name__, url_prefix='/maps')
 @module.route('/')
 def index():
     popup_id = request.args.get('id')
-    center = [6.37, 101.4] # lat, long
+    center = [7.0065949668769205, 100.49891880632555] # lat, long
     zoom = 10
     
     return render_template('maps/index.html',

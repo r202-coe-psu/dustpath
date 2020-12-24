@@ -9,7 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^4.5.3",
     "brython": "^3.9.0",
-    "leaflet": "^1.7.1"
+    "fomantic-ui-css": "^2.8.7",
+    "jquery": "^3.5.1",
+    "leaflet": "^1.7.1",
+    "leaflet-draw": "^1.0.4",
+    "package.json": "^2.0.1"
   }
 }

@@ -3,7 +3,6 @@
 <div class="ui vertical masthead segment" style="background-color: cornsilk;width: 100%; height: 100%;">
     <div id="mapid" style="z-index:1;"></div>
 </div>
-    
 
 <script type="text/python">
 from browser import alert, document, window, html, ajax, timer
@@ -21,9 +20,19 @@ openstreet = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.p
 center = {{center}}
 zoom = {{zoom}}
 map = leaflet.map('mapid', {
-    "center":center,
-    "zoom":zoom,
-    "layers":openstreet
+    'center': center,
+    'zoom': zoom,
+    'layers': openstreet
 })
+drawnItems = leaflet.FeatureGroup.new()
+map.addLayer(drawnItems);
+drawControl = leaflet.Control.Draw.new({
+         'edit': {
+             'featureGroup': drawnItems
+         }
+})
+
+map.addControl(drawControl);
+
 </script>
 {% endblock %}
