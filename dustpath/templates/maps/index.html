@@ -9,6 +9,7 @@ from browser import alert, document, window, html, ajax, timer
 import javascript as js
 import datetime
 
+
 # Access the leaflet.js API
 leaflet = window.L
 
@@ -34,5 +35,11 @@ drawControl = leaflet.Control.Draw.new({
 
 map.addControl(drawControl);
 
+def create_polygon(e):
+    layer_type = e.layerType
+    layer = e.layer
+    print(layer, "&&&&",layer_type)
+
+map.on('draw:created', create_polygon)
 </script>
 {% endblock %}
