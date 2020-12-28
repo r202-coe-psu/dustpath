@@ -1,30 +1,20 @@
 {% extends "/base/base-layout.html" %}
 {% block body %}
-{% if not "/main/index.html" %}
-<div class="ui vertical inverted sidebar large menu left">
+
+<div class="ui vertical inverted sidebar">
   {% include "base/navbar.html" %}
 </div>
-{%endif%}
 
-{% if not "/main/index.html" %}
 <div class="ui fixed main menu">
   <a class="launch icon item">
     <i class="content icon"></i>
   </a>
-</div>
-{%endif%}
-
-
-<div class="ui fixed main menu">
   <div class="item">
     <a id="link" href="/" style="color: black;">
       Dustpath
     </a>
   </div>
 </div>
-
-
-
 
 <div class="pusher" style="min-height: 84% !important;">
   <main class="twelve wide column" style="padding-top: 3em;">

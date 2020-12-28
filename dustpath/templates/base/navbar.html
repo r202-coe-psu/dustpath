@@ -1,14 +1,14 @@
 <div class="ui left demo vertical inverted sidebar labeled icon menu">
   <a class="item">
     <i class="home icon"></i>
-    Home
+    หน้าหลัก
   </a>
-  <a class="item">
-    <i class="block layout icon"></i>
-    Topics
+  <a href="{{ url_for('maps.index') }}" class="item" target="_blank">
+    <i class="map icon"></i>
+    แผนที่
   </a>
-  <a class="item">
-    <i class="smile icon"></i>
-    Friends
+  <a href="{{ url_for('users.record') }}" class="item">
+    <i class="user icon"></i>
+    โปรไฟล์
   </a>
 </div>
