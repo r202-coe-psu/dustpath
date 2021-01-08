@@ -19,6 +19,7 @@ def index():
 
 @module.route('/record', methods=['GET', 'POST'])
 def record():
+    
     center = [7.0065949668769205, 100.49891880632555] # lat, long
     zoom = 10
     
@@ -27,7 +28,6 @@ def record():
         if data:
             circle_map = models.CircleMap(center=data['center'], radius=data['radius'])
             circle_map.save()
-            return render_template('main/index.html')
     return render_template('maps/record.html',
                            zoom=zoom,
                            center=center,)
