@@ -22,3 +22,4 @@ xlsxwriter
 watchdog
 brython
 wheel
+idna==2.5
