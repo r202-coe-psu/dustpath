@@ -1,10 +1,11 @@
 from flask_mongoengine import MongoEngine
 from .users import User, AuthSecret 
+from .maps import CircleMap
 
 db = MongoEngine()
 
 __all__ = [
-    User,
+    User, CircleMap
 ]
 
 

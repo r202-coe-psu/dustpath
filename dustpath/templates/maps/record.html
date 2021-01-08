@@ -1,13 +1,15 @@
 {% extends '/base/base-map.html' %}
 {% block body %}
 <div class="ui vertical masthead segment" style="background-color: cornsilk;width: 100%; height: 100%;">
-    <div id="mapid" style="z-index:1;"></div>
+    <div id="mapid" style="z-index:1;">
+    </div>
 </div>
 
 <script type="text/python">
 from browser import alert, document, window, html, ajax, timer
 import javascript as js
 import datetime
+import json
 
 
 # Access the leaflet.js API
@@ -44,6 +46,15 @@ def create_circle(e):
         layer_center = [latlng.lat, latlng.lng]
         layer_radius = layer.getRadius()
         leaflet.circle(layer_center, {'radius': layer_radius}).addTo(map)
+
+        req = ajax.ajax()
+        req.open('POST', '/maps/record', True)
+        req.set_header('content-type', 'application/json')
+        data = json.dumps(
+            {'center': layer_center,
+             'radius': layer_radius}
+        )
+        req.send(data)
 
 map.on('draw:created', create_circle)
 </script>

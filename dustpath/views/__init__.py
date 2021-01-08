@@ -3,7 +3,8 @@ import datetime
 from . import (
     index,
     users,
-    maps)
+    maps,
+    )
 
 
 def add_date_url(url):
