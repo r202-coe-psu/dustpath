@@ -1,7 +1,8 @@
 import datetime
 
 from . import (
-    index,
+    main,
+    dashboard,
     users,
     maps,
     )
@@ -30,7 +31,8 @@ def register_blueprint(app):
     app.add_template_filter(add_date_url)
     blueprints = get_subblueprints(
         [
-            index,
+            main,
+            dashboard,
             users,
             maps,
         ])
