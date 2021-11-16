@@ -9,9 +9,11 @@ from .. import models
 import datetime
 import mongoengine as me
 import pathlib
+import subprocess
 
-module = Blueprint('main', __name__, url_prefix='/')
+module = Blueprint('compile', __name__, url_prefix='/compile')
 
-@module.route('/compile')
-def compile_index():
-    return render_template('compile/index.html)
+@module.route('/')
+def index():
+    subprocess.Popen(['./activate'])
+    return redirect(url_for('dashboard.index'))
