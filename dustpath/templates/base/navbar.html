@@ -15,3 +15,101 @@
       บันทึกแมพ
   </a>
 </div>
+
+<nav class="navbar fixed-top shadow-sm navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="me-5" href="{{ url_for('dashboard.index') }}" style="text-decoration: none;"><b class="text-dark">Dustpath</b></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-5 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{{ url_for('dashboard.index') }}">หน้าหลัก</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('maps.index') }}">แผนที่</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('users.record') }}">โปรไฟล์</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('maps.record') }}">บันทึกแมพ</a>
+        </li>
+        {# <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle " id="aboutANH" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            {{ _('About ANH') }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('about.index') }}">{{ _('About ANH') }}</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="{{ url_for('staffs.index') }}">
+                {{ _('Committees & Members') }}</a>
+            </li>
+            <li><a class="dropdown-item" href="{{ url_for('collaborations.index') }}">{{ _('Collaborations') }}</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('contacts.index') }}">{{ _('Contact us') }}</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="staffs" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ _('Committees & Members') }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('staffs.index') }}#steering">{{ _('Steering Committees')}}</a>
+            </li>
+            <li><a class="dropdown-item" href="{{ url_for('staffs.index') }}#working">{{ _('Working Committees') }}</a>
+            </li>
+            <li><a class="dropdown-item" href="{{ url_for('staffs.index') }}#members">{{ _('Members') }}</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('galleries.index') }}">Gallery</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="students" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            {{ _('Students & Theses') }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('students.index') }}#master">{{ _("Master's degree") }}</a>
+            </li>
+            <li><a class="dropdown-item" href="{{ url_for('students.index') }}#doctor">{{ _("Doctor of Philosophy") }}</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('publications.index') }}">{{ _('Publications') }}</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('projects.index') }}">{{ _('Projects') }}</a></li>
+      </ul>
+      <li class="d-flex">
+        {% if g.lang_code == 'th' %}
+        <div class="btn-group rounded-pill" role="group" aria-label="Language">
+          <a type="button" href="{{ url_for('change_lang', lang_code='th') }}" class="btn btn-secondary">EN</a>
+          <a type="button" href="{{ url_for('change_lang', lang_code='en') }}" class="btn btn-primary text-white">TH</a>
+        </div>
+        {% else %}
+        <div class="btn-group rounded-pill" role="group" aria-label="Language">
+          <a type="button" href="{{ url_for('change_lang', lang_code='th') }}" class="btn btn-primary text-white">EN</a>
+          <a type="button" href="{{ url_for('change_lang', lang_code='en') }}" class="btn btn-secondary">TH</a>
+        </div>
+        {% endif %}
+      </li> 
+      {% if current_user.is_authenticated %}
+      <li class="nav-item dropdown d-flex">
+        <a class="nav-link dropdown-toggle text-dark" id="user" role="button" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          {{ current_user.firstname }}
+          {{ current_user.lastname }}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{{ url_for('admin.logout') }}">{{ _('Log Out') }}</a>
+        </ul>
+      </li>
+      {% endif %} #}
+    </div>
+  </div>
+</nav>

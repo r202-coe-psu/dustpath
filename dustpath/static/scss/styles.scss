@@ -1,0 +1,16 @@
+@import url(https://fonts.googleapis.com/css?family=Prompt);
+$font-family-sans-serif: "Prompt";
+// $primary: #4eb49d;
+// $secondary: #DFF9F7;
+// $info: #0d6efd;
+// $light: #f5fefe;
+// $warning: #636766;
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+ul,
+p,
+li,
+span {
+  font-family: "Prompt" !important;
+}
