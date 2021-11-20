@@ -1,26 +1,52 @@
 <!DOCTYPE html>
-<html lang="en" class="h-100">
-<link rel="icon" href="{{ url_for('static', filename='images/logo.svg') }}">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') | add_date_url }}">
-  <script src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') | add_date_url }}"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/bootstrap-icons/font/bootstrap-icons.css') | add_date_url }}">
+  <link rel="stylesheet" type="text/css" media="all"
+    href="{{ url_for('static', filename='node_modules/fomantic-ui-css/semantic.min.css') | add_date_url }}">
+
+  <script src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') | add_date_url }}"></script>
+  <script
+    src="{{ url_for('static', filename='node_modules/fomantic-ui-css/semantic.min.js') | add_date_url }}"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') | add_date_url }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}">
   {% block additional_head %}{% endblock %}
+
   <title>{% block title %}{{ config.get('APP_TITLE') }}{% endblock %}</title>
 </head>
 
-<body class="d-flex flex-column bg-light h-100">
-  {% include "base/navbar.html" %}
-  <div class="d-flex flex-column h-100">
-    <main class="flex-shrink-0 my-5">
-      {% block content %}{% endblock content %}
-    </main>
+<body>
+  {% block body %}{% endblock body %}
+
+  <footer style="width: 100%; left: 0; bottom: 0; position: relative;">
+    {% block footer %}
     {% include "base/footer.html" %}
-  </div>
+    {% endblock footer %}
+  </footer>
 </body>
+
+<script>
+  $('.ui.dropdown')
+    .dropdown();
+  $(document)
+    .ready(function () {
+      $('.left.sidebar.menu')
+        .sidebar('attach events', '.launch.icon.item', 'show')
+        ;
+    })
+    ;
+</script>
+
+<style type="text/css">
+  #link:hover {
+    text-decoration: underline;
+  }
+</style>
+
 {% block additional_js %}{% endblock %}
 
 </html>
