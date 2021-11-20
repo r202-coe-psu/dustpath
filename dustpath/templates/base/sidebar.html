@@ -1,0 +1,31 @@
+<div class="ui vertical inverted sidebar large menu left">
+  <div class="item">
+    <span style="font-size: 24px">{{ config['APP_TITLE'] }}</span>
+  </div>
+  <div class="item">
+    <a href="{{ url_for('main.index') }}" class="header">
+      <i class="home icon"></i>
+      หน้าหลัก
+    </a>
+  </div>
+  <div class="item">
+    <a class="header">
+      <i class="map icon"></i>
+      แผนที่
+    </a>
+    <div class="menu">
+      <a href="{{ url_for('maps.index') }}" class="item">
+        <i class="map icon"></i>แผนที่
+      </a>
+      <a href="{{ url_for('maps.record') }}" class="item">
+        <i class="map marker alternate icon"></i>บันทึกแมพ
+      </a>
+    </div>
+  </div>
+  <div class="item">
+    <a href="{{ url_for('users.record') }}" class="header">
+      <i class="user icon"></i>
+      โปรไฟล์
+    </a>
+  </div>
+</div>

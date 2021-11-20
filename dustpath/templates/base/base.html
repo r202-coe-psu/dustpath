@@ -19,14 +19,14 @@
   <title>{% block title %}{{ config.get('APP_TITLE') }}{% endblock %}</title>
 </head>
 
-<body>
+<body class="pusher">
+  {% include "base/navbar.html" %}
   {% block body %}{% endblock body %}
-
-  <footer style="width: 100%; left: 0; bottom: 0; position: relative;">
-    {% block footer %}
-    {% include "base/footer.html" %}
-    {% endblock footer %}
-  </footer>
+  <main>
+    {% include "base/sidebar.html" %}
+    {% block content %}{% endblock content %}
+  </main>
+  {% include "base/footer.html" %}
 </body>
 
 <script>
