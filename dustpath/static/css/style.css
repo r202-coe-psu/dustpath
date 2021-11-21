@@ -2,130 +2,58 @@
 * {
     font-family: 'Prompt', 'Icons', 'brand-icons' !important;
 }
+
+/* landing */
 .center {
-    text-align: center;
-  }
+  text-align: center;
+}
 
 .header1 {
-    height: 80vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.5),
-        rgba(0, 0, 0, 0.5)) center top no-repeat;
-    background-size: cover;
-    margin-bottom: -56px;
-  }
+  height: 80vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.65),
+      rgba(0, 0, 0, 0.65)), url("../images/dustpath_main_bg.png") center top no-repeat;
+  background-size: cover;
+  margin-bottom: -28px;
+}
 
 .title {
-    color: white;
-    padding-top: calc(30vh - 25px);
-  }
+  color: white;
+  padding-top: calc(30vh - 25px);
+}
 
 .title h1 {
-    font-size: 4.5em;
-  }
+  font-size: 4.5em;
+}
 
 .title h3 {
-    font-size: 1.5em;
-  }
+  font-size: 1.5em;
+}
 
 .main {
-    margin-bottom: 50px;
-  }
+  margin-bottom: 50px;
+}
 
 .main p {
-    font-size: 1.2em;
-  }
+  font-size: 1.2em;
+}
 
 .main h3 {
-    font-size: 1.5em;
-  }
+  font-size: 1.5em;
+}
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: Verdana, sans-serif;
-  }
+  font-family: Verdana, sans-serif;
+}
 
 .mySlides {
-    display: none;
-  }
+  display: none;
+}
 
 img {
-    vertical-align: middle;
-  }
-
-  /* Slideshow container */
-.dot {
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
-  }
-
-.active {
-    background-color: #717171;
-  }
-
-  /* Fading animation */
-
-@-webkit-keyframes fade {
-    from {
-      opacity: .4
-    }
-
-    to {
-      opacity: 1
-    }
-  }
-
-@keyframes fade {
-    from {
-      opacity: .4
-    }
-
-    to {
-      opacity: 1
-    }
-  }
-
-.ui.color1 {
-    background-color: #EA7171;
-    color: #fff;
-  }
-
-.ui.color2 {
-    background-color: #003083;
-    color: #fff;
-  }
-
-.ui.color3 {
-    background-color: #ffb554;
-    color: #fff;
-  }
-
-.ui.color4 {
-    background-color: #8DB600;
-    color: #fff;
-  }
-
-.ui.color5 {
-    background-color: #23c6c8;
-    color: #fff;
-  }
-
-.ui.color6 {
-    background-color: #ae0001;
-    color: #fff;
-  }
-
-.sidebar .item {
-    font-size: 16px !important;
-  }
-
-.menu .item {
-    font-size: 16px !important;
+  vertical-align: middle;
 }
+
