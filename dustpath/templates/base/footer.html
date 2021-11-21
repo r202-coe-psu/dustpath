@@ -1,23 +1,38 @@
+<style>
+  a:link {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  a:visited {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  a:hover {
+    color: gray;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+</style>
 <div class="ui inverted vertical footer segment">
   <div class="ui center aligned container">
-    <div class="ui stackable inverted divided grid">
+    <div class="ui stackable inverted grid">
       <div class="six wide column">
-          <img src="{{ url_for('static', filename='images/icon.png') }}" class="ui centered tiny image">
-          <br>
-          </a>
-          ทางของฝุ่น<br> ระบบจำลองการเคลื่อนตัวของฝุ่น PM 2.5
-        </div>
+        <br>
+        <img src="{{ url_for('static', filename='images/icon.png') }}" class="ui centered tiny image">
+        <br>
+        ทางของฝุ่น<br> ระบบจำลองการเคลื่อนตัวของฝุ่น PM 2.5
+      </div>
       <div class="four wide column">
-          <br>
-          ผู้จัดทำ<br> 1. นายพงศธร ชดช้อย<br> 2. นายธีรยุทธ นุชผดุง<br>
-          </a>
-          <br>
-          ที่ปรึกษาโครงการ<br> ดร. ธนาธิป ลิ่มนา
+        <br>
+        <b>ผู้จัดทำ</b><br> 1. นายพงศธร ชดช้อย<br> 2. นายทิวัตถ์ ลิม<br> 3. นายธีรยุทธ นุชผดุง<br><br>
+        <b>ที่ปรึกษาโครงการ</b><br>ดร.ธนาธิป ลิ่มนา
       </div>
       <div class="six wide column">
           <br>
-          <img src="{{ url_for('static', filename='images/CoE-BG_1_.png') }}" class="ui centered tiny image">
-          <a href="http://www.coe.psu.ac.th" class="item">
+          <a href="http://www.coe.psu.ac.th" class="item inverted" target="_blank">
+            <img src="{{ url_for('static', filename='images/coe.png') }}" class="ui centered tiny image">
             <br>
             สาขาวิชาวิศวกรรมคอมพิวเตอร์<br>
             คณะวิศวกรรมศาสตร์
