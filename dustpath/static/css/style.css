@@ -57,3 +57,13 @@ img {
   vertical-align: middle;
 }
 
+footer {
+    position: absolute !important;
+    bottom: 0 !important;
+    width: 100%;
+    text-align: center;
+}
+
+.footer.segment {
+    position: relative !important;
+}
