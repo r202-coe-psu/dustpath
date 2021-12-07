@@ -1,5 +1,8 @@
-from .user import ProfileForm
+from .user import ProfileForm 
+from .compiles import BodyControlForm 
+
 
 __all__ = [
-    ProfileForm, 
+    ProfileForm,
+    BodyControlForm, 
 ]

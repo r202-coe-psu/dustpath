@@ -5,7 +5,7 @@ from flask import (Blueprint,
                    url_for,
                    current_app,
                    redirect)
-from .. import models
+from .. import models, forms
 import datetime
 import mongoengine as me
 import pathlib
@@ -15,5 +15,12 @@ module = Blueprint('compile', __name__, url_prefix='/compile')
 
 @module.route('/')
 def index():
-    subprocess.Popen(['./activate'])
-    return redirect(url_for('dashboard.index'))
+    # subprocess.Popen(['./activate'])
+    form = forms.BodyControlForm()
+    if not form.validate_on_submit():
+        print(form.errors)
+        return render_template('compile/index.html',
+                            form=form,
+                            settings=settings)
+    return render_template('compile/index.html',
+                           form=form,)
