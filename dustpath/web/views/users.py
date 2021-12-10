@@ -2,7 +2,7 @@ from flask import (Blueprint, render_template,
                    url_for, redirect, request)
 from flask_login import (login_required)
 from dustpath import models
-from dustpath.forms import ProfileForm
+from ..forms import ProfileForm
 
 module = Blueprint('users', __name__, url_prefix='/users')
 

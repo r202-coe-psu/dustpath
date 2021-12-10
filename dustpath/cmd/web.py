@@ -1,8 +1,8 @@
-import dustpath
+from dustpath import web
 
 
 def main():
-    app = dustpath.create_app()
+    app = web.create_app()
 
     app.run(
             debug=True,

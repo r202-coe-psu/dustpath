@@ -7,6 +7,7 @@ __pycache__
 app/build
 app/dist
 static/download
+venv
 *.xlsx
 *.ini
 
