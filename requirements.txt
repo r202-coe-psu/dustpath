@@ -1,25 +1,51 @@
-flake8
-werkzeug
+# new-------------v
+
 flask
 flask-mongoengine
 flask-login
+# flask-allows
 flask-principal
-flask-restx
-flask_marshmallow
-flask_jwt_extended
-flask-caching
-pillow
+authlib==0.15.3
+bcrypt
+blinker
+requests
+# flask_restplus
+# flask_marshmallow
+# flask_jwt_extended
 loginpass
-authlib
-utm
-bokeh==1.4.0
-pandas
 email_validator
 
-#migrate and export db
-xlrd
-xlsxwriter
-watchdog
-brython
-wheel
-idna==2.5
+
+# Flask-uWSGI-WebSocket
+asyncio-nats-client
+
+psutil
+asyncio-nats-client
+
+# old-------------v
+
+# flake8
+# werkzeug
+# flask
+# flask-mongoengine
+# flask-login
+# flask-principal
+# flask-restx
+# flask_marshmallow
+# flask_jwt_extended
+# flask-caching
+# pillow
+# loginpass
+# authlib
+# utm
+# bokeh==1.4.0
+# pandas
+# email_validator
+
+# #migrate and export db
+# xlrd
+# xlsxwriter
+# watchdog
+# brython
+# wheel
+# idna==2.5

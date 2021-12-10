@@ -1,0 +1,38 @@
+version: '1'
+services:
+    mongodb:
+        image: mongo
+        container_name: dustpath-mongodb
+        volumes:
+            - ../deployment/dustpath/mongodb/data/db:/data/db
+            - /etc/localtime:/etc/localtime:ro
+        # restart: always
+        ports:
+            - 27017:27017
+        networks:
+            - default
+
+    controller:
+        build: .
+        image: wrf-image
+        container_name: dustpath-controller
+        volumes:
+            - .:/app
+            - ../deployment:/deployment
+            - /etc/localtime:/etc/localtime:ro
+        links:
+            - mongodb
+            - stan-server
+        depends_on:
+            - stan-server
+            - mongodb
+        networks:
+            - default
+        restart: always
+        environment:
+            DUSTPATH_SETTINGS: /app/dustpath-development.cfg
+        command: dustpath-controller
+
+networks:
+    default:
+      

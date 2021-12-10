@@ -1,0 +1,43 @@
+version: '1'
+services:
+    mongodb:
+        image: mongo
+        container_name: dustpath-mongodb
+        volumes:
+            - ../deployment/dustpath/mongodb/data/db:/data/db
+            - /etc/localtime:/etc/localtime:ro
+        restart: always
+        networks:
+            - default
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+
+    controller:
+        build: .
+        image: dustpath-image
+        container_name: dustpath-controller
+        volumes:
+            - ../deployment:/deployment
+            - /etc/localtime:/etc/localtime:ro
+        links:
+            - mongodb
+            - stan-server
+        depends_on:
+            - stan-server
+            - mongodb
+        networks:
+            - default
+        restart: always
+        environment:
+            DUSTPATH_SETTINGS: /app/dustpath-production.cfg
+        command: dustpath-controller
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+
+networks:
+    default:
+      

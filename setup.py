@@ -29,5 +29,7 @@ setup(
     install_requires=requires,
     tests_require=requires,
     test_suite="dustpath",
-    entry_points={"console_scripts": ["dustpath-web = dustpath.cmd.web:main"]},
+    entry_points={"console_scripts": [
+        "dustpath-web = dustpath.cmd.web:main",
+        "dustpath-controller = dustpath.cmd.controller:main"]},
 )

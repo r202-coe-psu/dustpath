@@ -1,0 +1,3 @@
+#!/bin/sh
+
+DUSTPATH_SETTINGS=$(pwd)/dustpath-development.cfg dustpath-controller
