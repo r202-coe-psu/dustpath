@@ -13,6 +13,23 @@ from .geogrid import GeoGrid
 from .metgrid import Metgrid
 from .ungrib import Ungrib
 
+from .compute_nodes import (
+    MachineSpecification,
+    CPUUsage,
+    MemoryUsage,
+    DiskUsage,
+    SystemLoad,
+    ResourceUsage,
+    ComputeNode,
+)
+from .processors import (
+    Processor,
+    ProcessorReport,
+    ProcessorCommand,
+    FailRunningProcessor,
+)
+
+
 db = MongoEngine()
 
 __all__ = [

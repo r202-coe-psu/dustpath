@@ -22,7 +22,9 @@ class ComputeNodeServer:
     def __init__(self, settings):
         self.settings = settings
 
-        path = pathlib.Path(self.settings["DUSTPATH_PROCESSOR_RECORDER_CACHE_PATH"])
+        path = pathlib.Path(
+                self.settings.get("DUSTPATH_PROCESSOR_RECORDER_CACHE_PATH", '/tmp')
+                )
         if not path.exists() and not path.is_dir():
             path.mkdir(parents=True)
 

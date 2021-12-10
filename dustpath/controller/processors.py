@@ -6,7 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from nokkhum import models
+from dustpath import models
 
 
 class ProcessorController:

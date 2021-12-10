@@ -1,4 +1,4 @@
-from nokkhum import controller
+from dustpath import controller
 
 
 def main():

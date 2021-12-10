@@ -7,7 +7,7 @@ import subprocess
 import json
 import time
 
-from nokkhum.utils import config
+from dustpath.utils import config
 
 import logging
 logger = logging.getLogger(__name__)
@@ -19,11 +19,11 @@ class Processor:
         self.id = process_id
         self.settings = config.get_settings()
         self.programe = self.settings.get(
-            'NOKKHUM_PROCESSOR_CMD')
+            'DUSTPATH_PROCESSOR_CMD')
         self.args = [
                 self.programe,
                 '--processor_id', self.id,
-                '--directory', self.settings['NOKKHUM_PROCESSOR_RECORDER_CACHE_PATH'],
+                '--directory', self.settings['DUSTPATH_PROCESSOR_RECORDER_CACHE_PATH'],
                 ]
         self.attributes = {}
 

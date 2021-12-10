@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class Machine:
-    def __init__(self, storage_path='/', interface='lo'):
+    def __init__(self, storage_path='/tmp', interface='lo'):
         self.storage_path = storage_path
         self.ip = '127.0.0.1'
         self.mac_address = '00:00:00:00:00:00'

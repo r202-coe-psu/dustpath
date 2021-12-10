@@ -1,4 +1,4 @@
-from nokkhum import compute
+from dustpath import compute
 
 
 def main():

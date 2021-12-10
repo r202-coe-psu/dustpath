@@ -1,4 +1,4 @@
-from nokkhum import models
+from dustpath import models
 import datetime
 
 import asyncio
@@ -8,7 +8,6 @@ import tarfile
 import os
 import shutil
 import concurrent.futures
-import ffmpeg
 import datetime
 from dataclasses import dataclass
 
@@ -28,17 +27,17 @@ class StorageController:
     def __init__(self, settings):
         self.settings = settings
         self.cache_path = pathlib.Path(
-            self.settings["NOKKHUM_PROCESSOR_RECORDER_CACHE_PATH"]
+            self.settings.get("DUSTPATH_PROCESSOR_RECORDER_CACHE_PATH", '/tmp')
         )
         self.recorder_path = pathlib.Path(
-            self.settings["NOKKHUM_PROCESSOR_RECORDER_PATH"]
+            self.settings.get("DUSTPATH_PROCESSOR_RECORDER_PATH", '/tmp')
         )
         self.loop = asyncio.get_event_loop()
         self.compression_pool = concurrent.futures.ThreadPoolExecutor(
-            max_workers=settings.get("NOKKHUM_COMPUTE_COMPRESSION_MAX_WORKER")
+            max_workers=settings.get("DUSTPATH_COMPUTE_COMPRESSION_MAX_WORKER")
         )
         self.convertion_pool = concurrent.futures.ThreadPoolExecutor(
-            max_workers=settings.get("NOKKHUM_COMPUTE_CONVERTION_MAX_WORKER")
+            max_workers=settings.get("DUSTPATH_COMPUTE_CONVERTION_MAX_WORKER")
         )
         self.compression_queue = asyncio.queues.Queue(maxsize=100)
         self.convertion_queue = asyncio.queues.Queue(maxsize=100)
@@ -88,8 +87,8 @@ class StorageController:
             # tar_path.rename(
             #     pathlib.Path(
             #         tar_file.replace("/_", "/").replace(
-            #             self.settings["NOKKHUM_PROCESSOR_RECORDER_CACHE_PATH"],
-            #             self.settings["NOKKHUM_PROCESSOR_RECORDER_PATH"],
+            #             self.settings["DUSTPATH_PROCESSOR_RECORDER_CACHE_PATH"],
+            #             self.settings["DUSTPATH_PROCESSOR_RECORDER_PATH"],
             #         )
             #     )
             # )
@@ -101,8 +100,8 @@ class StorageController:
                 str(tar_file)
                 .replace("/_", "/")
                 .replace(
-                    self.settings["NOKKHUM_PROCESSOR_RECORDER_CACHE_PATH"],
-                    self.settings["NOKKHUM_PROCESSOR_RECORDER_PATH"],
+                    self.settings["DUSTPATH_PROCESSOR_RECORDER_CACHE_PATH"],
+                    self.settings["DUSTPATH_PROCESSOR_RECORDER_PATH"],
                 )
             )
             if not new_tar_path.parent.exists():
@@ -123,7 +122,7 @@ class StorageController:
             if (
                 datetime.datetime.now()
                 - datetime.timedelta(
-                    days=self.settings["NOKKHUM_PROCESSOR_RECORDER_LOGS_EXPIRED_DAYS"]
+                    days=self.settings["DUSTPATH_PROCESSOR_RECORDER_LOGS_EXPIRED_DAYS"]
                 )
             ).date() >= log_date.date():
                 log.unlink()
@@ -139,9 +138,10 @@ class StorageController:
                 month = int(date_dir.name[4:6])
                 day = int(date_dir.name[6:8])
                 expired_date = datetime.date.today() - datetime.timedelta(
-                    days=self.settings[
-                        "NOKKHUM_PROCESSOR_RECORDER_CACHE_PATH_EXPIRED_DAYS"
-                    ]
+                    days=self.settings.get(
+                        "DUSTPATH_PROCESSOR_RECORDER_CACHE_PATH_EXPIRED_DAYS",
+                        0
+                        )
                 )
                 expired_date = datetime.datetime.combine(
                     expired_date, datetime.time(0, 0, 0)

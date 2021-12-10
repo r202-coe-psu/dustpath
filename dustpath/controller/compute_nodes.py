@@ -12,7 +12,6 @@ class ComputeNodeResource:
 
     def update_machine_specification(self, machine):
         compute_node = models.ComputeNode.objects(mac=machine['mac']).first()
-
         if compute_node is None:
             compute_node = models.ComputeNode()
             compute_node.create_date = datetime.datetime.now()

@@ -7,7 +7,6 @@ import pathlib
 import tarfile
 import os
 import concurrent.futures
-import ffmpeg
 
 logger = logging.getLogger(__name__)
 
@@ -15,19 +14,19 @@ logger = logging.getLogger(__name__)
 class StorageController:
     def __init__(self, settings):
         self.settings = settings
-        # self.recorder_path = pathlib.Path(self.settings["NOKKHUM_PROCESSOR_RECORDER_PATH"])
+        # self.recorder_path = pathlib.Path(self.settings["DUST_PATH_PROCESSOR_RECORDER_PATH"])
         self.cache_path = pathlib.Path(
-            self.settings["NOKKHUM_PROCESSOR_RECORDER_CACHE_PATH"]
+            self.settings.get("DUST_PATH_PROCESSOR_RECORDER_CACHE_PATH", '/tmp')
         )
         self.recorder_path = pathlib.Path(
-            self.settings["NOKKHUM_PROCESSOR_RECORDER_PATH"]
+            self.settings.get("DUST_PATH_PROCESSOR_RECORDER_PATH", '/tmp')
         )
         self.loop = asyncio.get_event_loop()
         self.compression_pool = concurrent.futures.ThreadPoolExecutor(
-            max_workers=settings.get("NOKKHUM_CONTROLLER_COMPRESSION_MAX_WORKER")
+            max_workers=settings.get("DUST_PATH_CONTROLLER_COMPRESSION_MAX_WORKER")
         )
         self.convertion_pool = concurrent.futures.ThreadPoolExecutor(
-            max_workers=settings.get("NOKKHUM_CONTROLLER_CONVERTION_MAX_WORKER")
+            max_workers=settings.get("DUST_PATH_CONTROLLER_CONVERTION_MAX_WORKER")
         )
         self.compression_queue = asyncio.queues.Queue(maxsize=100)
         self.convertion_queue = asyncio.queues.Queue(maxsize=100)
@@ -41,7 +40,7 @@ class StorageController:
             if (
                 datetime.datetime.now()
                 - datetime.timedelta(
-                    days=self.settings["NOKKHUM_PROCESSOR_RECORDER_LOGS_EXPIRED_DAYS"]
+                    days=self.settings["DUST_PATH_PROCESSOR_RECORDER_LOGS_EXPIRED_DAYS"]
                 )
             ).date() >= log_date.date():
                 log.unlink()
@@ -82,7 +81,7 @@ class StorageController:
             # if files_cache_path.exists() and files_cache_path.is_dir():
             #     self.check_expired_dir(
             #         files_cache_path,
-            #         self.settings["NOKKHUM_PROCESSOR_RECORDER_CACHE_PATH_EXPIRED_DAYS"],
+            #         self.settings["DUST_PATH_PROCESSOR_RECORDER_CACHE_PATH_EXPIRED_DAYS"],
             #     )
 
             storage_period = processor.storage_period

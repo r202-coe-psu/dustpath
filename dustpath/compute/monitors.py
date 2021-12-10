@@ -48,8 +48,8 @@ class ComputeNodeMonitor:
 
     def get_machine_specification(self):
         ms = machines.Machine(
-            self.settings.get('NOKKHUM_PROCESSOR_RECORDER_PATH'),
-            self.settings.get('NOKKHUM_COMPUTE_INTERFACE')
+            self.settings.get('DUSTPATH_PROCESSOR_RECORDER_PATH', '/tmp'),
+            self.settings.get('DUSTPATH_COMPUTE_INTERFACE')
         )
 
         return ms.get_specification()
@@ -80,7 +80,7 @@ class ComputeNodeMonitor:
                 )
 
         disk = psutil.disk_usage(
-                self.settings.get('NOKKHUM_PROCESSOR_RECORDER_PATH'))
+                self.settings.get('DUSTPATH_PROCESSOR_RECORDER_PATH'))
         disk_prop = dict(
                 total=disk.total,
                 used=disk.used,
