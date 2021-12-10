@@ -31,5 +31,7 @@ setup(
     test_suite="dustpath",
     entry_points={"console_scripts": [
         "dustpath-web = dustpath.cmd.web:main",
-        "dustpath-controller = dustpath.cmd.controller:main"]},
+        "dustpath-controller = dustpath.cmd.controller:main",
+        "dustpath-compute = dustpath.cmd.compute:main",
+        ]},
 )

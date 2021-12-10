@@ -5,7 +5,7 @@ from flask import Flask
 
 from .. import models
 from . import views
-
+from . import nats
 
 def create_app():
     app = Flask(__name__)
@@ -14,5 +14,6 @@ def create_app():
 
     models.init_db(app)
     views.register_blueprint(app)
+    nats.init_nats(app)
 
     return app
