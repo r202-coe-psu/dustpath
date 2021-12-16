@@ -6,6 +6,7 @@ from . import (
     users,
     maps,
     compile,
+    config,
     )
 
 
@@ -37,6 +38,7 @@ def register_blueprint(app):
             users,
             maps,
             compile,
+            config,
         ])
 
     for blueprint in blueprints:
