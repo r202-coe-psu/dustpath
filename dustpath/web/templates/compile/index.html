@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% block title %}
-หน้าหลัก | {{ config.get('APP_TITLE') }}
+คอมไพล์ | {{ config.get('APP_TITLE') }}
 {% endblock %}
 {% block content %}
 <div class="ui vertical masthead segment">
@@ -11,16 +11,8 @@
           คอมไพล์
         </h1>
       </div>
-      โปรดกรอกข้อมูลให้ครบถ้วน
-      {{ form.csrf_token }}
-      <div class="ui segment">
-        <h3>spec_bdy_width</h3>
-        <div class="field">
-          {{ form.spec_bdy_width.label }}
-          {{ form.spec_bdy_width }}
-        </div>
-      </div>
     </div>
   </div>
 </div>
+
 {% endblock %}

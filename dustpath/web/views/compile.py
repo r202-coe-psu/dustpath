@@ -16,11 +16,4 @@ module = Blueprint('compile', __name__, url_prefix='/compile')
 @module.route('/')
 def index():
     # subprocess.Popen(['./activate'])
-    form = forms.BodyControlForm()
-    if not form.validate_on_submit():
-        print(form.errors)
-        return render_template('compile/index.html',
-                            form=form,
-                            settings=settings)
-    return render_template('compile/index.html',
-                           form=form,)
+    return render_template('compile/index.html',)
