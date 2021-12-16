@@ -1,17 +1,23 @@
 from flask_mongoengine import MongoEngine
 from .users import User, AuthSecret 
 from .maps import CircleMap
-from .time_control import TimeControl
-from .domains import Domains
-from .physics import Physics
-from .dynamics import Dynamics
-from .bdy_control import BodyControl
-from .namelist_quilt import NameListQuilt
-from .chem import Chem
-from .share import Share
-from .geogrid import GeoGrid
-from .metgrid import Metgrid
-from .ungrib import Ungrib
+
+
+from .config import (
+    BodyControl, 
+    Chem,
+    Domains,
+    Dynamics,
+    GeoGrid,
+    Metgrid,
+    NameListQuilt,
+    Physics,
+    Share,
+    TimeControl,
+    Ungrib,
+)
+    
+
 
 from .compute_nodes import (
     MachineSpecification,
