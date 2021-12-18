@@ -8,7 +8,6 @@ from flask import (Blueprint,
 from .. import models
 import datetime
 import mongoengine as me
-import pathlib
 
 module = Blueprint('main', __name__, url_prefix='/')
 

@@ -13,7 +13,6 @@ class Machine:
         self.mac_address = '00:00:00:00:00:00'
 
         ifaces = psutil.net_if_addrs()
-
         self.ip = ifaces[interface][0].address
 
         for addr in ifaces[interface][::-1]:

@@ -5,7 +5,7 @@
     <div class="ui container">
       <div class="ui teal segment" style="margin-top:7%;margin-bottom:100%;">
         <h1>
-          Maps ทั้งหมด
+          โดเมนทั้งหมด
         </h1>
         <div class="ui divider">
         </div>
@@ -20,25 +20,25 @@
                 </tr>
               </thead>
               <tbody>
-                {% for map in maps %}
+                {% for domain in domains %}
                 <tr>
                   <td>
                     <div class="left floated left aligned two wide column">
                       <a class="right aligned content" id="namelist" style="color: black;">
-                        {{ map.center[0] }} {{map.center[1]}}
+                        {{ domain.center[0] }} {{domain.center[1]}}
                       </a>
                     </div>
                   </td>
                   <td>
                     <div class="left floated left aligned two wide column">
                       <a class="right aligned content"  style="color: black;">
-                        {{ map.radius }}
+                        {{ domain.radius }}
                       </a>
                     </div>
                   </td>
                   <td>
                     <div class="left floated left aligned two wide column">
-                      <a class="right aligned content" href="{{ url_for('maps.record') }}">
+                      <a class="right aligned content" href="{{ url_for('domains.record') }}">
                         Show
                       </a>
                     </div>

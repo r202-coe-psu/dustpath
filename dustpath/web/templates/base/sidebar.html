@@ -9,22 +9,16 @@
     </a>
   </div>
   <div class="item">
-    <a href="{{ url_for('compile.index') }}" class="header" style="text-decoration: none;">
-      <i class="arrow circle right icon"></i>
-      คอมไพล์
-    </a>
-  </div>
-  <div class="item">
-    <a class="header" style="text-decoration: none;">
+    <a class="header">
       <i class="map icon"></i>
       แผนที่
     </a>
     <div class="menu">
-      <a href="{{ url_for('maps.index') }}" class="item" style="text-decoration: none;">
-        <i class="map icon"></i>แผนที่
+      <a href="{{ url_for('domains.index') }}" class="item">
+        <i class="map icon"></i>โดเมนทั้งหมด
       </a>
-      <a href="{{ url_for('maps.record') }}" class="item" style="text-decoration: none;">
-        <i class="map marker alternate icon"></i>บันทึกแมพ
+      <a href="{{ url_for('domains.record') }}" class="item">
+        <i class="map marker alternate icon"></i>บันทึกโดเมน
       </a>
     </div>
   </div>

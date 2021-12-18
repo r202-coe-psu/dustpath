@@ -1,23 +1,7 @@
 from flask_mongoengine import MongoEngine
 from .users import User, AuthSecret 
-from .maps import CircleMap
-
-
-from .config import (
-    BodyControl, 
-    Chem,
-    Domains,
-    Dynamics,
-    GeoGrid,
-    Metgrid,
-    NameListQuilt,
-    Physics,
-    Share,
-    TimeControl,
-    Ungrib,
-)
-    
-
+from .domains import Domain
+from .wrf_config import WrfConfig
 
 from .compute_nodes import (
     MachineSpecification,
@@ -40,18 +24,8 @@ db = MongoEngine()
 
 __all__ = [
     User, 
-    CircleMap,
-    TimeControl,
-    Domains,
-    Physics,
-    Dynamics,
-    BodyControl,
-    NameListQuilt,
-    Chem,
-    GeoGrid,
-    Share,
-    Metgrid,
-    Ungrib,
+    Domain,
+    WrfConfig,
 ]
 
 def init_db(app):

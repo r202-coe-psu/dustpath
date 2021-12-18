@@ -1,12 +1,10 @@
 import datetime
 
 from . import (
+    domains,
     main,
     dashboard,
     users,
-    maps,
-    compile,
-    config,
     )
 
 
@@ -36,9 +34,7 @@ def register_blueprint(app):
             main,
             dashboard,
             users,
-            maps,
-            compile,
-            config,
+            domains,
         ])
 
     for blueprint in blueprints:

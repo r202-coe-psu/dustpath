@@ -37,6 +37,8 @@ class ComputeNodeResource:
         return response
 
     def update_machine_resources(self, compute_node_id, resource):
+        if not resource:
+            return
         logger.debug(f'compute_node_id {compute_node_id}')
         cpu = resource['cpu']
         memory = resource['memory']

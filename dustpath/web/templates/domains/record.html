@@ -53,7 +53,7 @@ def save_data(e):
         layer_radius = layer.getRadius()
         
         req = ajax.ajax()
-        req.open('POST', '/maps/record', True)
+        req.open('POST', '/domains/record', True)
         req.set_header('content-type', 'application/json')
         data = json.dumps(
             {'center': layer_center,
