@@ -1,5 +1,5 @@
 from .user import ProfileForm 
-from .wrf_config import WrfConfigForm
+from .wrf_configs import WrfConfigForm
 
 
 __all__ = [

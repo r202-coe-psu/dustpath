@@ -5,6 +5,7 @@ from . import (
     main,
     dashboard,
     users,
+    wrf_configs
     )
 
 
@@ -35,6 +36,7 @@ def register_blueprint(app):
             dashboard,
             users,
             domains,
+            wrf_configs
         ])
 
     for blueprint in blueprints:

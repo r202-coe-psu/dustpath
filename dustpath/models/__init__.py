@@ -1,7 +1,7 @@
 from flask_mongoengine import MongoEngine
 from .users import User, AuthSecret 
 from .domains import Domain
-from .wrf_config import WrfConfig
+from .wrf_configs import WrfConfig
 
 from .compute_nodes import (
     MachineSpecification,

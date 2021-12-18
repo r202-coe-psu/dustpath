@@ -1,0 +1,89 @@
+{% extends "base/default-page.html" %}
+{% macro render_calendar(field, calendar_id='calendar') -%}
+<div class="ui calendar" id="{{ calendar_id }}">
+  <div class="ui input left icon">
+    <i class="calendar icon"></i>
+    {% if field.data %}
+    {{ field(autocomplete='off',value=field.data.strftime('%d-%m-%Y')) }}
+    {% else %} {{ field(autocomplete='off') }}
+    {% endif %}
+  </div>
+</div>
+{%- endmacro %}
+{% block content %}
+<div class="ui container">
+  <div class="ui one column stackable grid">
+    <div class="column harvers" style="padding-top: 0;">
+      <div style="margin-top: 3rem;">
+        <h1 class="ui centered header">ตั้งค่า</h1>
+      </div>
+      <h4 class="ui horizontal divider header">
+        ตั้งค่าการจำลองสภาพการเคลื่อนที่
+      </h4>
+      <div class="ui vertical segment">
+        <form class="ui form error" enctype="multipart/form-data" method="POST">
+          {{ form.csrf_token }}
+          <div class="field">
+            {{ form.max_domain.label }}
+            {{ form.max_domain }}
+          </div>
+          <div class="two fields">
+            <div class="required eight wide field">
+              <h3>{{ form.start_date.label }}</h3>
+              {{ render_calendar(form.start_date,
+              calendar_id="start_date_calendar") }}
+              {% for error in form.start_date.errors %}
+              <p style="color: red;">* โปรดใส่วันที่เริ่มการคำนวณ</p>
+              {% endfor %}
+            </div>
+            <div class="required eight wide field">
+              <h3>{{ form.end_date.label }}</h3>
+              {{ render_calendar(form.end_date,
+              calendar_id="end_date_calendar") }}
+              {% for error in form.end_date.errors %}
+              <p style="color: red;">* โปรดใส่วันที่สิ้นสุดการคำนวณ</p>
+              {% endfor %}
+            </div>
+          </div>  
+          <button class="ui right floated button green" type="submit">ยืนยัน</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  datetime_formatter = {
+    datetime: function (datetime, settings) {
+      if (!datetime) return '';
+      var day = datetime.getDate();
+      var month = datetime.getMonth() + 1;
+      var year = datetime.getFullYear();
+      var hour = datetime.getHours();
+      var minute = datetime.getMinutes();
+      return ("0" + day).slice(-2) + '-' + ("0" + month).slice(-2) + '-' + year;
+    }
+  };
+
+
+  var calendar_setting = {
+    type: 'date',
+    monthFirst: false,
+    formatter: datetime_formatter,
+    text: {
+      days: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+      months: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤษจิกายน', 'ธันวาคม'],
+      monthsShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
+      today: 'วันนี้',
+      now: 'ปัจจุบัน',
+      am: 'AM',
+      pm: 'PM'
+    }
+  };
+
+  $('.ui.calendar').calendar(calendar_setting);
+
+
+
+
+</script>
+{% endblock %}
