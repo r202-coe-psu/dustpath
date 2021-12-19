@@ -24,8 +24,18 @@
         <form class="ui form error" enctype="multipart/form-data" method="POST">
           {{ form.csrf_token }}
           <div class="field">
+            {{ form.name.label }}
+            {{ form.name }}
+            {% for error in form.name.errors %}
+            <p style="color: red;">* โปรดระบุจำนวนโดเมนสูงสุด</p>
+            {% endfor %}
+          </div>
+          <div class="field">
             {{ form.max_domain.label }}
             {{ form.max_domain }}
+            {% for error in form.max_domain.errors %}
+            <p style="color: red;">* โปรดระบุจำนวนโดเมนสูงสุด</p>
+            {% endfor %}
           </div>
           <div class="two fields">
             <div class="required eight wide field">

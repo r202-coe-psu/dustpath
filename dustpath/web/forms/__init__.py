@@ -1,8 +1,8 @@
 from .user import ProfileForm 
-from .wrf_configs import WrfConfigForm
+from .projects import ProjectForm
 
 
 __all__ = [
     ProfileForm,
-    WrfConfigForm, 
+    ProjectForm, 
 ]

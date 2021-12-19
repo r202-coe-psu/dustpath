@@ -4,8 +4,9 @@ from . import (
     domains,
     main,
     dashboard,
+    projects,
     users,
-    wrf_configs
+    projects,
     )
 
 
@@ -36,7 +37,8 @@ def register_blueprint(app):
             dashboard,
             users,
             domains,
-            wrf_configs
+            projects,
+            projects,
         ])
 
     for blueprint in blueprints:

@@ -1,7 +1,7 @@
 from flask_mongoengine import MongoEngine
 from .users import User, AuthSecret 
 from .domains import Domain
-from .wrf_configs import WrfConfig
+from .projects import Project
 
 from .compute_nodes import (
     MachineSpecification,
@@ -25,7 +25,7 @@ db = MongoEngine()
 __all__ = [
     User, 
     Domain,
-    WrfConfig,
+    Project,
 ]
 
 def init_db(app):

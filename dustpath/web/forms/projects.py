@@ -4,7 +4,8 @@ from wtforms import fields
 from wtforms import validators
 from wtforms.widgets import TextInput
 
-class WrfConfigForm(FlaskForm):
+class ProjectForm(FlaskForm):
+    name = fields.StringField('ชื่อโปรเจ็ค', validators=[validators.Length(min=1)])
     max_domain = fields.IntegerField('จำนวนโดเมน',
                                     default=1, 
                                     validators=[
