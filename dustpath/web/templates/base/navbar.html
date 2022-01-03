@@ -1,10 +1,23 @@
-<div class="ui borderless main menu fixed" style="position: fixed; top: 0px; left: auto; z-index: 10;">
+<style>
+    .ui.fixed.borderless.menu {
+        background-color: #44545C;
+    }
+
+    span.title_text {
+        font-weight: lighter;
+    }
+
+    .white {
+        color: #ffffff;
+    }
+</style>
+<div class="ui borderless menu fixed" style="position: fixed; top: 0px; left: auto; z-index: 10; box-shadow: none;">
     <a class="launch icon item">
-        <i class="sidebar icon"></i>
+        <i class="white sidebar icon"></i>
     </a>
     <div class="header item">
-        <a href="{{ url_for('main.index') }}">
-            <span class="ui black text">
+        <a href="{{ url_for('main.index') }}" style="text-decoration: none;">
+            <span class="title_text">
                 {{ config['APP_TITLE'] }}
             </span>
         </a>
