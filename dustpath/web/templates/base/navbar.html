@@ -1,10 +1,12 @@
-<div class="ui fixed main menu">
+<div class="ui borderless main menu fixed" style="position: fixed; top: 0px; left: auto; z-index: 10;">
     <a class="launch icon item">
-        <i class="content icon"></i>
+        <i class="sidebar icon"></i>
     </a>
-    <div class="item">
-        <a id="link" href="/" style="color: black;">
-            Dustpath
+    <div class="header item">
+        <a href="{{ url_for('main.index') }}">
+            <span class="ui black text">
+                {{ config['APP_TITLE'] }}
+            </span>
         </a>
     </div>
 </div>

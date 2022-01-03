@@ -13,17 +13,20 @@
     src="{{ url_for('static', filename='node_modules/fomantic-ui-css/semantic.min.js') | add_date_url }}"></script>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') | add_date_url }}">
-  <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/icon.png') | add_date_url }}">
+
   {% block additional_head %}{% endblock %}
 
   <title>{% block title %}{{ config.get('APP_TITLE') }}{% endblock %}</title>
 </head>
 
-<body class="pusher">
-  {% block body %}{% endblock body %}
-  {% include "base/footer.html" %}
+<body>
+  {% include "base/sidebar.html" %}
+  <div class="pusher">
+    {% block body %}{% endblock body %}
+  </div>
 </body>
-
+<script src="{{ url_for('static', filename='js/utils.js') | add_date_url }}"></script>
 <script>
   $('.ui.dropdown')
     .dropdown();
@@ -35,7 +38,6 @@
     })
     ;
 </script>
-
 <style type="text/css">
   #link:hover {
     text-decoration: underline;

@@ -1,27 +1,14 @@
-{% extends "/base/base-layout.html" %}
+{% extends "base/base-layout.html" %}
+
 {% block body %}
 
 {% include "base/navbar.html" %}
-<div class="ui vertical inverted sidebar">
-  {% include "base/sidebar.html" %}
-</div>
 
-<div class="ui fixed main menu">
-  <a class="launch icon item">
-    <i class="content icon"></i>
-  </a>
-  <div class="item">
-    <a id="link" href="/" style="color: black;">
-      Dustpath
-    </a>
-  </div>
-</div>
-
-<div class="pusher" style="min-height: 84% !important;">
-  <main class="twelve wide column" style="padding-top: 3em;">
-    {% block content %}{% endblock content %}
-  </main>
-</div>
+<main>
+  {% block content %}{% endblock content %}
+</main>
+<!-- footer -->
+{% include "base/footer.html" %}
 
 <script>
   var dropdown = document.getElementsByClassName("ui item secondary");
