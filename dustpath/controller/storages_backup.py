@@ -1,4 +1,3 @@
-import shutil
 from dustpath import models
 import datetime
 
@@ -17,14 +16,11 @@ class StorageController:
         self.settings = settings
         # self.recorder_path = pathlib.Path(self.settings["DUST_PATH_PROCESSOR_RECORDER_PATH"])
         self.cache_path = pathlib.Path(
-            self.settings.get("DUSTPATH_PROCESSOR_CACHE_PATH", '/tmp')
+            self.settings.get("DUST_PATH_PROCESSOR_RECORDER_CACHE_PATH", '/tmp')
         )
         self.recorder_path = pathlib.Path(
-            self.settings.get("DUSTPATH_PROCESSOR_RECORDER_PATH", '/tmp')
+            self.settings.get("DUST_PATH_PROCESSOR_RECORDER_PATH", '/tmp')
         )
-        # self.wrf_path = (pathlib.Path.cwd() /
-        #     self.settings.get("DUSTPATH_PROCESSOR_WRF_PATH")
-        # )
         self.loop = asyncio.get_event_loop()
         self.compression_pool = concurrent.futures.ThreadPoolExecutor(
             max_workers=settings.get("DUST_PATH_CONTROLLER_COMPRESSION_MAX_WORKER")
@@ -75,18 +71,6 @@ class StorageController:
                 video_file.unlink()
 
             date_dir.rmdir()
-            
-    async def copy_project(self, data):
-        new_project_path = self.cache_path / data.get("project_id")
-        if not new_project_path.exists():
-            try:
-                shutil.copytree(
-                    self.wrf_path, 
-                    new_project_path, 
-                    copy_function = shutil.copy
-                )
-            except Exception as e:
-                print(e)
 
     async def remove_expired_video_records(self):
         logger.debug("start remove expired records")

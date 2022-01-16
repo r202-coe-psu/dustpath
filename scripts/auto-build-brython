@@ -9,7 +9,7 @@ import os
 import pathlib
 import subprocess
 
-BRYTHON_PATH = "dustpath/static/brython"
+BRYTHON_PATH = "dustpath/web/static/brython"
 
 def cls():
     os.system("cls" if os.name == "nt" else "clear")

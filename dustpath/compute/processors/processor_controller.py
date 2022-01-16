@@ -31,28 +31,28 @@ class ProcessorController:
 
         return response
 
-    def get_processor_attributes(self, processor_id):
-        '''
-        List working processor resource
-        '''
-        logger.debug('Get Processors Attributes')
+    # def get_processor_attributes(self, processor_id):
+    #     '''
+    #     List working processor resource
+    #     '''
+    #     logger.debug('Get Processors Attributes')
 
-        response = {'success': False}
-        try:
-            processor_process = self.processor_manager.get(processor_id)
-            if processor_process is None:
-                logger.debug('processor id: %s is not available' %
-                             (processor_id))
-                response['comment'] = 'processor id: %s is not available' % (
-                    processor_id)
-                return response
+    #     response = {'success': False}
+    #     try:
+    #         processor_process = self.processor_manager.get(processor_id)
+    #         if processor_process is None:
+    #             logger.debug('processor id: %s is not available' %
+    #                          (processor_id))
+    #             response['comment'] = 'processor id: %s is not available' % (
+    #                 processor_id)
+    #             return response
 
-            response['success'] = True
-            response['result'] = processor_process.get_attributes()
+    #         response['success'] = True
+    #         response['result'] = processor_process.get_attributes()
 
-        except Exception as e:
-            logger.exception(e)
-            response['comment'] = 'Get Processor Attribute Error'
+    #     except Exception as e:
+    #         logger.exception(e)
+    #         response['comment'] = 'Get Processor Attribute Error'
 
         return response
 
@@ -78,10 +78,10 @@ class ProcessorController:
             logger.debug('Begin to start processor')
             logger.debug(f'processor_id: {processor_id}')
 
-            processor_process = processors.Processor(processor_id)
+            processor_process = processors.Processor(processor_id, attributes)
 
             logger.debug(f'start VS for processor id: {processor_id}')
-            processor_process.start(attributes)
+            processor_process.start()
             logger.debug(
                 f'add process processor id: {processor_id} to process manager')
             self.processor_manager.add(processor_id, processor_process)
@@ -93,49 +93,6 @@ class ProcessorController:
             logger.exception(e)
             response['comment'] = 'Add Processor Error'
             logger.debug(f'Processor name: {processor_id} started error')
-
-        return response
-
-
-    def start_recorder(self, processor_id, attributes):
-        response = {'success': False,
-                    'action': 'start-recorder',
-                    'processor_id': processor_id}
-
-        processor = self.processor_manager.get(processor_id)
-        if processor is None:
-            response = self.start_processor(processor_id, attributes)
-            if not response['success']:
-                return response
-
-            processor = self.processor_manager.get(processor_id)
-        
-        try:
-            processor.start_recorder(attributes)
-            response['success'] = True
-        except Exception as e:
-            logger.exception(e)
-
-        return response
-
-    def start_streamer(self, processor_id, attributes):
-        response = {'success': False,
-                    'action': 'start-streamer',
-                    'processor_id': processor_id}
-
-        processor = self.processor_manager.get(processor_id)
-        if processor is None:
-            response = self.start_processor(processor_id, attributes)
-            if not response['success']:
-                return response
-
-            processor = self.processor_manager.get(processor_id)
-        
-        try:
-            processor.start_streamer(attributes)
-            response['success'] = True
-        except Exception as e:
-            logger.exception(e)
 
         return response
 
@@ -234,7 +191,6 @@ class ProcessorController:
             result = processor.get_status()
             response['status'] = result
             response['state'] = 'running'
-
         return response
 
 

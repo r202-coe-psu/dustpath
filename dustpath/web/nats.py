@@ -43,7 +43,7 @@ class MessageThread(threading.Thread):
 
     async def initial_nats_client(self):
         self.nc = NATS()
-        await self.nc.connect(current_app.config.get('NOKKHUM_MESSAGE_NATS_HOST'), self.loop)
+        await self.nc.connect(current_app.config.get('DUSTPATH_MESSAGE_NATS_HOST'), self.loop)
 
     async def run_async_loop(self):
         await self.initial_nats_client()
@@ -79,7 +79,7 @@ class NatsClient:
     def init_nats(self, app):
         message_thread = MessageThread(app)
         s = {"app": app, "thread": message_thread}
-        app.extensions["nokkhum_nats"][self] = s
+        app.extensions["dustpath_nats"][self] = s
         message_thread.start()
 
 
@@ -88,14 +88,14 @@ class NatsClient:
 
         app.extensions = getattr(app, "extensions", {})
 
-        if "nokkhum_nats" not in app.extensions:
-            app.extensions["nokkhum_nats"] = {}
+        if "dustpath_nats" not in app.extensions:
+            app.extensions["dustpath_nats"] = {}
 
         @app.before_first_request
         def start_thread():
 
 
-            if self in app.extensions["nokkhum_nats"]:
+            if self in app.extensions["dustpath_nats"]:
                 self.stop()
             
             self.init_nats(app)
@@ -104,11 +104,11 @@ class NatsClient:
 
 
     def stop(self):
-        if self in self.app.extensions["nokkhum_nats"]:
-            self.app.extensions["nokkhum_nats"][self]['thread'].stop()
+        if self in self.app.extensions["dustpath_nats"]:
+            self.app.extensions["dustpath_nats"][self]['thread'].stop()
         
     def publish(self, topic: str, message: str):
-        t = self.app.extensions["nokkhum_nats"][self]['thread']
+        t = self.app.extensions["dustpath_nats"][self]['thread']
         t.put_data(dict(topic=topic, message=message))
 
 nats_client = NatsClient()

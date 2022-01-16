@@ -40,22 +40,26 @@ def create():
     project.wrf_config.start_date = form.start_date.data
     project.wrf_config.end_date = form.end_date.data
     project.save()
+    # data = {
+    #     "action": "create_project",
+    #     "project_id": str(project.id),
+    # }
+    # nats.nats_client.publish("dustpath.storage.command", data)
 
     return redirect(url_for('projects.index'))
     
 @module.route("/<project_id>/run_wrf", methods=["POST"])
 def run_wrf(project_id):
-    project_id = request.form.get("project_id")
     project = models.Project.objects.get(id=project_id)
     # if not project.is_assistant_or_owner(current_user._get_current_object()):
     #     return Response(403)
 
-    # camera = models.Camera.objects.get(id=camera_id)
     data = {
-        "action": "start-recorder",
-        # "camera_id": camera_id,
-        "project_id": project_id,
+        "action": "start",
         # "user_id": str(current_user._get_current_object().id),
+        "attributes": {
+            "project_id": project_id,
+            },
     }
 
     # if camera.motion_property.active:

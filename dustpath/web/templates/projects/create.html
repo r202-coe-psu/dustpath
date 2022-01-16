@@ -61,6 +61,8 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block additional_js %}
 <script>
   datetime_formatter = {
     datetime: function (datetime, settings) {
@@ -91,9 +93,6 @@
   };
 
   $('.ui.calendar').calendar(calendar_setting);
-
-
-
-
 </script>
+
 {% endblock %}

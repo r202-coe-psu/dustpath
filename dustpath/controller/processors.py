@@ -17,13 +17,13 @@ class ProcessorController:
     async def init_message(self, nc):
         self.nc = nc
 
-    async def get_processor(self, project, camera):
-        processor = models.Processor.objects(project=project, camera=camera).first()
+    async def get_processor(self, project):
+        processor = models.Processor.objects(project=project).first()
 
         if processor:
             return processor
 
-        processor = models.Processor(project=project, camera=camera)
+        processor = models.Processor(project=project)
         processor.save()
 
         return processor
@@ -44,10 +44,10 @@ class ProcessorController:
         return compute_node
 
     async def process_command(self, data):
-        camera = models.Camera.objects(id=data["camera_id"]).first()
+        project = models.Project.objects(id=data["attributes"]["project_id"]).first()
 
-        if camera is None:
-            logger.debug("camera is None")
+        if project is None:
+            logger.debug("project is None")
             return False
 
         processor = None
@@ -55,18 +55,14 @@ class ProcessorController:
         if data.get("processor_id", None) is not None:
             processor = models.Processor.objects(id=data["processor_id"]).first()
         else:
-            processor = models.Processor.objects(camera=camera).first()
+            processor = await self.get_processor(project)
 
-            if not processor:
-                project = models.Project.objects(id=data["project_id"]).first()
-                processor = await self.get_processor(project, camera)
-
-        result = await self.actuate_command(processor, camera, data)
+        result = await self.actuate_command(processor, data)
         return result
 
     # save data into database
 
-    async def actuate_command(self, processor, camera, data):
+    async def actuate_command(self, processor, data):
 
         # need to decision
         if "start" in data["action"]:
@@ -101,9 +97,9 @@ class ProcessorController:
         except Exception as e:
             logger.exception(e)
 
-        if data["action"] in ["start-recorder", "start-streamer"]:
-            compute_node = await self.get_available_compute_node(compute_node)
-            processor.compute_node = compute_node
+        # if data["action"] in ["start-recorder", "start-streamer"]:
+        #     compute_node = await self.get_available_compute_node(compute_node)
+        #     processor.compute_node = compute_node
 
         if not compute_node or not compute_node.is_online():
             if not compute_node:
@@ -126,18 +122,21 @@ class ProcessorController:
             processor.state = "stopping"
         processor.save()
 
-        command = dict(processor_id=str(processor.id), action=data["action"])
-        if data["action"] in ["start-recorder", "start-streamer"]:
-            command["attributes"] = dict(
-                video_uri=camera.uri,
-                fps=camera.frame_rate,
-                size=(camera.width, camera.height),
-                camera_id=str(camera.id),
-                motion=data.get("motion", False),
-                sensitivity=data.get("sensitivity", 0),
-            )
+        command = dict(
+            processor_id=str(processor.id),
+            action=data["action"],
+            attributes=data["attributes"])
+        # if data["action"] in ["start-recorder", "start-streamer"]:
+        #     command["attributes"] = dict(
+        #         video_uri=camera.uri, 
+        #         fps=camera.frame_rate,
+        #         size=(camera.width, camera.height),
+        #         camera_id=str(camera.id),
+        #         motion=data.get("motion", False),
+        #         sensitivity=data.get("sensitivity", 0),
+        #     )
 
-        topic = "nokkhum.compute.{}.rpc".format(compute_node.mac)
+        topic = "dustpath.compute.{}.rpc".format(compute_node.mac)
 
         result = None
         result_data = dict(success=False)
@@ -172,7 +171,7 @@ class ProcessorController:
         )
 
         try:
-            topic = "nokkhum.compute.{}.rpc".format(processor.compute_node.mac)
+            topic = "dustpath.compute.{}.rpc".format(processor.compute_node.mac)
             result = await self.nc.request(
                 topic, json.dumps(command).encode(), timeout=60
             )

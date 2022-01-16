@@ -33,5 +33,6 @@ setup(
         "dustpath-web = dustpath.cmd.web:main",
         "dustpath-controller = dustpath.cmd.controller:main",
         "dustpath-compute = dustpath.cmd.compute:main",
+        'dustpath-processor = dustpath.cmd.processor:main',
         ]},
 )

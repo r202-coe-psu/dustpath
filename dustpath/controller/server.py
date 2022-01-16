@@ -135,7 +135,7 @@ class ControllerServer:
     async def process_compute_node_report(self):
         while self.running:
             data = await self.cn_report_queue.get()
-            # logger.debug(f'process compute node: {data}')
+            # logger.debug(f'process compute node: {data}'
 
             try:
                 if data["action"] == "update-resource":
@@ -145,10 +145,11 @@ class ControllerServer:
                 elif data["action"] == "report-fail-processor":
                     # logger.debug('pcnr: {}'.format(data))
                     # logger.debug('>>>>>>> {}'.format(data['fail_processor_data']))
-                    await self.processor_controller.update_fail_processor(
-                        data["fail_processor_data"],
-                        data["compute_node_id"],
-                    )
+                    # await self.processor_controller.update_fail_processor(
+                    #     data["fail_processor_data"],
+                    #     data["compute_node_id"],
+                    # )
+                    pass
                 elif data["action"] != "report":
                     logger.debug("got unproccess report {}".format(str(data)))
             except Exception as e:
@@ -168,21 +169,14 @@ class ControllerServer:
             except Exception as e:
                 logger.exception(e)
 
-            # if not result:
-            # logger.debug(f"process command fail")
-            # if 'start-recorder' == data['action']:
-            #     await asyncio.sleep(20)
-            #     await self.processor_command_queue.put(data)
-
     async def process_storage_command(self):
         while self.running:
             data = await self.storage_command_queue.get()
             logger.debug(data)
-            if data["action"] != "extract":
-                await asyncio.sleep(0.1)
-                continue
-            await self.storage_controller.extract_tar_file(data)
-            # tar_path = pathlib.Path()
+            # if data["action"] != "extract":
+            #     await asyncio.sleep(0.1)
+            #     continue
+            await self.storage_controller.copy_project(data)
 
             await asyncio.sleep(0.1)
 
@@ -216,9 +210,9 @@ class ControllerServer:
         loop.run_until_complete(self.set_up(loop))
         cn_report_task = loop.create_task(self.process_compute_node_report())
         processor_command_task = loop.create_task(self.process_processor_command())
-        handle_expired_data_task = loop.create_task(self.process_expired_controller())
-        monitor_processor_task = loop.create_task(self.monitor_processor())
-        storage_command_task = loop.create_task(self.process_storage_command())
+        # handle_expired_data_task = loop.create_task(self.process_expired_controller())
+        # monitor_processor_task = loop.create_task(self.monitor_processor())
+        # storage_command_task = loop.create_task(self.process_storage_command())
         # processor_compress_video_task = loop.create_task(
         #     self.process_compress_video_files()
         # )

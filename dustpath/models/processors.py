@@ -11,6 +11,7 @@ PROCESSOR_OPERATING_STATE = [
         'start', 'starting', 'running', 'stopping', 'stop']
 PROCESSOR_USER_COMMANDS = [
         'start',
+        'run-wrf',
         'start-recorder',
         'start-motion-recorder',
         'start-streamer',
@@ -50,7 +51,7 @@ class Processor(me.Document):
             # 'strict': False,
             }
 
-    camera = me.ReferenceField('Camera', dbref=True)
+    # camera = me.ReferenceField('Camera', dbref=True)
     storage_period = me.IntField(required=True, default=30)  # in day
 
     # image_processors = me.ListField(me.DictField())

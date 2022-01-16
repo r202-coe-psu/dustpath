@@ -56,25 +56,10 @@ class ComputeNodeServer:
         if action == "start":
             respons = self.processor_controller.start_processor(
                 data["processor_id"],
-                data["attributes"],
-            )
-        elif action == "start-recorder":
-            respons = self.processor_controller.start_recorder(
-                data["processor_id"],
-                data.get("attributes", {}),
-            )
-
-        elif action == "start-streamer":
-            respons = self.processor_controller.start_streamer(
-                data["processor_id"],
                 data.get("attributes", {}),
             )
         elif action == "stop":
             respons = self.processor_controller.stop_processor(data["processor_id"])
-        elif action == "stop-recorder":
-            respons = self.processor_controller.stop_recorder(data["processor_id"])
-        elif action == "stop-streamer":
-            respons = self.processor_controller.stop_streamer(data["processor_id"])
         elif action == "get-status":
             respons = self.processor_controller.get_status(data["processor_id"])
 
@@ -266,18 +251,18 @@ class ComputeNodeServer:
         update_resource_task = loop.create_task(self.update_compute_node_resource())
         update_fail_processor_task = loop.create_task(self.update_fail_processor())
 
-        process_convert_video_task = loop.create_task(
-            self.process_convert_video_files()
-        )
-        process_convert_video_result_task = loop.create_task(
-            self.process_convert_video_result()
-        )
-        process_compress_video_task = loop.create_task(
-            self.process_compress_video_files()
-        )
-        process_expired_dir_recorder = loop.create_task(
-            self.process_expired_dir_recorder_cache()
-        )
+        # process_convert_video_task = loop.create_task(
+        #     self.process_convert_video_files()
+        # )
+        # process_convert_video_result_task = loop.create_task(
+        #     self.process_convert_video_result()
+        # )
+        # process_compress_video_task = loop.create_task(
+        #     self.process_compress_video_files()
+        # )
+        # process_expired_dir_recorder = loop.create_task(
+        #     self.process_expired_dir_recorder_cache()
+        # )
 
         try:
             loop.run_forever()

@@ -22,6 +22,10 @@ asyncio-nats-client
 psutil
 asyncio-nats-client
 
+# brython
+watchdog
+brython
+
 # old-------------v
 
 # flake8

@@ -181,7 +181,7 @@ class ComputeNodeMonitor:
             messages = {'method': 'update_machine_resources', 'args': resource}
             return self.send_message(messages)
 
-        self.processor_running_fail_report()
+        # self.processor_running_fail_report()
 
 
 # class UpdateStatus(threading.Thread):

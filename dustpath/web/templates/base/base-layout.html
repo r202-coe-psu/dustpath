@@ -14,19 +14,19 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') | add_date_url }}">
   <link rel="icon" href="{{ url_for('static', filename='images/icon.png') | add_date_url }}">
-
+  <script src="{{ url_for('static', filename='node_modules/brython/brython.js') | add_date_url }}"></script>
+  <script src="{{ url_for('static', filename='node_modules/brython/brython_stdlib.js') | add_date_url }}"></script>
   {% block additional_head %}{% endblock %}
 
   <title>{% block title %}{{ config.get('APP_TITLE') }}{% endblock %}</title>
 </head>
 
-<body>
-  {% include "base/sidebar.html" %}
-  <div class="pusher">
-    {% block body %}{% endblock body %}
-  </div>
+<body onload="brython()">
+  {% block body %}{% endblock %}
 </body>
-<script src="{{ url_for('static', filename='js/utils.js') | add_date_url }}"></script>
+{% block additional_js %}{% endblock %}
+{% include "base/footer.html" %}
+
 <script>
   $('.ui.dropdown')
     .dropdown();
@@ -43,7 +43,5 @@
     text-decoration: underline;
   }
 </style>
-
-{% block additional_js %}{% endblock %}
 
 </html>

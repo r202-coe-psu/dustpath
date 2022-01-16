@@ -27,7 +27,7 @@ class StorageController:
     def __init__(self, settings):
         self.settings = settings
         self.cache_path = pathlib.Path(
-            self.settings.get("DUSTPATH_PROCESSOR_RECORDER_CACHE_PATH", '/tmp')
+            self.settings.get("DUSTPATH_PROCESSOR_CACHE_PATH", '/tmp')
         )
         self.recorder_path = pathlib.Path(
             self.settings.get("DUSTPATH_PROCESSOR_RECORDER_PATH", '/tmp')

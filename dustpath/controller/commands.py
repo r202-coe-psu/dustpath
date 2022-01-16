@@ -84,12 +84,12 @@ class CommandController:
             logger.debug(f"Try to restart processor id {processor.id}")
             data = {
                 "action": processor.user_command.recorder.action,
-                "camera_id": str(processor.camera.id),
+                # "camera_id": str(processor.camera.id),
                 "processor_id": str(processor.id),
                 "project_id": str(processor.project.id),
                 "system": True,
             }
-            if processor.camera.motion_property.active:
-                data["motion"] = processor.camera.motion_property.active
-                data["sensitivity"] = processor.camera.motion_property.sensitivity
+            # if processor.camera.motion_property.active:
+            #     data["motion"] = processor.camera.motion_property.active
+            #     data["sensitivity"] = processor.camera.motion_property.sensitivity
             await self.command_queue.put(data)
