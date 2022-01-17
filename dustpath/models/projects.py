@@ -12,6 +12,7 @@ class Project(me.Document):
     
     name = me.StringField(default="")
     wrf_config = me.EmbeddedDocumentField(WrfConfiguration, default=WrfConfiguration)
+    output_filename = me.StringField(required=True, default="")
     # has_token = me.BooleanField(default=False)
     # line_notify_token = me.StringField(default="")
     # owner = me.ReferenceField("User", dbref=True, required=True)

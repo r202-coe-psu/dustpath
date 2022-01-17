@@ -3,12 +3,18 @@
 {% block body %}
 
 {% include "base/navbar.html" %}
+<div class="ui vertical inverted sidebar">
+  {% include "base/sidebar.html" %}
+</div>
 
-<main>
-  {% block content %}{% endblock content %}
-</main>
+
+<div class="pusher" style="min-height: 84% !important;">
+  <main class="twelve wide column" style="padding-top: 3em;">
+    {% block content %}{% endblock content %}
+  </main>
+</div>
+
 <!-- footer -->
-{% include "base/footer.html" %}
 
 <script>
   var dropdown = document.getElementsByClassName("ui item secondary");

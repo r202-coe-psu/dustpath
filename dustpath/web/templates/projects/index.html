@@ -19,6 +19,7 @@
                   <th>end_date</th>
                   <th>max_domain</th>
                   <th>run</th>
+                  <th>show</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,6 +56,12 @@
                   <td>
                     <a class="ui primary icon top right pointing big button run-wrf" id="project-{{project.id}}">
                       Run
+                    </a>
+                  </td>
+                  <td>
+                    <a class="ui primary icon top right pointing big button"
+                      href="{{url_for('projects.result', project_id=project.id )}}">
+                      show
                     </a>
                   </td>
                 </tr>

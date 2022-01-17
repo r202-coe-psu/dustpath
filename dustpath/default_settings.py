@@ -15,3 +15,4 @@ DUSTPATH_PROCESSOR_CACHE_PATH = "/mnt/bc9a96ba-6425-46b9-b773-c5deef3f7143/wrf-b
 DUSTPATH_PROCESSOR_WRF_DATA_PATH = "/mnt/bc9a96ba-6425-46b9-b773-c5deef3f7143/data"
 DUSTPATH_PROCESSOR_WRF_CACHE_PATH = "/tmp/dustpath"
 DUSTPATH_PROCESSOR_CMD = "dustpath-processor"
+DUSTPATH_GIF_PATH = '/mnt/bc9a96ba-6425-46b9-b773-c5deef3f7143/code/dustpath/dustpath/web/static/gif'

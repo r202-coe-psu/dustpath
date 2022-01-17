@@ -1,5 +1,6 @@
 import datetime
 import copy
+import pathlib
 import subprocess
 import os
 import sys
@@ -11,8 +12,9 @@ logger = logging.getLogger(__name__)
 
 
 class WrfRunner(threading.Thread):
-    def __init__(self, project_path, data_path):
+    def __init__(self, project_path, data_path, project_id, setting):
         super().__init__()
+        self.settings = setting
         self.running = False
         self.user = '${USER}'
         self.status = {
@@ -25,22 +27,18 @@ class WrfRunner(threading.Thread):
             'link-met-data': False, 
             'run-real': False, 
             'run-wrf': False,
+            'plot': False, 
+            'generate-GIF': False,
             }
+        self.project_id = project_id
         self.project_path = project_path
         self.data_path = data_path
-        # self.activate_path = path + 'activate'
-        # self.wps_path = path + 'WPS/'
-        # self.geogrid_path = self.wps_path + 'geogrid/'
-        # self.geogrid_exe_path = self.wps_path + 'geogrid.exe'
-        # self.ungrib_exe_path = self.wps_path + 'ungrib.exe'
-        # self.metgrid_exe_path = self.wps_path + 'metgrid.exe'
-        # self.link_gfs_exec_path = self.wps_path + 'link_grib.csh'
-        # self.met_em_data_path = self.wps_path + 'met_em*'
-        # self.gfs_data_path = path + '../../data/geo_data/gfs/fnl*'
 
-        # self.wrf_path = path + 'WRF/no_emission_run/'
-        # self.real_exe_path = self.wrf_path + 'real.exe'
-        # self.wrf_exe_path = self.wrf_path + 'wrf.exe'
+        self.wrf_path = project_path / 'WRF/no_emission_run'
+        self.pic_path = project_path / 'WRF/no_emission_run/pic'
+        # self.gif_path = project_path / 'WRF/no_emission_run/gif'
+        self.gif_path = pathlib.Path(
+                self.settings.get("DUSTPATH_GIF_PATH")) / self.project_id
 
     def stop(self):
         self.running = False
@@ -268,6 +266,92 @@ class WrfRunner(threading.Thread):
             self.status['run-wrf'] = True
         else:
             self.running = False
+    
+    def plot(self):
+        import numpy as np
+        from netCDF4 import Dataset
+        import matplotlib.pyplot as plt
+        from matplotlib.cm import get_cmap
+        import matplotlib as mpl
+        import cartopy.crs as crs
+        from cartopy.feature import NaturalEarthFeature
+        from matplotlib.colors import LinearSegmentedColormap
+        from wrf import (to_np, getvar, smooth2d, get_cartopy, cartopy_xlim,
+                        cartopy_ylim, latlon_coords)
+
+        ncfile = Dataset(
+            pathlib.Path(
+                f"{self.wrf_path}/wrfout_d01_2019-09-24_00:00:00"))
+
+        cm = mpl.colors.LinearSegmentedColormap.from_list('my_colormap', ['#00c7ff' , '#6ee44b', '#f1ff00', '#ffa500', '#ff0024'], 1024)
+        days = np.arange(0,25)
+
+        for i in days:
+            PM2_5_DRY = getvar(ncfile, "PM2_5_DRY", timeidx=i)[0,:]
+            DUST_1 = getvar(ncfile, "DUST_1", timeidx=i)[0,:]
+            PM2_5 = DUST_1
+
+            cart_proj = get_cartopy(PM2_5)
+            lats, lons = latlon_coords(PM2_5)
+
+
+            fig = plt.figure(figsize=(19,12))
+
+
+            ax = plt.axes(projection=crs.PlateCarree())
+            # ax.set_global()
+            # ax.set_extent([90, 110 , 0, 20])
+            # ax.stock_img()
+            ax.coastlines(linewidth=0.5)
+
+            # lvl = np.arange(990, 1030, 2.5)
+
+            plt.contourf(lons,
+                        lats,
+                        PM2_5,
+                        # level=lvl,
+                        transform=crs.PlateCarree(),
+                        #cmap=plt.get_cmap('jet'))
+                        cmap=cm)
+            t = np.datetime64(PM2_5.Time.values)
+            date = np.datetime_as_string(t, unit='D')
+            plt.title('PM2.5_DRY : ' + date)
+
+            axs, _ = mpl.colorbar.make_axes(plt.gca(), shrink=0.5)  
+
+            cbar = mpl.colorbar.ColorbarBase(axs, cmap=cm,
+                            norm=mpl.colors.Normalize(vmin=-0, vmax=100))
+
+            plt.savefig(
+                pathlib.Path(f"{self.pic_path}") / pathlib.Path(str(i)+'.jpg'))
+            # plt.show()
+        self.status['plot'] = True
+    
+    def genarate_GIF_file(self):
+        from PIL import Image, ImageDraw
+        import numpy as np 
+
+        image_frames=[]
+
+        days = np.arange(0,25)
+
+        for i in days:
+            new_frame = Image.open(
+                pathlib.Path(f"{self.pic_path}") / pathlib.Path(str(i)+'.jpg'))
+            image_frames.append(new_frame)
+
+        path = pathlib.Path(self.gif_path)
+        if not path.exists() and not path.is_dir():
+            path.mkdir(parents=True)
+
+        image_frames[0].save(
+            pathlib.Path(f"{path}/output.gif"), 
+            format = 'GIF', append_images = image_frames[1: ], save_all = True, duration = 300, loop = 0) 
+
+        # image_frames[0].save(
+        #     pathlib.Path(f"{self.gif_path}/output.gif"), 
+        #     format = 'GIF', append_images = image_frames[1: ], save_all = True, duration = 300, loop = 0) 
+        self.status['generate-GIF'] = True
 
     def run(self):
         logger.debug("Start Wrf Runner")
@@ -298,6 +382,11 @@ class WrfRunner(threading.Thread):
         if self.status['run-real']:
             logger.debug(f'run_wrf')
             self.run_wrf()
-        self.running = False
-        logger.debug("Start Wrf Runner")
+        if self.status['run-wrf']:
+            logger.debug(f'plot')
+            self.plot()
+        if self.status['plot']:
+        logger.debug(f'genarate_GIF_file')
+        self.genarate_GIF_file()
+        logger.debug("finish Wrf Runner And wait for get status")
         

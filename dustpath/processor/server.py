@@ -23,6 +23,7 @@ class ProcessorServer:
         self.settings = setting
         self.running = False
         self.processors = {'wrf-runner': None}
+        self.status = {}
         self.project_id = None
         self.project_path = None
         self.projects_path = pathlib.Path(
@@ -86,6 +87,8 @@ class ProcessorServer:
                     wrf_runner = wrf_runners.WrfRunner(
                         project_path=self.project_path,
                         data_path=self.data_path,
+                        project_id=self.project_id,
+                        setting=self.settings,
                         )
                     wrf_runner.start()
                     self.processors['wrf-runner'] = wrf_runner
@@ -95,12 +98,17 @@ class ProcessorServer:
                         if p:
                             p.stop()
                 elif command.get('action') == 'get-status':
-                    data = dict()
+                    data = dict(success={})
                     for k, v in self.processors.items():
                         if v and v.running:
                             data[k] = True
                         else:
                             data[k] = False
+
+                    if self.processors['wrf-runner']:
+                        for k, v in self.processors['wrf-runner'].status.items():
+                            data['success'][k] = v
+
                     print(json.dumps(data))
 
         logger.debug("End Commander")
@@ -119,8 +127,8 @@ class ProcessorServer:
                 time.sleep(1)
                 if self.processors['wrf-runner']:
                     if not self.processors['wrf-runner'].running:
-                        logger.debug(f"---ending")
                         self.running = False
+                        logger.debug(f"---ending")
                         continue
             except Exception as e:
                 logger.exception(e)

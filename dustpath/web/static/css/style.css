@@ -51,6 +51,7 @@ body.pushable>.pusher {
 
 body {
   font-family: Verdana, sans-serif;
+  min-height: 100%;
 }
 
 .mySlides {

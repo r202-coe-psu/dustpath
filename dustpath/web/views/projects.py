@@ -28,13 +28,14 @@ def index():
     return render_template('projects/index.html',
                             projects=projects,)
 
-@module.route('/record', methods=['GET', 'POST'])
+@module.route('/create', methods=['GET', 'POST'])
 def create():
     form = ProjectForm()
     if not form.validate_on_submit():
         return render_template('projects/create.html', form=form)
     project = models.Project(
         name=form.name.data,
+        output_filename=f"wrfout_d01_{form.start_date.data}_00:00:00",
     )
     project.wrf_config.max_domain = form.max_domain.data
     project.wrf_config.start_date = form.start_date.data
@@ -51,8 +52,6 @@ def create():
 @module.route("/<project_id>/run_wrf", methods=["POST"])
 def run_wrf(project_id):
     project = models.Project.objects.get(id=project_id)
-    # if not project.is_assistant_or_owner(current_user._get_current_object()):
-    #     return Response(403)
 
     data = {
         "action": "start",
@@ -61,13 +60,21 @@ def run_wrf(project_id):
             "project_id": project_id,
             },
     }
-
-    # if camera.motion_property.active:
-    #     data["motion"] = camera.motion_property.active
-    #     data["sensitivity"] = camera.motion_property.sensitivity
-
     nats.nats_client.publish("dustpath.processor.command", data)
 
     response = Response()
     response.status_code = 200
     return response
+
+@module.route('<project_id>/result', methods=['GET','POST'])
+def result(project_id):
+    return render_template('projects/result.html', project_id=project_id)
+
+# @module.route('/listresult', defaults={'req_path': ''})
+# @module.route('/<path:req_path>')
+# def listresult(req_path):
+#     BASE_DIR = 'dustpath/static/gif'
+#     # Joining the base and the requested path
+#     abs_path = os.path.join(BASE_DIR, req_path)
+#     files = os.listdir(abs_path)
+#     return render_template('result/listresult.html', files=files)

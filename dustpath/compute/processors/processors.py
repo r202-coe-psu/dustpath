@@ -64,20 +64,20 @@ class Processor:
         logger.debug(f'start processor {self.id} action: {data}')
         
 
-    # def stop(self):
-    #     data = dict(action='stop')
-    #     self.write(data)
-    #     try:
-    #         if self.process.poll() is None:
-    #             self.process.wait(timeout=30)
-    #     except Exception as e:
-    #         logger.exception(e)
+    def stop(self):
+        data = dict(action='stop')
+        self.write(data)
+        try:
+            if self.process.poll() is None:
+                self.process.wait(timeout=30)
+        except Exception as e:
+            logger.exception(e)
 
-    #     # if self.process.poll() is None:
-    #     self.process.terminate()
+        # if self.process.poll() is None:
+        self.process.terminate()
 
-    # def get_attributes(self):
-    #     return self.atdtributes
+    def get_attributes(self):
+        return self.atdtributes
 
     def get_status(self):
         data = dict(action='get-status')
@@ -85,7 +85,16 @@ class Processor:
         status = self.read()
         if not status:
             status = {'wrf-runner': False}
-        
+            return status
+        logger.debug(f'------------------------------------------------')
+        logger.debug(f'status: {status}')
+
+        checked_success = True
+        if status.get('success'):
+            for k, v in status.get('success').items():
+                checked_success = checked_success and v
+        if checked_success:
+            self.stop()
         return status
 
  
