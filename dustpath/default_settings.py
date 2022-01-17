@@ -1,7 +1,7 @@
 # database set up
 MONGODB_DB = "dustpathdb"
 
-APP_TITLE = "Dustpath"
+APP_TITLE = "DustPath"
 
 JWT_ACCESS_TOKEN_EXPIRES = 21600
 
