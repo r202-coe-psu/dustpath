@@ -10,4 +10,4 @@ static/download
 venv
 *.xlsx
 *.ini
-dustpath/web/static/gif/
+dustpath/web/static/gif/**/
