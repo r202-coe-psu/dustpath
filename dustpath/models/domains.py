@@ -6,7 +6,6 @@ class Domain(me.Document):
 
     center = me.GeoPointField(required=True)
     radius = me.IntField(required=True)
-    wrf_config =me.ReferenceField("WRFConfig", dbref=True)
 
     created_date = me.DateTimeField(
         required=True, 

@@ -3,9 +3,10 @@ import mongoengine as me
 import datetime
 
 class WrfConfiguration(me.EmbeddedDocument):
-    max_domain = me.IntField(required=True, default=1)
+    # max_domain = me.IntField(required=True, default=1)
     start_date = me.DateField(required=True)
     end_date = me.DateField(required=True)
+    domain = me.ReferenceField("Domain", dbref=True)
 
 class Project(me.Document):
     meta = {"collection": "projects"}

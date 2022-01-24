@@ -31,15 +31,18 @@ def index():
 @module.route('/create', methods=['GET', 'POST'])
 def create():
     form = ProjectForm()
+    form.domain.choices = get_domains_choices()
     if not form.validate_on_submit():
         return render_template('projects/create.html', form=form)
     project = models.Project(
         name=form.name.data,
         output_filename=f"wrfout_d01_{form.start_date.data}_00:00:00",
     )
-    project.wrf_config.max_domain = form.max_domain.data
     project.wrf_config.start_date = form.start_date.data
     project.wrf_config.end_date = form.end_date.data
+
+    domain = models.Domain.objects.get(id=form.domain.data)
+    project.wrf_config.domain = domain
     project.save()
     # data = {
     #     "action": "create_project",
@@ -78,3 +81,8 @@ def result(project_id):
 #     abs_path = os.path.join(BASE_DIR, req_path)
 #     files = os.listdir(abs_path)
 #     return render_template('result/listresult.html', files=files)
+
+
+def get_domains_choices():
+    domains = models.Domain.objects()
+    return [(str(d.id), f"{d.center} {d.radius}") for d in domains]

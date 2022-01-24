@@ -28,7 +28,6 @@ def record():
         if data:
             domain = models.Domain(center=data['center'], radius=data['radius'])
             domain.save()
-            print(domain, "--------")
     return render_template('domains/record.html',
                            zoom=zoom,
                            center=center,)

@@ -14,6 +14,7 @@ from . import compute_nodes
 from . import processors
 from . import commands
 from . import storages
+from . import configuration_composer
 
 
 class ControllerServer:
@@ -31,9 +32,13 @@ class ControllerServer:
             self.settings,
             self.processor_command_queue,
         )
+        self.config_composer = configuration_composer.ConfigurationComposer(
+            self.settings
+        )
         self.processor_controller = processors.ProcessorController(
             self.nc,
             command_controller=self.command_controller,
+            config_composer=self.config_composer,
         )
         self.storage_controller = storages.StorageController(self.settings)
 
@@ -161,7 +166,7 @@ class ControllerServer:
     async def process_processor_command(self):
         while self.running:
             data = await self.processor_command_queue.get()
-            logger.debug(f"processor command: {data}")
+            logger.debug(f"process processor command: {data}")
 
             result = False
             try:

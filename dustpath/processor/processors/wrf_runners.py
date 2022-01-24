@@ -1,23 +1,28 @@
-import datetime
-import copy
+
+from importlib.resources import path
 import pathlib
 import subprocess
+import shutil
 import os
-import sys
 
 import logging
 import threading
+import jinja2
+import json
 
 logger = logging.getLogger(__name__)
 
 
 class WrfRunner(threading.Thread):
-    def __init__(self, project_path, data_path, project_id, setting):
+    def __init__(self, setting, attributes):
         super().__init__()
         self.settings = setting
         self.running = False
         self.user = '${USER}'
         self.status = {
+            'copy-project': False,
+            'write-namelist-wps': False,
+            'write-namelist-input': False,
             'link-geogrid-table': False, 
             'run-geogrid': False, 
             'link-gfs-file': False,
@@ -30,18 +35,62 @@ class WrfRunner(threading.Thread):
             'plot': False, 
             'generate-GIF': False,
             }
-        self.project_id = project_id
-        self.project_path = project_path
-        self.data_path = data_path
 
-        self.wrf_path = project_path / 'WRF/no_emission_run'
-        self.pic_path = project_path / 'WRF/no_emission_run/pic'
-        # self.gif_path = project_path / 'WRF/no_emission_run/gif'
+        self.project_id = attributes.get('project_id')
+        self.namelist_wps = attributes.get('namelist_wps')
+        self.namelist_input = attributes.get('namelist_input')
+
+        self.projects_path = pathlib.Path(
+                self.settings.get("DUSTPATH_PROCESSOR_CACHE_PATH", '/tmp')
+                )
+        self.data_path = pathlib.Path(
+                self.settings.get("DUSTPATH_PROCESSOR_WRF_DATA_PATH")
+                )
+        self.mastery_project_path = self.projects_path / pathlib.Path('mastery_project')
+
+        self.project_path = self.projects_path / pathlib.Path(self.project_id)
+        self.wps_path = self.project_path / 'WPS'
+        self.wrf_path = self.project_path / 'WRF/no_emission_run'
+        self.pic_path = self.project_path / 'WRF/no_emission_run/pic'
         self.gif_path = pathlib.Path(
                 self.settings.get("DUSTPATH_GIF_PATH")) / self.project_id
 
     def stop(self):
         self.running = False
+
+    def copy_project(self):
+        try:
+            if not os.path.exists(self.project_path):
+                shutil.copytree(
+                    self.mastery_project_path, 
+                    self.project_path,
+                    symlinks=True,
+                    copy_function = shutil.copy
+                )
+            self.status['copy-project'] = True
+        except Exception as e:
+            logger.debug(e)
+            self.running = False
+                    
+    def write_namelist_wps(self):
+        try:
+            f = open(self.wps_path / "namelist.wps" , "w")
+            f.write(json.loads(self.namelist_wps))
+            f.close()
+            self.status['write-namelist-wps'] = True
+        except Exception as e:
+            logger.debug(e)
+            self.running = False
+                    
+    def write_namelist_input(self):
+        try:
+            f = open(self.wrf_path / "namelist.input" , "w")
+            f.write(json.loads(self.namelist_input))
+            f.close()
+            self.status['write-namelist-input'] = True
+        except Exception as e:
+            logger.debug(e)
+            self.running = False
     
     def link_geogrid_table(self):
         self.process = subprocess.Popen(
@@ -356,8 +405,17 @@ class WrfRunner(threading.Thread):
     def run(self):
         logger.debug("Start Wrf Runner")
         self.running = True
-        logger.debug(f'link_geogrid_table')
-        self.link_geogrid_table()
+        logger.debug(f'copy_project')
+        self.copy_project()
+        if self.status['copy-project']:
+            logger.debug(f'write_namelist_wps')
+            self.write_namelist_wps()
+        if self.status['write-namelist-wps']:
+            logger.debug(f'write_namelist_input')
+            self.write_namelist_input()
+        if self.status['write-namelist-input']:
+            logger.debug(f'link_geogrid_table')
+            self.link_geogrid_table()
         if self.status['link-geogrid-table']:
             logger.debug(f'run_geogrid')
             self.run_geogrid()
@@ -386,7 +444,7 @@ class WrfRunner(threading.Thread):
             logger.debug(f'plot')
             self.plot()
         if self.status['plot']:
-        logger.debug(f'genarate_GIF_file')
-        self.genarate_GIF_file()
+            logger.debug(f'genarate_GIF_file')
+            self.genarate_GIF_file()
         logger.debug("finish Wrf Runner And wait for get status")
         

@@ -1,0 +1,50 @@
+﻿&share
+ wrf_core = 'ARW',
+ max_dom = 1,
+ start_date = '{{ wrf_config.start_date.year }}-{{ wrf_config.start_date.month }}-{{ wrf_config.start_date.day }}_00:00:00','{{ wrf_config.start_date.year }}-{{ wrf_config.start_date.month }}-{{ wrf_config.start_date.day }}_00:00:00','{{ wrf_config.start_date.year }}-{{ wrf_config.start_date.month }}-{{ wrf_config.start_date.day }}_00:00:00','{{ wrf_config.start_date.year }}-{{ wrf_config.start_date.month }}-{{ wrf_config.start_date.day }}_00:00:00',
+ end_date   = '{{ wrf_config.end_date.year }}-{{ wrf_config.end_date.month }}-{{ wrf_config.end_date.day }}_00:00:00','{{ wrf_config.end_date.year }}-{{ wrf_config.end_date.month }}-{{ wrf_config.end_date.day }}_00:00:00','{{ wrf_config.end_date.year }}-{{ wrf_config.end_date.month }}-{{ wrf_config.end_date.day }}_00:00:00','{{ wrf_config.end_date.year }}-{{ wrf_config.end_date.month }}-{{ wrf_config.end_date.day }}_00:00:00',
+ interval_seconds = 21600,
+ io_form_geogrid = 2,
+/
+
+&geogrid
+ parent_id         =   0,    1,    2,  
+ parent_grid_ratio =   1,    3,    3,
+ i_parent_start    =   1,   12,   50,  
+ j_parent_start    =   1,    5,  200,  
+ e_we              = 200,  262,  160, 
+ e_sn              = 200,  271,   91,
+ !
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ ! The default datasets used to produce the MAXSNOALB and ALBEDO12M
+ ! fields have changed in WPS v4.0. These fields are now interpolated
+ ! from MODIS-based datasets.
+ !
+ ! To match the output given by the default namelist.wps in WPS v3.9.1,
+ ! the following setting for geog_data_res may be used
+ !
+ ! geog_data_res = 'maxsnowalb_ncep+albedo_ncep+default', 'maxsnowalb_ncep+albedo_ncep+default', 
+ !
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ !
+ geog_data_res = '5m','2m','30s','30s',
+ dx = {{ wrf_config.domain.radius / 100 }},
+ dy = {{ wrf_config.domain.radius / 100 }},
+ map_proj = 'lambert',
+ ref_lat   =  {{ wrf_config.domain.center[0] }},
+ ref_lon   =  {{ wrf_config.domain.center[1] }},
+ truelat1  =  {{ wrf_config.domain.center[0] }},
+ truelat2  =  {{ wrf_config.domain.center[0] }},
+ stand_lon =  {{ wrf_config.domain.center[1] }},
+ geog_data_path = '../data/geo_data/geog'
+/
+
+&ungrib
+ out_format = 'WPS',
+ prefix = 'FILE',
+/
+
+&metgrid
+ fg_name = 'FILE'
+ io_form_metgrid = 2, 
+/

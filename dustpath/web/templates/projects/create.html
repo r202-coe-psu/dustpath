@@ -31,10 +31,10 @@
             {% endfor %}
           </div>
           <div class="field">
-            {{ form.max_domain.label }}
-            {{ form.max_domain }}
-            {% for error in form.max_domain.errors %}
-            <p style="color: red;">* โปรดระบุจำนวนโดเมนสูงสุด</p>
+            {{ form.domain.label }}
+            {{ form.domain(class_="ui dropdown search") }}
+            {% for error in form.domain.errors %}
+            <p style="color: red;">* โปรดระบุโดเมนที่ต้องการ</p>
             {% endfor %}
           </div>
           <div class="two fields">

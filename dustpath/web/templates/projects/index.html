@@ -17,7 +17,8 @@
                   <th>name</th>
                   <th>start_date</th>
                   <th>end_date</th>
-                  <th>max_domain</th>
+                  <th>domain center</th>
+                  <th>domain radius</th>
                   <th>run</th>
                   <th>show</th>
                 </tr>
@@ -49,7 +50,14 @@
                   <td>
                     <div class="left floated left aligned two wide column">
                       <a class="right aligned content"  style="color: black;">
-                        {{ project.wrf_config.max_domain }}
+                        {{ project.wrf_config.domain.center }}
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="left floated left aligned two wide column">
+                      <a class="right aligned content"  style="color: black;">
+                        {{ project.wrf_config.domain.radius }}
                       </a>
                     </div>
                   </td>

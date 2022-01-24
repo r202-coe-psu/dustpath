@@ -1,6 +1,7 @@
 import datetime
 import asyncio
 import json
+import jinja2
 
 import logging
 
@@ -10,9 +11,10 @@ from dustpath import models
 
 
 class ProcessorController:
-    def __init__(self, nc=None, command_controller=None):
+    def __init__(self, nc=None, command_controller=None, config_composer=None):
         self.nc = nc
         self.command_controller = command_controller
+        self.config_composer = config_composer
 
     async def init_message(self, nc):
         self.nc = nc
@@ -101,6 +103,10 @@ class ProcessorController:
         #     compute_node = await self.get_available_compute_node(compute_node)
         #     processor.compute_node = compute_node
 
+        if data["action"] == "start":
+            compute_node = await self.get_available_compute_node(compute_node)
+            processor.compute_node = compute_node
+
         if not compute_node or not compute_node.is_online():
             if not compute_node:
                 logger.debug("compute node is not available for start")
@@ -122,10 +128,17 @@ class ProcessorController:
             processor.state = "stopping"
         processor.save()
 
+        project = models.Project.objects(id=data["attributes"]["project_id"]).first()
+
+        attributes = data["attributes"]
+        attributes['namelist_wps'] = self.config_composer.get_namelist_wps(project)
+        attributes['namelist_input'] = self.config_composer.get_namelist_input(project)
+
         command = dict(
             processor_id=str(processor.id),
             action=data["action"],
-            attributes=data["attributes"])
+            attributes=attributes)
+
         # if data["action"] in ["start-recorder", "start-streamer"]:
         #     command["attributes"] = dict(
         #         video_uri=camera.uri, 

@@ -26,7 +26,6 @@ class Processor:
             'DUSTPATH_PROCESSOR_CMD')
         self.args = [
                 self.programe,
-                '--project_id', attributes['project_id'],
                 ]
         self.process = None
 
@@ -57,7 +56,8 @@ class Processor:
                                         stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE)
-        data = {}
+                                        
+        data = {'attributes': self.attributes}
         data['action'] = 'start-wrf-runner'
         self.write(data)
         
