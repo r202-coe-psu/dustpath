@@ -11,27 +11,37 @@
   <div class="item">
     <a class="header" style="text-decoration: none;">
       <i class="map icon"></i>
-      แผนที่
+      โดเมน
     </a>
     <div class="menu">
-      <a href="{{ url_for('domains.index') }}" class="item">
-        <i class="map icon"></i>โดเมนทั้งหมด
-      </a>
       <a href="{{ url_for('domains.record') }}" class="item">
         <i class="map marker alternate icon"></i>บันทึกโดเมน
       </a>
+      <a href="{{ url_for('domains.index') }}" class="item">
+        <i class="map icon"></i>โดเมนทั้งหมด
+      </a>
     </div>
   </div>
+  <div class="item">
+    <a class="header" style="text-decoration: none;">
+      <i class="map icon"></i>
+      แผนที่
+    </a>
+    <div class="menu">
+      <a href="{{ url_for('projects.create') }}" class="item">
+        <i class="map icon"></i>สร้างโปรเจ็ค
+      </a>
+      <a href="{{url_for('projects.index')}}" class="item">
+        <i class="map marker alternate icon"></i>โปรเจ็คทั้งหมด
+      </a>
+    </div>
+  </div>
+  {#
   <div class="item">
     <a href="{{ url_for('users.record') }}" class="header" style="text-decoration: none;">
       <i class="user icon"></i>
       โปรไฟล์
     </a>
   </div>
-  <div class="item">
-    <a href="{{ url_for('projects.create') }}" class="header" style="text-decoration: none;">
-      <i class="cog icon"></i>
-      CreateProject
-    </a>
-  </div>
+  #}
 </div>

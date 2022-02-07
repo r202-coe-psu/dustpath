@@ -140,7 +140,7 @@ class ControllerServer:
     async def process_compute_node_report(self):
         while self.running:
             data = await self.cn_report_queue.get()
-            # logger.debug(f'process compute node: {data}'
+            # logger.debug(f'process compute node: {data}')
 
             try:
                 if data["action"] == "update-resource":
@@ -155,6 +155,25 @@ class ControllerServer:
                     #     data["compute_node_id"],
                     # )
                     pass
+                elif data["action"] == "report-status":
+                    status = data.get('status')
+                    project = models.Project.objects.get(id=data.get('project_id'))
+                    project.status.copy_project = status['copy-project']
+                    project.status.write_namelist_wps = status['write-namelist-wps']
+                    project.status.write_namelist_input = status['write-namelist-input']
+                    project.status.link_geogrid_table = status['link-geogrid-table']
+                    project.status.run_geogrid = status['run-geogrid']
+                    project.status.link_gfs_file = status['link-gfs-file']
+                    project.status.link_Vtable = status['link-Vtable']
+                    project.status.run_ungrib = status['run-ungrib']
+                    project.status.run_metgrid = status['run-metgrid']
+                    project.status.link_met_data = status['link-met-data']
+                    project.status.run_real = status['run-real']
+                    project.status.run_wrf = status['run-wrf']
+                    project.status.plot = status['plot']
+                    project.status.generate_GIF = status['generate-GIF']
+                    project.save()
+                    logger.debug(f"report-status DONE")
                 elif data["action"] != "report":
                     logger.debug("got unproccess report {}".format(str(data)))
             except Exception as e:

@@ -120,6 +120,43 @@ class ComputeNodeServer:
             except Exception as e:
                 logger.exception(e)
 
+    async def update_process_status(self):
+        processor_manager = self.processor_controller.processor_manager
+
+        while self.running:
+            # logger.debug('begin update_process_status')
+
+            is_sleep = True
+            for pid in processor_manager.status_report.keys():
+                status = None
+
+                try:
+                    status = processor_manager.get_process_status(pid)
+                    project_id = processor_manager.get_project_id(pid)
+                except Exception as e:
+                    logger.exception(e)
+
+                if not status:
+                    continue
+
+                response = dict(
+                    action="report-status",
+                    processor_id=pid,
+                    status=status,
+                    project_id=project_id,
+                    date=datetime.datetime.now().isoformat(),
+                )
+
+                await self.nc.publish(
+                    "dustpath.compute.report", json.dumps(response).encode()
+                )
+
+                if status:
+                    is_sleep = False
+
+            if is_sleep:
+                await asyncio.sleep(10)
+
     async def update_processor_output(self):
         processor_manager = self.processor_controller.processor_manager
 
@@ -154,55 +191,6 @@ class ComputeNodeServer:
 
             if is_sleep:
                 await asyncio.sleep(10)
-
-    async def process_compress_video_files(self):
-        while self.running:
-            logger.debug("start compress video file task")
-            # await self.storage_controller.compress_video_files()
-            try:
-                await self.storage_controller.process_compression_result()
-            except Exception as e:
-                logger.exception(e)
-            await asyncio.sleep(10)
-
-    async def process_convert_video_files(self):
-        while self.running:
-            logger.debug("start convert video file task")
-            try:
-                await self.storage_controller.convert_video_files()
-                # await self.storage_controller.process_convertion_result()
-            except Exception as e:
-                logger.exception(e)
-            await asyncio.sleep(10)
-
-    async def process_convert_video_result(self):
-        while self.running:
-            logger.debug("start convert video result task")
-            try:
-                await self.storage_controller.process_convertion_result()
-            except Exception as e:
-                logger.exception(e)
-            await asyncio.sleep(10)
-
-    async def process_expired_dir_recorder_cache(self):
-        time_check = self.settings["DAIRY_TIME_TO_REMOVE"]
-        hour, minute = time_check.split(":")
-        process_time = datetime.time(int(hour), int(minute), 0)
-
-        while self.running:
-            logger.debug("start process expired data")
-            date = datetime.date.today()
-            time_set = datetime.datetime.combine(date, process_time)
-            time_to_check = time_set - datetime.datetime.now()
-
-            # logger.debug(f'time to sleep {time_to_check.seconds}')
-            try:
-                await asyncio.sleep(time_to_check.seconds)
-                await self.storage_controller.remove_empty_video_records_cache()
-                # await asyncio.sleep(10)
-            except Exception as e:
-                logger.exception(e)
-            await asyncio.sleep(10)
 
     async def set_up(self, loop):
         self.nc = NATS()
@@ -248,21 +236,9 @@ class ComputeNodeServer:
 
         loop.run_until_complete(self.set_up(loop))
         update_output_task = loop.create_task(self.update_processor_output())
+        update_process_status_task = loop.create_task(self.update_process_status())
         update_resource_task = loop.create_task(self.update_compute_node_resource())
         update_fail_processor_task = loop.create_task(self.update_fail_processor())
-
-        # process_convert_video_task = loop.create_task(
-        #     self.process_convert_video_files()
-        # )
-        # process_convert_video_result_task = loop.create_task(
-        #     self.process_convert_video_result()
-        # )
-        # process_compress_video_task = loop.create_task(
-        #     self.process_compress_video_files()
-        # )
-        # process_expired_dir_recorder = loop.create_task(
-        #     self.process_expired_dir_recorder_cache()
-        # )
 
         try:
             loop.run_forever()

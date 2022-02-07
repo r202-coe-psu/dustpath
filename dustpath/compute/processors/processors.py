@@ -26,6 +26,9 @@ class Processor:
             'DUSTPATH_PROCESSOR_CMD')
         self.args = [
                 self.programe,
+                '--processor_id', self.id,
+                # '--directory', '/tmp',
+                '--directory', self.settings['DUSTPATH_PROCESSOR_LOG_PATH'],
                 ]
         self.process = None
 
@@ -37,7 +40,6 @@ class Processor:
 
     def read(self):
         if self.process.poll() is None:
-
             result = {}
             try:
                 data = self.process.stdout.readline().decode('utf-8')
@@ -85,16 +87,7 @@ class Processor:
         status = self.read()
         if not status:
             status = {'wrf-runner': False}
-            return status
-        logger.debug(f'------------------------------------------------')
-        logger.debug(f'status: {status}')
-
-        checked_success = True
-        if status.get('success'):
-            for k, v in status.get('success').items():
-                checked_success = checked_success and v
-        if checked_success:
-            self.stop()
+        
         return status
 
  

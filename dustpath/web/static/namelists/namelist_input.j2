@@ -52,18 +52,18 @@
 /
 
 &domains
- time_step                           = 120,
+ time_step                           = 15,
  time_step_fract_num                 = 0,
  time_step_fract_den                 = 1,
  max_dom                             = 1,
 
  s_we                                = 1,    1,    1, 
- e_we                                = 150,  262,  160,
+ e_we                                = 200,  262,  160,
  s_sn                                = 1,    1,    1, 
- e_sn                                = 130,  271,   91,
+ e_sn                                = 200,  271,   91,
  e_vert                              = 33,   33,   33,
- dx                                  = 27000,  9000,  3000,
- dy                                  = 27000,  9000,  3000,
+ dx                                  = {{ wrf_config.domain.radius / 100 }},  9000,  3000,
+ dy                                  = {{ wrf_config.domain.radius / 100 }},  9000,  3000,
  
  ! s_we                                = 1, 
  ! e_we                                = 262,

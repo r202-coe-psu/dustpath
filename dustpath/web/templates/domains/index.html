@@ -14,9 +14,9 @@
             <table id="mytable" class="ui teal celled table">
               <thead>
                 <tr>
-                  <th>Center[Lat, Long]</th>
-                  <th>Radius</th>
-                  <th>xx</th>
+                  <th>Lat</th>
+                  <th>Lon</th>
+                  <th>Radius(m)</th>
                 </tr>
               </thead>
               <tbody>
@@ -25,7 +25,14 @@
                   <td>
                     <div class="left floated left aligned two wide column">
                       <a class="right aligned content" id="namelist" style="color: black;">
-                        {{ domain.center[0] }} {{domain.center[1]}}
+                        {{domain.center[0]}}
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="left floated left aligned two wide column">
+                      <a class="right aligned content" id="namelist" style="color: black;">
+                        {{domain.center[1]}}
                       </a>
                     </div>
                   </td>
@@ -33,13 +40,6 @@
                     <div class="left floated left aligned two wide column">
                       <a class="right aligned content"  style="color: black;">
                         {{ domain.radius }}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="left floated left aligned two wide column">
-                      <a class="right aligned content" href="{{ url_for('domains.record') }}">
-                        Show
                       </a>
                     </div>
                   </td>

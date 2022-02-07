@@ -21,7 +21,6 @@ from .. import forms
 
 module = Blueprint("projects", __name__, url_prefix="/projects")
 
-
 @module.route('/')
 def index():
     projects = models.Project.objects().order_by("-id")
@@ -44,12 +43,6 @@ def create():
     domain = models.Domain.objects.get(id=form.domain.data)
     project.wrf_config.domain = domain
     project.save()
-    # data = {
-    #     "action": "create_project",
-    #     "project_id": str(project.id),
-    # }
-    # nats.nats_client.publish("dustpath.storage.command", data)
-
     return redirect(url_for('projects.index'))
     
 @module.route("/<project_id>/run_wrf", methods=["POST"])
@@ -64,25 +57,17 @@ def run_wrf(project_id):
             },
     }
     nats.nats_client.publish("dustpath.processor.command", data)
-
-    response = Response()
-    response.status_code = 200
-    return response
+    
+    return redirect(url_for('projects.result'))
 
 @module.route('<project_id>/result', methods=['GET','POST'])
 def result(project_id):
-    return render_template('projects/result.html', project_id=project_id)
-
-# @module.route('/listresult', defaults={'req_path': ''})
-# @module.route('/<path:req_path>')
-# def listresult(req_path):
-#     BASE_DIR = 'dustpath/static/gif'
-#     # Joining the base and the requested path
-#     abs_path = os.path.join(BASE_DIR, req_path)
-#     files = os.listdir(abs_path)
-#     return render_template('result/listresult.html', files=files)
-
+    project = models.Project.objects.get(id=project_id)
+    return render_template('projects/result.html',
+        project_id=project_id, 
+        result=result, 
+        project=project)
 
 def get_domains_choices():
     domains = models.Domain.objects()
-    return [(str(d.id), f"{d.center} {d.radius}") for d in domains]
+    return [(str(d.id), f"lat={d.center[0]}, lon={d.center[1]}, r={d.radius}") for d in domains]

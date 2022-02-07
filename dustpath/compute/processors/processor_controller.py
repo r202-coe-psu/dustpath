@@ -84,7 +84,7 @@ class ProcessorController:
             processor_process.start()
             logger.debug(
                 f'add process processor id: {processor_id} to process manager')
-            self.processor_manager.add(processor_id, processor_process)
+            self.processor_manager.add(processor_id, attributes.get('project_id'), processor_process)
 
             response['success'] = True
 

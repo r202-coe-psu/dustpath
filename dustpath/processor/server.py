@@ -1,4 +1,5 @@
 
+import argparse
 import json
 import pathlib
 import time
@@ -21,33 +22,39 @@ class ProcessorServer:
         self.processors = {'wrf-runner': None}
         self.status = {}
 
-    # def get_options(self):
-    #     parser = argparse.ArgumentParser(description="Dustpath Running WRF")
-
-    #     parser.add_argument(
-    #         "--project_id",
-    #         dest="project_id",
-    #         default="",
-    #         help="identify project_id",
-    #     )
-
-    #     return parser.parse_args()
-
-    def set_up(self):
-        logging.basicConfig(
-            format="%(name)s:%(lineno)d %(levelname)s - %(message)s",
-            level=logging.DEBUG,
+    def get_options(self):
+        parser = argparse.ArgumentParser(description="Nokkhum Recorder")
+        parser.add_argument(
+            "--directory",
+            dest="directory",
+            default="/tmp",
+            help="set directory for storing video footage, defaul is /tmp.",
+        )
+        parser.add_argument(
+            "--processor_id",
+            dest="processor_id",
+            default="processor",
+            help="identify processor_id",
         )
 
-        # self.project_id = options.project_id
+        return parser.parse_args()
 
-        # self.project_path = self.projects_path / pathlib.Path(self.project_id)
-        # if not os.path.exists(self.project_path):
-        #     shutil.copytree(
-        #         self.mastery_project_path, 
-        #         self.project_path, 
-        #         copy_function = shutil.copy
-            # )
+    def set_up(self, options):
+        path = pathlib.Path(options.directory) / options.processor_id / 'log'
+        if not path.exists():
+            path.mkdir(parents=True)
+
+        handler = handlers.TimedRotatingFileHandler(
+                f'{path}/processor.log',
+                'midnight',
+                1,
+                backupCount=10)
+        formatter = logging.Formatter('%(asctime)s %(name)s:%(lineno)d %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+
+        root_logger = logging.getLogger()
+        root_logger.addHandler(handler)
+        root_logger.setLevel(logging.DEBUG)
 
     def get_input(self):
         data = input().strip()
@@ -80,7 +87,7 @@ class ProcessorServer:
                         if p:
                             p.stop()
                 elif command.get('action') == 'get-status':
-                    data = dict(success={})
+                    data = dict()
                     for k, v in self.processors.items():
                         if v and v.running:
                             data[k] = True
@@ -89,14 +96,17 @@ class ProcessorServer:
 
                     if self.processors['wrf-runner']:
                         for k, v in self.processors['wrf-runner'].status.items():
-                            data['success'][k] = v
+                            data[k] = v
 
                     print(json.dumps(data))
 
         logger.debug("End Commander")
 
     def run(self):
-        self.set_up()
+        options = self.get_options()
+        self.set_up(options)
+        self.options = options
+
         logger.debug(f"---Start")
         self.running = True
 

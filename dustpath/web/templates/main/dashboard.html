@@ -11,7 +11,12 @@
           หน้าหลัก
         </h1>
       </div>
-      <a class="ui primary icon top right pointing big button" href="{{url_for('projects.index')}}">
+      <a class="ui primary fluid button" href="{{ url_for('domains.record') }}">
+        <i class="sign in alternate icon"></i>
+        <span class="text">บันทึกโดเมน</span>
+      </a>
+      <br>
+      <a class="ui primary fluid button" href="{{ url_for('projects.create') }}">
         <i class="sign in alternate icon"></i>
         <span class="text">เริ่มโปรเจกต์ใหม่</span>
       </a>

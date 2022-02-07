@@ -112,8 +112,7 @@ class WrfRunner(threading.Thread):
             self.status['link-geogrid-table'] = True
         else:
             self.running = False
-        # return err_code
-
+            
     def run_geogrid(self):
         self.process = subprocess.Popen(
             f"docker run --rm --shm-size=2048M \
@@ -133,7 +132,6 @@ class WrfRunner(threading.Thread):
             self.status['run-geogrid'] = True
         else:
             self.running = False
-        # return err_code
 
     def link_gfs_file(self):
         self.process = subprocess.Popen(
@@ -154,13 +152,6 @@ class WrfRunner(threading.Thread):
             self.status['link-gfs-file'] = True
         else:
             self.running = False
-
-        # if res:
-        #     print("out-->\n", res)
-
-        # if err_code != 0:
-        #     return res
-        # return err_code
         
     def link_Vtable(self):
         self.process = subprocess.Popen(
@@ -182,13 +173,6 @@ class WrfRunner(threading.Thread):
         else:
             self.running = False
 
-        # if res:
-        #     print("out-->\n", res)
-        
-        # if err_code != 0:
-        #     return res
-        # return err_code
-
     def run_ungrib(self):
         self.process = subprocess.Popen(
             f"docker run --rm --shm-size=2048M \
@@ -209,20 +193,13 @@ class WrfRunner(threading.Thread):
         else:
             self.running = False
 
-        # if res:
-        #     print("out-->\n", res)
-
-        # if err_code != 0:
-        #     return res
-        # return err_code
-
     def run_metgrid(self):
         self.process = subprocess.Popen(
             f"docker run --rm --shm-size=2048M \
             -v {self.project_path}:/home/{self.user}/projects \
             -v {self.data_path}:/home/{self.user}/projects/data \
             wrf-image /bin/sh -c \
-            'cd WPS/ && ./metgrid.exe'",
+            'cd WPS/ && mpirun --oversubscribe -np 7 ./metgrid.exe'",
             shell=True,
             stdout=subprocess.PIPE, 
             stderr=subprocess.PIPE)
@@ -234,13 +211,6 @@ class WrfRunner(threading.Thread):
             self.status['run-metgrid'] = True
         else:
             self.running = False
-
-        # if res:
-        #     print("out-->\n", res)
-
-        # if err_code != 0:
-        #     return res
-        # return err_code
         
     def link_met_data(self):
         self.process = subprocess.Popen(
@@ -262,13 +232,6 @@ class WrfRunner(threading.Thread):
         else:
             self.running = False
 
-        # if res:
-        #     print("out-->\n", res)
-
-        # if err_code != 0:
-        #     return res
-        # return err_code
-
     def run_real(self):
         self.process = subprocess.Popen(
             f"docker run --rm --shm-size=2048M \
@@ -289,20 +252,13 @@ class WrfRunner(threading.Thread):
         else:
             self.running = False
 
-        # if res:
-        #     print("res-->\n", res)
-
-        # if err_code != 0:
-        #     return res
-        # return err_code
-
     def run_wrf(self):
         self.process = subprocess.Popen(
             f"docker run --rm --shm-size=2048M \
             -v {self.project_path}:/home/{self.user}/projects \
             -v {self.data_path}:/home/{self.user}/projects/data \
             wrf-image /bin/sh -c \
-            'cd WRF/no_emission_run/ && ./wrf.exe'",
+            'cd WRF/no_emission_run/ && mpirun --oversubscribe -np 7 ./wrf.exe'",
             shell=True,
             stdout=subprocess.PIPE, 
             stderr=subprocess.PIPE)
@@ -330,7 +286,7 @@ class WrfRunner(threading.Thread):
 
         ncfile = Dataset(
             pathlib.Path(
-                f"{self.wrf_path}/wrfout_d01_2019-09-24_00:00:00"))
+                f"{self.wrf_path}/wrfout_d01_2019-09-14_00:00:00"))
 
         cm = mpl.colors.LinearSegmentedColormap.from_list('my_colormap', ['#00c7ff' , '#6ee44b', '#f1ff00', '#ffa500', '#ff0024'], 1024)
         days = np.arange(0,25)
@@ -396,10 +352,6 @@ class WrfRunner(threading.Thread):
         image_frames[0].save(
             pathlib.Path(f"{path}/output.gif"), 
             format = 'GIF', append_images = image_frames[1: ], save_all = True, duration = 300, loop = 0) 
-
-        # image_frames[0].save(
-        #     pathlib.Path(f"{self.gif_path}/output.gif"), 
-        #     format = 'GIF', append_images = image_frames[1: ], save_all = True, duration = 300, loop = 0) 
         self.status['generate-GIF'] = True
 
     def run(self):
