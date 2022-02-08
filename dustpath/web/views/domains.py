@@ -41,7 +41,7 @@ def record():
                 domain.dy = domain.dx
                 resolution = (domain.dx / 1000) * (domain.dy / 1000)
                 domain.e_sn = (area / resolution) / 100
-            elif domain.dy < domain.dX:
+            elif domain.dy < domain.dx:
                 domain.dX = domain.dy
                 resolution = (domain.dx / 1000) * (domain.dy / 1000)
                 domain.e_we = (area / resolution) / 100
