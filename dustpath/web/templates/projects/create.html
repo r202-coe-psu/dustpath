@@ -15,43 +15,51 @@
   <div class="ui one column stackable grid">
     <div class="column harvers" style="padding-top: 0;">
       <div style="margin-top: 3rem;">
-        <h1 class="ui centered header">ตั้งค่า</h1>
+        <h1 class="ui centeyellow header">ตั้งค่า</h1>
       </div>
       <h4 class="ui horizontal divider header">
         ตั้งค่าการจำลองสภาพการเคลื่อนที่
       </h4>
       <div class="ui vertical segment">
-        <form class="ui form error" enctype="multipart/form-data" method="POST">
+        <form 
+          class="ui form error" 
+          enctype="multipart/form-data" 
+          method="POST"
+          style="color:white">
           {{ form.csrf_token }}
           <div class="field">
+            <h3>
             {{ form.name.label }}
+            </h3>
             {{ form.name }}
             {% for error in form.name.errors %}
-            <p style="color: red;">* โปรดระบุจำนวนโดเมนสูงสุด</p>
+            <p style="color: yellow;">* โปรดระบุจำนวนโดเมนสูงสุด</p>
             {% endfor %}
           </div>
           <div class="field">
+            <h3>
             {{ form.domain.label }}
+            </h3>
             {{ form.domain(class_="ui dropdown search") }}
             {% for error in form.domain.errors %}
-            <p style="color: red;">* โปรดระบุโดเมนที่ต้องการ</p>
+            <p style="color: yellow;">* โปรดระบุโดเมนที่ต้องการ</p>
             {% endfor %}
           </div>
           <div class="two fields">
-            <div class="required eight wide field">
+            <div class="requiyellow eight wide field">
               <h3>{{ form.start_date.label }}</h3>
               {{ render_calendar(form.start_date,
               calendar_id="start_date_calendar") }}
               {% for error in form.start_date.errors %}
-              <p style="color: red;">* โปรดใส่วันที่เริ่มการคำนวณ</p>
+              <p style="color: yellow;">* โปรดใส่วันที่เริ่มการคำนวณ</p>
               {% endfor %}
             </div>
-            <div class="required eight wide field">
+            <div class="requiyellow eight wide field">
               <h3>{{ form.end_date.label }}</h3>
               {{ render_calendar(form.end_date,
               calendar_id="end_date_calendar") }}
               {% for error in form.end_date.errors %}
-              <p style="color: red;">* โปรดใส่วันที่สิ้นสุดการคำนวณ</p>
+              <p style="color: yellow;">* โปรดใส่วันที่สิ้นสุดการคำนวณ</p>
               {% endfor %}
             </div>
           </div>  
