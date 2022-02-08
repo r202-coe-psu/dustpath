@@ -14,15 +14,23 @@
             <table id="mytable" class="ui teal celled table">
               <thead>
                 <tr>
+                  <th>Name</th>
                   <th>Lat</th>
                   <th>Lon</th>
-                  <th>width(m)</th>
-                  <th>hight(m)</th>
+                  <th>Width(m)</th>
+                  <th>Hight(m)</th>
                 </tr>
               </thead>
               <tbody>
                 {% for domain in domains %}
                 <tr>
+                  <td>
+                    <div class="left floated left aligned two wide column">
+                      <a class="right aligned content" id="namelist" style="color: black;">
+                        {{ domain.name }}
+                      </a>
+                    </div>
+                  </td>
                   <td>
                     <div class="left floated left aligned two wide column">
                       <a class="right aligned content" id="namelist" style="color: black;">

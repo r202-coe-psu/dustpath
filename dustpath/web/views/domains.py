@@ -27,9 +27,24 @@ def record():
         data = request.json
         if data:
             domain = models.Domain(
+                name=data['name'],
                 center=data['center'],
                 width=data['width'],
-                hight=data['hight'])
+                hight=data['hight'],
+                dx=data['width']/100,
+                dy=data['hight']/100,
+                e_we=100,
+                e_sn=100,
+                )
+            area = (domain.dx / 1000) * (domain.dy / 1000) * 10000
+            if domain.dx < domain.dy:
+                domain.dy = domain.dx
+                resolution = (domain.dx / 1000) * (domain.dy / 1000)
+                domain.e_sn = (area / resolution) / 100
+            elif domain.dy < domain.dX:
+                domain.dX = domain.dy
+                resolution = (domain.dx / 1000) * (domain.dy / 1000)
+                domain.e_we = (area / resolution) / 100
             domain.save()
     return render_template('domains/record.html',
                            zoom=zoom,

@@ -4,6 +4,11 @@
     <div id="mapid" style="z-index:1;"></div>
     <div align="right" style="margin-top:2em;z-index: 2;position: absolute;
                               top: 100px;right: 10px;;padding: 5px">
+        <form class="ui form error">
+            <div class="field">
+                <input id="name-form" value="" placeholder="ชื่อโดเมน">
+            </div>
+        </form>
         <button id="record" class="ui teal button" style="margin-top:5px">
             บันทึก</button>
     </div>
@@ -63,16 +68,20 @@ def save_data(e):
         southEest = layer.getBounds().getSouthEast()
         width = southWest.distanceTo(southEest)
         hight = northWest.distanceTo(southWest)
+
         req = ajax.ajax()
         req.open('POST', '/domains/record', True)
         req.set_header('content-type', 'application/json')
-        data = json.dumps(
-            {'center': layer_center,
+        data = {
+            'center': layer_center,
             'width': width,
             'hight': hight,}
-        )
-        req.send(data)
-        print("data was saved")
+        if document['name-form'].value :
+            data['name'] = document['name-form'].value
+        else:
+            data['name'] = "domain"
+        json_data = json.dumps(data)
+        req.send(json_data)
 
 def create_rectangle(e):
     if e.layerType == 'rectangle':

@@ -12,8 +12,8 @@
  parent_grid_ratio =   1,    3,    3,
  i_parent_start    =   1,   12,   50,  
  j_parent_start    =   1,    5,  200,  
- e_we              = 200,  262,  160, 
- e_sn              = 200,  271,   91,
+ e_we              = {{ wrf_config.domain.e_we }},  262,  160, 
+ e_sn              = {{ wrf_config.domain.e_sn }},  271,   91,
  !
  !!!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
  ! The default datasets used to produce the MAXSNOALB and ALBEDO12M
@@ -28,8 +28,8 @@
  !!!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
  !
  geog_data_res = '5m','2m','30s','30s',
- dx = {{ wrf_config.domain.radius / 100 }},
- dy = {{ wrf_config.domain.radius / 100 }},
+ dx = {{ wrf_config.domain.dx }},
+ dy = {{ wrf_config.domain.dy }},
  map_proj = 'lambert',
  ref_lat   =  {{ wrf_config.domain.center[0] }},
  ref_lon   =  {{ wrf_config.domain.center[1] }},

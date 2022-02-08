@@ -70,4 +70,4 @@ def result(project_id):
 
 def get_domains_choices():
     domains = models.Domain.objects()
-    return [(str(d.id), f"lat={d.center[0]}, lon={d.center[1]}, r={d.radius}") for d in domains]
+    return [(str(d.id), f"{d.name}") for d in domains]

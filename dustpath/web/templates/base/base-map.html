@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/leaflet-draw/dist/leaflet.draw.css') }}" />
     <script src="{{ url_for('static', filename='node_modules/leaflet-draw/dist/leaflet.draw.js') }}"></script>
     <script src="{{ url_for('static', filename='node_modules/leaflet-geometryutil/src/leaflet.geometryutil.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') | add_date_url }}">
 </head>
 
 <body onload="brython()">
