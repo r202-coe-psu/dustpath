@@ -133,6 +133,8 @@ class ProcessorController:
         attributes = data["attributes"]
         attributes['namelist_wps'] = self.config_composer.get_namelist_wps(project)
         attributes['namelist_input'] = self.config_composer.get_namelist_input(project)
+        attributes['output_file'] = project.output_filename
+
 
         command = dict(
             processor_id=str(processor.id),

@@ -5,7 +5,8 @@ class Domain(me.Document):
     meta = {'collection': 'domains'}
 
     center = me.GeoPointField(required=True)
-    radius = me.IntField(required=True)
+    width = me.FloatField(required=True)
+    hight = me.FloatField(required=True)
 
     created_date = me.DateTimeField(
         required=True, 

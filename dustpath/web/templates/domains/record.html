@@ -31,36 +31,57 @@ map = leaflet.map('mapid', {
     'zoom': zoom,
     'layers': openstreet
 })
+
 drawnItems = leaflet.FeatureGroup.new()
 map.addLayer(drawnItems)
 drawControl = leaflet.Control.Draw.new({
-         'edit': {
-             'featureGroup': drawnItems
-         }
+        'draw' : {
+            'polyline' : False,
+            'polygon' : False,
+            'rectangle' : True,
+            'circle' : False,
+            'marker' : False,
+            'circlemarker': False,
+        },
+        'edit': False
 })
 
 map.addControl(drawControl)
 
 #จำเป็นต้องใช้กรุ๊ปเพราะจำเป็นต้องใช้ต่อและไม่สามารถอ้างอิงก่อนจะ assign ภายในฟังก์ชันได้
 circle_layers = leaflet.layerGroup([])
+rectangle_layers = leaflet.layerGroup([])
 
 def save_data(e):
-    layers = circle_layers.getLayers()
+    layers = rectangle_layers.getLayers()
     if layers:
         layer = layers[0]
-        latlng = layer.getLatLng()
+        latlng = layer.getCenter()
         layer_center = [latlng.lat, latlng.lng]
-        layer_radius = layer.getRadius()
-        
+        northWest = layer.getBounds().getNorthWest()
+        southWest = layer.getBounds().getSouthWest()
+        southEest = layer.getBounds().getSouthEast()
+        width = southWest.distanceTo(southEest)
+        hight = northWest.distanceTo(southWest)
         req = ajax.ajax()
         req.open('POST', '/domains/record', True)
         req.set_header('content-type', 'application/json')
         data = json.dumps(
             {'center': layer_center,
-            'radius': layer_radius}
+            'width': width,
+            'hight': hight,}
         )
         req.send(data)
         print("data was saved")
+
+def create_rectangle(e):
+    if e.layerType == 'rectangle':
+        layer = e.layer
+        layer_bounds = layer.getBounds()
+        rectangle_layer = leaflet.rectangle(layer_bounds)
+        rectangle_layers.clearLayers()
+        rectangle_layers.addLayer(rectangle_layer)
+        rectangle_layers.addTo(map)
 
 def create_circle(e):
     if e.layerType == 'circle':
@@ -73,7 +94,7 @@ def create_circle(e):
         circle_layers.addLayer(circle_layer)
         circle_layers.addTo(map)
         
-map.on('draw:created', create_circle)
+map.on('draw:created', create_rectangle)
 document["record"].bind("click", save_data)
 
 </script>

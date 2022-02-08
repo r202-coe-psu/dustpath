@@ -26,7 +26,10 @@ def record():
     if request.method == 'POST':
         data = request.json
         if data:
-            domain = models.Domain(center=data['center'], radius=data['radius'])
+            domain = models.Domain(
+                center=data['center'],
+                width=data['width'],
+                hight=data['hight'])
             domain.save()
     return render_template('domains/record.html',
                            zoom=zoom,

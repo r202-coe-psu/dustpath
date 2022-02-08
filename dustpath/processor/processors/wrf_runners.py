@@ -20,18 +20,18 @@ class WrfRunner(threading.Thread):
         self.running = False
         self.user = '${USER}'
         self.status = {
-            'copy-project': False,
-            'write-namelist-wps': False,
-            'write-namelist-input': False,
-            'link-geogrid-table': False, 
-            'run-geogrid': False, 
-            'link-gfs-file': False,
-            'link-Vtable': False, 
-            'run-ungrib': False, 
-            'run-metgrid': False,
-            'link-met-data': False, 
-            'run-real': False, 
-            'run-wrf': False,
+            'copy-project': True,
+            'write-namelist-wps': True,
+            'write-namelist-input': True,
+            'link-geogrid-table': True, 
+            'run-geogrid': True, 
+            'link-gfs-file': True,
+            'link-Vtable': True, 
+            'run-ungrib': True, 
+            'run-metgrid': True,
+            'link-met-data': True, 
+            'run-real': True, 
+            'run-wrf': True,
             'plot': False, 
             'generate-GIF': False,
             }
@@ -39,6 +39,7 @@ class WrfRunner(threading.Thread):
         self.project_id = attributes.get('project_id')
         self.namelist_wps = attributes.get('namelist_wps')
         self.namelist_input = attributes.get('namelist_input')
+        self.output_file = attributes.get('output_file')
 
         self.projects_path = pathlib.Path(
                 self.settings.get("DUSTPATH_PROCESSOR_CACHE_PATH", '/tmp')
@@ -284,15 +285,12 @@ class WrfRunner(threading.Thread):
         from wrf import (to_np, getvar, smooth2d, get_cartopy, cartopy_xlim,
                         cartopy_ylim, latlon_coords)
 
-        ncfile = Dataset(
-            pathlib.Path(
-                f"{self.wrf_path}/wrfout_d01_2019-09-14_00:00:00"))
-
+        ncfile = Dataset(pathlib.Path(self.wrf_path / self.output_file))
         cm = mpl.colors.LinearSegmentedColormap.from_list('my_colormap', ['#00c7ff' , '#6ee44b', '#f1ff00', '#ffa500', '#ff0024'], 1024)
         days = np.arange(0,25)
 
         for i in days:
-            PM2_5_DRY = getvar(ncfile, "PM2_5_DRY", timeidx=i)[0,:]
+            # PM2_5_DRY = getvar(ncfile, "PM2_5_DRY", timeidx=i)[0,:]
             DUST_1 = getvar(ncfile, "DUST_1", timeidx=i)[0,:]
             PM2_5 = DUST_1
 
@@ -357,44 +355,44 @@ class WrfRunner(threading.Thread):
     def run(self):
         logger.debug("Start Wrf Runner")
         self.running = True
-        logger.debug(f'copy_project')
-        self.copy_project()
-        if self.status['copy-project']:
-            logger.debug(f'write_namelist_wps')
-            self.write_namelist_wps()
-        if self.status['write-namelist-wps']:
-            logger.debug(f'write_namelist_input')
-            self.write_namelist_input()
-        if self.status['write-namelist-input']:
-            logger.debug(f'link_geogrid_table')
-            self.link_geogrid_table()
-        if self.status['link-geogrid-table']:
-            logger.debug(f'run_geogrid')
-            self.run_geogrid()
-        if self.status['run-geogrid']:
-            logger.debug(f'link_gfs_file')
-            self.link_gfs_file()
-        if self.status['link-gfs-file']:
-            logger.debug(f'link_Vtable')
-            self.link_Vtable()
-        if self.status['link-Vtable']:
-            logger.debug(f'run_ungrib')
-            self.run_ungrib()
-        if self.status['run-ungrib']:
-            logger.debug(f'run_metgrid')
-            self.run_metgrid()
-        if self.status['run-metgrid']:
-            logger.debug(f'link_met_data')
-            self.link_met_data()
-        if self.status['link-met-data']:
-            logger.debug(f'run_real')
-            self.run_real()
-        if self.status['run-real']:
-            logger.debug(f'run_wrf')
-            self.run_wrf()
-        if self.status['run-wrf']:
-            logger.debug(f'plot')
-            self.plot()
+        # logger.debug(f'copy_project')
+        # self.copy_project()
+        # if self.status['copy-project']:
+        #     logger.debug(f'write_namelist_wps')
+        #     self.write_namelist_wps()
+        # if self.status['write-namelist-wps']:
+        #     logger.debug(f'write_namelist_input')
+        #     self.write_namelist_input()
+        # if self.status['write-namelist-input']:
+        #     logger.debug(f'link_geogrid_table')
+        #     self.link_geogrid_table()
+        # if self.status['link-geogrid-table']:
+        #     logger.debug(f'run_geogrid')
+        #     self.run_geogrid()
+        # if self.status['run-geogrid']:
+        #     logger.debug(f'link_gfs_file')
+        #     self.link_gfs_file()
+        # if self.status['link-gfs-file']:
+        #     logger.debug(f'link_Vtable')
+        #     self.link_Vtable()
+        # if self.status['link-Vtable']:
+        #     logger.debug(f'run_ungrib')
+        #     self.run_ungrib()
+        # if self.status['run-ungrib']:
+        #     logger.debug(f'run_metgrid')
+        #     self.run_metgrid()
+        # if self.status['run-metgrid']:
+        #     logger.debug(f'link_met_data')
+        #     self.link_met_data()
+        # if self.status['link-met-data']:
+        #     logger.debug(f'run_real')
+        #     self.run_real()
+        # if self.status['run-real']:
+        #     logger.debug(f'run_wrf')
+        #     self.run_wrf()
+        # if self.status['run-wrf']:
+        logger.debug(f'plot')
+        self.plot()
         if self.status['plot']:
             logger.debug(f'genarate_GIF_file')
             self.genarate_GIF_file()
