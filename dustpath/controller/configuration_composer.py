@@ -24,6 +24,7 @@ class ConfigurationComposer:
         loader = jinja2.FileSystemLoader(self.template_dir)
         env = jinja2.Environment(loader=loader)
         template = env.get_template('namelist_input.j2')
+        delta = project.wrf_config.end_date - project.wrf_config.start_date
 
-        result = template.render(wrf_config=project.wrf_config)
+        result = template.render(wrf_config=project.wrf_config, days=delta.days)
         return json.dumps(result) 

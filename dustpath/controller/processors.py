@@ -134,6 +134,8 @@ class ProcessorController:
         attributes['namelist_wps'] = self.config_composer.get_namelist_wps(project)
         attributes['namelist_input'] = self.config_composer.get_namelist_input(project)
         attributes['output_file'] = project.output_filename
+        delta = project.wrf_config.end_date - project.wrf_config.start_date
+        attributes['days'] = delta.days
 
 
         command = dict(

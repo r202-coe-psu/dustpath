@@ -40,6 +40,7 @@ class WrfRunner(threading.Thread):
         self.namelist_wps = attributes.get('namelist_wps')
         self.namelist_input = attributes.get('namelist_input')
         self.output_file = attributes.get('output_file')
+        self.days = attributes.get('days')
 
         self.projects_path = pathlib.Path(
                 self.settings.get("DUSTPATH_PROCESSOR_CACHE_PATH", '/tmp')
@@ -287,9 +288,9 @@ class WrfRunner(threading.Thread):
 
         ncfile = Dataset(pathlib.Path(self.wrf_path / self.output_file))
         cm = mpl.colors.LinearSegmentedColormap.from_list('my_colormap', ['#00c7ff' , '#6ee44b', '#f1ff00', '#ffa500', '#ff0024'], 1024)
-        days = np.arange(0,25)
+        hours = np.arange(0, 24*self.days)
 
-        for i in days:
+        for i in hours:
             # PM2_5_DRY = getvar(ncfile, "PM2_5_DRY", timeidx=i)[0,:]
             DUST_1 = getvar(ncfile, "DUST_1", timeidx=i)[0,:]
             PM2_5 = DUST_1
@@ -318,7 +319,7 @@ class WrfRunner(threading.Thread):
                         cmap=cm)
             t = np.datetime64(PM2_5.Time.values)
             date = np.datetime_as_string(t, unit='D')
-            plt.title('PM2.5_DRY : ' + date)
+            plt.title('PM2.5 : ' + date)
 
             axs, _ = mpl.colorbar.make_axes(plt.gca(), shrink=0.5)  
 
@@ -336,9 +337,9 @@ class WrfRunner(threading.Thread):
 
         image_frames=[]
 
-        days = np.arange(0,25)
+        hours = np.arange(0, 24*self.days)
 
-        for i in days:
+        for i in hours:
             new_frame = Image.open(
                 pathlib.Path(f"{self.pic_path}") / pathlib.Path(str(i)+'.jpg'))
             image_frames.append(new_frame)
