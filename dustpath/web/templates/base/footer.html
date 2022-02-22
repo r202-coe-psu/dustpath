@@ -18,35 +18,53 @@
   }
 </style>
 <footer class="ui inverted vertical footer segment">
-  <div class="ui inverted vertical footer segment">
-    <div class="ui center aligned container">
-      <div class="ui stackable inverted grid">
-        <div class="six wide column">
-          <br>
-          <img src="{{ url_for('static', filename='images/icon.png') }}" class="ui centered tiny image">
-          <br>
-          Dustpath<br> ระบบจำลองการเคลื่อนตัวของฝุ่น PM 2.5
+  <div class="ui container">
+    <div class="ui three column stackable grid">
+      <div class="column">
+        <h4>
+          เกี่ยวกับ
+        </h4>
+        <div>
+          <img src="{{ url_for('static', filename='images/icon.png') }}" class="center"
+            style="width:105px; height:115px; margin-bottom: 1rem;">
+          <br>Dustpath<br>ระบบจำลองการเคลื่อนตัวของฝุ่น PM 2.5
         </div>
-        <div class="four wide column">
-          <br>
-          <b>ผู้จัดทำ</b><br> 1. นายพงศธร ชดช้อย<br> 2. นายทิวัตถ์ ลิม<br><br>
-          {#
-          <b>ผู้จัดทำ</b><br> 1. นายพงศธร ชดช้อย<br> 2. นายทิวัตถ์ ลิม<br> 3. นายธีรยุทธ นุชผดุง<br><br>
-          #}
-          <b>ที่ปรึกษาโครงการ</b><br>ดร.ธนาธิป ลิ่มนา
+      </div>
+      <div class="column">
+        <h4>
+          ผู้จัดทำ
+        </h4>
+        1. นายพงศธร ชดช้อย<br>2. นายทิวัตถ์ ลิม<br>3. นายธีรยุทธ นุชผดุง
+        <h4>
+          อาจารย์ที่ปรึกษาโครงการ
+        </h4>
+        <div>
+          ดร.ธนาธิป ลิ่มนา
         </div>
-        <div class="six wide column">
-          <br>
-          <a href="http://www.coe.psu.ac.th" class="item inverted" target="_blank" style="text-decoration: none;">
-            <img src="{{ url_for('static', filename='images/coe.png') }}" class="ui centered tiny image">
-            <br>
-            สาขาวิชาวิศวกรรมคอมพิวเตอร์<br>
-            คณะวิศวกรรมศาสตร์
-            มหาวิทยาลัยสงขลานครินทร์<br>
-            <br>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">
+          สนับสนุนโดย
+        </h4>
+        <div class="inverted link list">
+          <a href="http://www.coe.psu.ac.th" class="item" target="_blank">
+            <img src="/static/images/coe-psu-branding-white.png" class="center" style="width:329px; height:64px;">
           </a>
+        </div>
+        <div class="ui inverted link list">
+          <div class="ui two column stackable grid">
+            <div class="column">
+              <img src="/static/images/r202-white.png" class="ui tiny image">
+            </div>
+            <div class="column">
+              <a href="http://air.psu.ac.th/" class="item" target="_blank">
+                <img src="/static/images/anh.png" style="width:170px; height:70px;">
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
 </footer>
