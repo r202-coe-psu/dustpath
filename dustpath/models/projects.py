@@ -10,20 +10,30 @@ class WrfConfiguration(me.EmbeddedDocument):
 
 class Status(me.EmbeddedDocument):
     # max_domain = me.IntField(required=True, default=1)
-    copy_project = me.BooleanField(required=True, default=False)
-    write_namelist_wps = me.BooleanField(required=True, default=False)
-    write_namelist_input = me.BooleanField(required=True, default=False)
-    link_geogrid_table = me.BooleanField(required=True, default=False)
-    run_geogrid = me.BooleanField(required=True, default=False)
-    link_gfs_file = me.BooleanField(required=True, default=False)
-    link_Vtable = me.BooleanField(required=True, default=False)
-    run_ungrib = me.BooleanField(required=True, default=False)
-    run_metgrid = me.BooleanField(required=True, default=False)
-    link_met_data = me.BooleanField(required=True, default=False)
-    run_real = me.BooleanField(required=True, default=False)
-    run_wrf = me.BooleanField(required=True, default=False)
-    plot = me.BooleanField(required=True, default=False)
-    generate_GIF = me.BooleanField(required=True, default=False)
+    copy_project = me.StringField(required=True, default='')
+    write_namelist_wps = me.StringField(required=True, default='')
+    link_geogrid_table = me.StringField(required=True, default='')
+    run_geogrid = me.StringField(required=True, default='')
+    link_gfs_file = me.StringField(required=True, default='')
+    link_Vtable = me.StringField(required=True, default='')
+    run_ungrib = me.StringField(required=True, default='')
+    run_metgrid = me.StringField(required=True, default='')
+    link_met_data = me.StringField(required=True, default='')
+
+    write_no_emiss_namelist_input = me.StringField(required=True, default='')
+    run_real_1 = me.StringField(required=True, default='')
+    write_prep_chem_src_input = me.StringField(required=True, default='')
+    run_prep_chem_src = me.StringField(required=True, default='')
+    link_prep_chem_src = me.StringField(required=True, default='')
+    write_emiss_namelist_input = me.StringField(required=True, default='')
+    convert_emission = me.StringField(required=True, default='')
+    
+    link_chemi = me.StringField(required=True, default='')
+    run_real_2 = me.StringField(required=True, default='')
+
+    run_wrf = me.StringField(required=True, default='')
+    plot = me.StringField(required=True, default='')
+    generate_GIF = me.StringField(required=True, default='')
 class Project(me.Document):
     meta = {"collection": "projects"}
     

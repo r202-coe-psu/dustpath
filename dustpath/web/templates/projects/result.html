@@ -6,189 +6,335 @@
       <div class="ui teal segment" style="margin-top:7%;margin-bottom:40%;">
         <h1>
           Status
+          <a class="ui right floated teal button primary run-wrf" id="project-{{project.id}}" href="{{url_for('projects.result', project_id=project.id )}}">
+            <i class="sync icon"></i>
+            รันอีกครั้ง
+          </a>
         </h1>
         <div class="ui divider">
         </div>
-        <div class="ui bottom attached tab segment active" data-tab="first">
-          <div class="ui">
-            <table id="mytable" class="ui teal celled table">
-              <thead>
-                <tr>
-                  <th>copy project</th>
-                  <th>write namelist wps</th>
-                  <th>write namelist input</th>
-                  <th>link geogrid table</th>
-                  <th>run geogrid</th>
-                  <th>link gfs_file</th>
-                  <th>link Vtable</th>
-                  <th>run ungrib</th>
-                  <th>run metgrid</th>
-                  <th>link met data</th>
-                  <th>run real</th>
-                  <th>run wrf</th>
-                  <th>plot</th>
-                  <th>generate GIF</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.copy_project %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
+        <div class="ui">
+          <table class="ui celled table">
+            <thead>
+              <tr class="center aligned">
+                <th>copy project</th>
+                <th>write namelist wps</th>
+                <th>link geogrid table</th>
+                <th>run geogrid</th>
+                <th>link gfs_file</th>
+                <th>link Vtable</th>
+                <th>run ungrib</th>
+                <th>run metgrid</th>
+                <th>link met data</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.copy_project == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.copy_project == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.copy_project == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.write_namelist_wps == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.write_namelist_wps == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.write_namelist_wps == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.link_geogrid_table == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.link_geogrid_table == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.link_geogrid_table == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.run_geogrid == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.run_geogrid == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.run_geogrid == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.link_gfs_file == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.link_gfs_file == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.link_gfs_file == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.link_Vtable == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.link_Vtable == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.link_Vtable == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.run_ungrib == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.run_ungrib == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.run_ungrib == 'running' %}
+                      <i class="grey spinner icon"></i>
                         {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.write_namelist_wps %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.write_namelist_input%}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.link_geogrid_table %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.run_geogrid %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.link_gfs_file %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.link_Vtable %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.run_ungrib %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                         {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.run_metgrid %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.link_met_data %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.run_real %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.run_wrf %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.plot %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="center aligned two wide column">
-                      <a class="right aligned content">
-                        {% if project.status.generate_GIF %}
-                        <i class="green check outline icon"></i>
-                        {% else %}
-                        <i class="grey times circle outline icon"></i>
-                        {% endif %}
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-            </table>
-          </div>
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.run_metgrid == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.run_metgrid == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.run_metgrid == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.link_met_data == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.link_met_data == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.link_met_data == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+              </tr>
+          </table>
+          <table class="ui celled table">
+            <thead>
+              <tr class="center aligned">
+                <th>write no emiss namelist.input</th>
+                <th>run real 1</th>
+                <th>write prep chem sources input</th>
+                <th>run prep chem sources</th>
+                <th>link prep chem sources</th>
+                <th>write emiss namelist.input</th>
+                <th>convert emission</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.write_no_emiss_namelist_input == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.write_no_emiss_namelist_input == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.write_no_emiss_namelist_input == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.run_real_1 == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.run_real_1 == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.run_real_1 == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.write_prep_chem_src_input == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.write_prep_chem_src_input == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.write_prep_chem_src_input == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.run_prep_chem_src == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.run_prep_chem_src == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.run_prep_chem_src == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.link_prep_chem_src == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.link_prep_chem_src == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.link_prep_chem_src == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.write_emiss_namelist_input == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.write_emiss_namelist_input == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.write_emiss_namelist_input == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.convert_emission == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.convert_emission == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.convert_emission == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+              </tr>
+          </table>
+          <table class="ui celled table">
+            <thead>
+              <tr class="center aligned">
+                <th>link chemi</th>
+                <th>run real 2</th>
+                <th>run wrf</th>
+                <th>plot</th>
+                <th>generate GIF</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.link_chemi == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.link_chemi == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.link_chemi == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.run_real_2 == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.run_real_2 == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.run_real_2 == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.run_wrf == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.run_wrf == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.run_wrf == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.plot == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.plot == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.plot == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.generate_GIF == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.generate_GIF == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.generate_GIF == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
+              </tr>
+          </table>
         </div>
         <h1>
           Result
@@ -204,4 +350,16 @@
   </div>
 </div>
 
+<script type="text/python">
+  from processors import status
+</script>
+
+{% endblock %}
+
+
+{% block additional_js %}
+  <script type="text/javascript">
+    brython(1);
+  </script>
+  <script type="text/javascript" src="{{ url_for('static', filename='brython/processors.brython.js') }}"></script>
 {% endblock %}

@@ -23,7 +23,7 @@ class ProcessorServer:
         self.status = {}
 
     def get_options(self):
-        parser = argparse.ArgumentParser(description="Nokkhum Recorder")
+        parser = argparse.ArgumentParser(description="Dustpath Recorder")
         parser.add_argument(
             "--directory",
             dest="directory",

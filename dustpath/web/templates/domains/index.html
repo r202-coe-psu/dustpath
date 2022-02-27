@@ -6,63 +6,65 @@
       <div class="ui teal segment" style="margin-top:7%;margin-bottom:100%;">
         <h1>
           โดเมนทั้งหมด
+          <a class="ui right floated primary button primary"
+             href="{{url_for('domains.record')}}">
+            สร้างโดเมน
+          </a>
         </h1>
         <div class="ui divider">
         </div>
-        <div class="ui bottom attached tab segment active" data-tab="first">
-          <div class="ui">
-            <table id="mytable" class="ui teal celled table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Lat</th>
-                  <th>Lon</th>
-                  <th>Width(m)</th>
-                  <th>Hight(m)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for domain in domains %}
-                <tr>
-                  <td>
-                    <div class="left floated left aligned two wide column">
-                      <a class="right aligned content" id="namelist" style="color: black;">
-                        {{ domain.name }}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="left floated left aligned two wide column">
-                      <a class="right aligned content" id="namelist" style="color: black;">
-                        {{domain.center[0]}}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="left floated left aligned two wide column">
-                      <a class="right aligned content" id="namelist" style="color: black;">
-                        {{domain.center[1]}}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="left floated left aligned two wide column">
-                      <a class="right aligned content"  style="color: black;">
-                        {{ domain.width }}
-                      </a>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="left floated left aligned two wide column">
-                      <a class="right aligned content"  style="color: black;">
-                        {{ domain.hight }}
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-                {% endfor %}
-            </table>
-          </div>
+        <div class="ui">
+          <table id="mytable" class="ui celled table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Lat</th>
+                <th>Lon</th>
+                <th>Width(m)</th>
+                <th>Hight(m)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for domain in domains %}
+              <tr>
+                <td>
+                  <div class="left floated left aligned two wide column">
+                    <a class="right aligned content" id="namelist" style="color: black;">
+                      {{ domain.name }}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="left floated left aligned two wide column">
+                    <a class="right aligned content" id="namelist" style="color: black;">
+                      {{domain.center[0]}}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="left floated left aligned two wide column">
+                    <a class="right aligned content" id="namelist" style="color: black;">
+                      {{domain.center[1]}}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="left floated left aligned two wide column">
+                    <a class="right aligned content"  style="color: black;">
+                      {{ domain.width }}
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <div class="left floated left aligned two wide column">
+                    <a class="right aligned content"  style="color: black;">
+                      {{ domain.hight }}
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+          </table>
         </div>
       </div>
     </div>

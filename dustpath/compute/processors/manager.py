@@ -41,7 +41,7 @@ class ProcessPolling(threading.Thread):
                 continue
 
             for v in new_status.values():
-                if not v:
+                if v != 'success':
                     process_success = False
                     break
 

@@ -26,6 +26,14 @@ asyncio-nats-client
 watchdog
 brython
 
+# wrf
+xarray
+cartopy
+matplotlib
+openpyxl
+sklearn
+dask
+
 # old-------------v
 
 # flake8

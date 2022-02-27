@@ -132,7 +132,9 @@ class ProcessorController:
 
         attributes = data["attributes"]
         attributes['namelist_wps'] = self.config_composer.get_namelist_wps(project)
-        attributes['namelist_input'] = self.config_composer.get_namelist_input(project)
+        attributes['emiss_namelist_input'] = self.config_composer.get_emiss_namelist_input(project)
+        attributes['no_emiss_namelist_input'] = self.config_composer.get_no_emiss_namelist_input(project)
+        attributes['prep_chem_sources_input'] = self.config_composer.get_prep_chem_sources_input(project)
         attributes['output_file'] = project.output_filename
         delta = project.wrf_config.end_date - project.wrf_config.start_date
         attributes['days'] = delta.days

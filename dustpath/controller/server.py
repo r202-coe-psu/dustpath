@@ -160,7 +160,6 @@ class ControllerServer:
                     project = models.Project.objects.get(id=data.get('project_id'))
                     project.status.copy_project = status['copy-project']
                     project.status.write_namelist_wps = status['write-namelist-wps']
-                    project.status.write_namelist_input = status['write-namelist-input']
                     project.status.link_geogrid_table = status['link-geogrid-table']
                     project.status.run_geogrid = status['run-geogrid']
                     project.status.link_gfs_file = status['link-gfs-file']
@@ -168,7 +167,17 @@ class ControllerServer:
                     project.status.run_ungrib = status['run-ungrib']
                     project.status.run_metgrid = status['run-metgrid']
                     project.status.link_met_data = status['link-met-data']
-                    project.status.run_real = status['run-real']
+
+                    project.status.write_no_emiss_namelist_input = status['write-no-emiss-namelist-input']
+                    project.status.run_real_1 = status['run-real-1']
+                    project.status.write_prep_chem_src_input = status['write-prep-chem-src-input']
+                    project.status.run_prep_chem_src = status['run-prep-chem-src']
+                    project.status.link_prep_chem_src = status['link-prep-chem-src']
+                    project.status.write_emiss_namelist_input = status['write-emiss-namelist-input']
+                    project.status.convert_emission = status['convert-emission']
+                    project.status.link_chemi = status['link-chemi']
+                    project.status.run_real_2 = status['run-real-2']
+                    
                     project.status.run_wrf = status['run-wrf']
                     project.status.plot = status['plot']
                     project.status.generate_GIF = status['generate-GIF']

@@ -14,4 +14,4 @@ module = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
 @module.route('/')
 def index():
-    return render_template('main/dashboard.html')
+    return redirect(url_for('projects.index'))

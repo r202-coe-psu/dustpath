@@ -20,10 +20,28 @@ class ConfigurationComposer:
         result = template.render(wrf_config=project.wrf_config)
         return json.dumps(result) 
 
-    def get_namelist_input(self, project):
+    def get_no_emiss_namelist_input(self, project):
         loader = jinja2.FileSystemLoader(self.template_dir)
         env = jinja2.Environment(loader=loader)
-        template = env.get_template('namelist_input.j2')
+        template = env.get_template('no_emiss_namelist_input.j2')
+        delta = project.wrf_config.end_date - project.wrf_config.start_date
+
+        result = template.render(wrf_config=project.wrf_config, days=delta.days)
+        return json.dumps(result) 
+
+    def get_emiss_namelist_input(self, project):
+        loader = jinja2.FileSystemLoader(self.template_dir)
+        env = jinja2.Environment(loader=loader)
+        template = env.get_template('emiss_namelist_input.j2')
+        delta = project.wrf_config.end_date - project.wrf_config.start_date
+
+        result = template.render(wrf_config=project.wrf_config, days=delta.days)
+        return json.dumps(result) 
+
+    def get_prep_chem_sources_input(self, project):
+        loader = jinja2.FileSystemLoader(self.template_dir)
+        env = jinja2.Environment(loader=loader)
+        template = env.get_template('prep_chem_sources.j2')
         delta = project.wrf_config.end_date - project.wrf_config.start_date
 
         result = template.render(wrf_config=project.wrf_config, days=delta.days)
