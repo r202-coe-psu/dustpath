@@ -504,6 +504,10 @@ class WrfRunner(threading.Thread):
                 cbar = mpl.colorbar.ColorbarBase(axs, cmap=cm,
                                 norm=mpl.colors.Normalize(vmin=-0, vmax=100))
 
+                path = pathlib.Path(self.pic_path)
+                if not path.exists() and not path.is_dir():
+                    path.mkdir(parents=True)
+
                 plt.savefig(
                     pathlib.Path(f"{self.pic_path}") / pathlib.Path(str(i)+'.jpg'))
                 # plt.show()
