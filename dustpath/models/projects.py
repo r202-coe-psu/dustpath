@@ -34,6 +34,7 @@ class Status(me.EmbeddedDocument):
     run_wrf = me.StringField(required=True, default='')
     plot = me.StringField(required=True, default='')
     generate_GIF = me.StringField(required=True, default='')
+    create_tumbon_table = me.StringField(required=True, default='')
 class Project(me.Document):
     meta = {"collection": "projects"}
     

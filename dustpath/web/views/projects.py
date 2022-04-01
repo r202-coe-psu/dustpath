@@ -1,3 +1,4 @@
+import pwd
 from dustpath.models import projects
 from flask import (
     Blueprint,
@@ -13,8 +14,11 @@ from flask import (
 import datetime
 from flask_login import login_required, current_user
 import json
+import pathlib
+import pandas
 from dustpath import models
 from dustpath.web import nats
+
 from ..forms import ProjectForm
 
 from .. import forms
@@ -63,10 +67,21 @@ def run_wrf(project_id):
 @module.route('<project_id>/result', methods=['GET','POST'])
 def result(project_id):
     project = models.Project.objects.get(id=project_id)
+    try:
+        filename = pathlib.Path(f'dustpath/web/static/projects/{project_id}/PM2_5_ALL.csv')
+        file = pandas.read_csv(filename, header=0) 
+        data = file.values
+        if len(data) == 0:
+            data = None
+    except Exception as e:
+        print(e)
+        data = None
     return render_template('projects/result.html',
         project_id=project_id, 
         result=result, 
-        project=project)
+        project=project,
+        data=data,
+        )
 
 def get_domains_choices():
     domains = models.Domain.objects()

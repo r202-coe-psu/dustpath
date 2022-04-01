@@ -264,6 +264,7 @@
                 <th>run wrf</th>
                 <th>plot</th>
                 <th>generate GIF</th>
+                <th>create tumbon table</th>
               </tr>
             </thead>
             <tbody>
@@ -333,6 +334,19 @@
                     </a>
                   </div>
                 </td>
+                <td>
+                  <div class="center aligned two wide column">
+                    <a class="right aligned content">
+                      {% if project.status.create_tumbon_table == 'success' %}
+                      <i class="green check outline icon"></i>
+                      {% elif project.status.create_tumbon_table == 'fail' %}
+                      <i class="red times circle outline icon"></i>
+                      {% elif project.status.create_tumbon_table == 'running' %}
+                      <i class="grey spinner icon"></i>
+                      {% endif %}
+                    </a>
+                  </div>
+                </td>
               </tr>
           </table>
         </div>
@@ -342,9 +356,52 @@
         <div class="ui divider">
         </div>
         <div class="ui bottom attached tab segment active" data-tab="first">
-          <img class="animated-gif" src="{{ url_for('static', filename='gif/' + project_id + '/output.gif')}}" onerror="this.style.display='none'">
+          <img class="animated-gif" src="{{ url_for('static', filename='projects/' + project_id + '/output.gif')}}" onerror="this.style.display='none'">
         </div>
+        <h1>
+          ค่าเฉลี่ย PM2.5 ในแต่ละตำบล
+        </h1>
+        <div class="ui divider">
         </div>
+        <table class="ui celled table">
+          <thead>
+            <tr class="center aligned">
+              <th>อำเภอ</th>
+              <th>ตำบล</th>
+              <th>PM2.5</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if data is not none %}
+              {% for value in data %}
+                <tr>
+                  <td>
+                    <div class="center aligned two wide column">
+                      {{ value[0] }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="center aligned two wide column">
+                      {{ value[1] }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="center aligned two wide column">
+                      {{ value[2] }}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td class="red" colspan="3">
+                  <div class="center aligned two wide column">
+                    ไม่พบข้อมูล
+                  </div>
+                </td>
+              </tr>
+            {% endif %}
+        </table>
       </div>
     </div>
   </div>

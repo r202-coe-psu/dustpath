@@ -26,7 +26,7 @@ class Processor:
             'DUSTPATH_PROCESSOR_CMD')
         self.args = [
                 self.programe,
-                '--processor_id', self.id,
+                '--project_id', attributes.get('project_id'),
                 # '--directory', '/tmp',
                 '--directory', self.settings['DUSTPATH_PROCESSOR_LOG_PATH'],
                 ]

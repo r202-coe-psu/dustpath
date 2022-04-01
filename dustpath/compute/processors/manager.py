@@ -28,9 +28,11 @@ class ProcessPolling(threading.Thread):
                 logger.debug(
                     'ProcessPolling processor id: {} terminate'.format(
                         self.processor.id))
+                self.status['wrf-runner'] = False
+                self.status_report_queue.put(new_status)
                 break
             time.sleep(1)
-
+            
             new_status = self.processor.get_status()
             old_status_set = set(self.status.items())
             new_status_set = set(new_status.items())
@@ -45,13 +47,14 @@ class ProcessPolling(threading.Thread):
                     process_success = False
                     break
 
+
             if process_success:
                 new_status['success'] = True
-
                 logger.debug(f'stop_process')
                 self.processor.stop()
 
             self.status = new_status
+            self.status['wrf-runner'] = True
             self.status_report_queue.put(new_status)
 
             # data = self.processor.process.stderr.readline().decode('utf-8')

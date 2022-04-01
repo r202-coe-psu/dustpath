@@ -21,6 +21,10 @@ from matplotlib.colors import LinearSegmentedColormap
 from wrf import (to_np, getvar, smooth2d, get_cartopy, cartopy_xlim,
                 cartopy_ylim, latlon_coords)
 from PIL import Image, ImageDraw
+import openpyxl
+import xarray as xr 
+from sklearn import preprocessing
+import csv
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +57,7 @@ class WrfRunner(threading.Thread):
             'run-wrf': '',
             'plot': '', 
             'generate-GIF': '',
+            'create-tumbon-table': '',
             }
 
         self.project_id = attributes.get('project_id')
@@ -76,9 +81,8 @@ class WrfRunner(threading.Thread):
         self.wrf_path = self.project_path / 'WRF/run'
         self.prep_chem_src_path = self.project_path / 'PREP-CHEM-SRC-1.5/bin'
         self.pic_path = self.project_path / 'WRF/run/pic'
-        self.gif_path = pathlib.Path(
-                self.settings.get("DUSTPATH_GIF_PATH")) / self.project_id
-
+        self.output_path = pathlib.Path(
+                self.settings.get("DUSTPATH_OUTPUT_PATH")) / self.project_id
     def stop(self):
         self.running = False
 
@@ -529,7 +533,7 @@ class WrfRunner(threading.Thread):
                     pathlib.Path(f"{self.pic_path}") / pathlib.Path(str(i)+'.jpg'))
                 image_frames.append(new_frame)
 
-            path = pathlib.Path(self.gif_path)
+            path = pathlib.Path(self.output_path)
             if not path.exists() and not path.is_dir():
                 path.mkdir(parents=True)
 
@@ -540,6 +544,118 @@ class WrfRunner(threading.Thread):
         except Exception as e:
             logger.debug(e)
             self.status['generate-GIF'] = 'fail'
+            self.running = False
+    
+    def create_tumbon_table(self):
+        self.status['create-tumbon-table'] = 'running'
+        try:
+            xlsx_file = pathlib.Path(f"{self.project_path}") / pathlib.Path('tambon.xlsx')
+            wb_obj = openpyxl.load_workbook(xlsx_file) 
+            sheet = wb_obj.active
+
+            # data = 'wrfout_d03_2019-09-10_newfirererun.nc'
+            data = pathlib.Path(self.wrf_path / self.output_file)
+            ds = xr.open_mfdataset(data, chunks = {'time': 10})
+            ds
+            PM2_5START = ds.PM2_5_DRY[0][0,:]
+            
+            scaler = preprocessing.MinMaxScaler(feature_range=(0, 100))
+            PM2_5 = scaler.fit_transform(ds.PM2_5_DRY[0][0])
+
+            start = 0
+            stop = 0
+            minlat = np.min(PM2_5START.XLAT.values)
+            maxlat = np.max(PM2_5START.XLAT.values)
+            minlon = np.min(PM2_5START.XLONG.values)
+            maxlon = np.max(PM2_5START.XLONG.values)
+            if(minlat > 11 and maxlat < 17.17 and maxlon < 100.83):
+                start = 1421
+                stop = 3736
+            elif(minlat > 14.34 and minlon > 101.79):
+                start = 4565
+                stop = 7233
+            elif(maxlat < 14.14 and minlon > 100.84):
+                start = 7234
+                stop = 7769
+            elif(maxlat < 11.00):
+                start = 2
+                stop = 1420
+            elif(minlat > 17.81):
+                start = 3737
+                stop = 4564
+            else:
+                start = 2
+                stop = 7769
+
+            path = pathlib.Path(self.output_path)
+            if not path.exists() and not path.is_dir():
+                path.mkdir(parents=True)
+
+            #csv
+            f = open(pathlib.Path(f"{path}/PM2_5_ALL.csv"), 'w', encoding='UTF8', newline='')
+            header = ['district', 'tambon', 'latitude', 'longitude', 'PM2_5']
+            writer = csv.writer(f)
+            writer.writerow(header)
+
+            for i in range(start,stop):
+                logger.debug(f'tumbon-{i}')
+                currentdistrict = 'F' + str(i)
+                currentlat = 'K' + str(i)
+                currenttambon = 'C' + str(i)
+                currentlon = 'L' + str(i)
+                tambonlat= float("{:.2f}".format(sheet[currentlat].value))
+                tambonlon = float("{:.2f}".format(sheet[currentlon].value))
+                nclat = 0.00
+                counter = 0
+                nclatfirst = float("{:.2f}".format(PM2_5START.XLAT[0][0].values.item(0)))
+
+                if(nclatfirst < tambonlat and maxlat >= tambonlat):
+                    j = 0
+                    while j < len(PM2_5START.XLAT):
+                        # logger.debug(f'j-{j}-range-{len(PM2_5START.XLAT)}')
+                        maxnclat = float("{:.2f}".format(np.max(PM2_5START.XLAT[j].values)))
+                        minnclat = float("{:.2f}".format(np.min(PM2_5START.XLAT[j].values)))
+                        if(maxnclat < tambonlat):
+                            j+=1
+                            continue
+                        elif(minnclat > tambonlat):
+                            break
+                        k = 0
+                        while k < len(PM2_5START.XLAT[j]):
+                            # logger.debug(f'k-{k}-range-{len(PM2_5START.XLAT[j])}')
+                            nclat = float("{:.2f}".format(PM2_5START.XLAT[j][k].values.item(0)))
+                            if(tambonlat == nclat):
+                                nclon = float("{:.2f}".format(PM2_5START.XLONG[j][k].values.item(0)))
+                                if(tambonlon == nclon):
+                                    currentPM2_5 = float("{:.2f}".format(PM2_5[j][k].item(0)))
+                                    # allPM = 0
+                                    # logger.debug(f'-{k}-range-{len(PM2_5START.XLAT[j])}')
+                                    # for l in range(len(ds.PM2_5_DRY[0,:])):
+                                    #     PM2_5 = ds.PM2_5_DRY[l][0,:]
+                                    #     scaler = preprocessing.MinMaxScaler(feature_range=(0, 100))
+                                    #     d = scaler.fit_transform(PM2_5)
+                                    #     currentPM2_5 = float("{:.2f}".format(d[j][k].item(0)))
+                                    #     allPM += currentPM2_5
+                                    # averagePM = allPM / len(ds.PM2_5_DRY[0,:])
+                                    # averagePM = float("{:.2f}".format(averagePM))
+                                    data = [sheet[currentdistrict].value, sheet[currenttambon].value, tambonlat, tambonlon, currentPM2_5]
+                                    writer.writerow(data)
+                                    break
+                            k+=1
+                            if tambonlat < nclat:
+                                counter += 1
+                            else:
+                                counter = 0
+                        if(counter >= len(PM2_5START.XLAT[j])):
+                            break
+                        else:
+                            j+=1
+
+            f.close
+            self.status['create-tumbon-table'] = 'success'
+        except Exception as e:
+            logger.debug(e)
+            self.status['create-tumbon-table'] = 'fail'
             self.running = False
 
     def run(self):
@@ -607,5 +723,8 @@ class WrfRunner(threading.Thread):
         if self.status['plot'] == 'success':
             logger.debug(f'genarate_GIF_file')
             self.genarate_GIF_file()
+        if self.status['generate-GIF'] == 'success':
+            logger.debug(f'create_tumbon_table')
+            self.create_tumbon_table()
         logger.debug("finish Wrf Runner And wait for get status")
         

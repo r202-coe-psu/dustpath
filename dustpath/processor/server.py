@@ -31,16 +31,17 @@ class ProcessorServer:
             help="set directory for storing video footage, defaul is /tmp.",
         )
         parser.add_argument(
-            "--processor_id",
-            dest="processor_id",
-            default="processor",
-            help="identify processor_id",
+            "--project_id",
+            dest="project_id",
+            default="project",
+            help="identify project_id",
         )
 
         return parser.parse_args()
 
     def set_up(self, options):
-        path = pathlib.Path(options.directory) / options.processor_id / 'log'
+        path = pathlib.Path(options.directory) / options.project_id / 'log'
+        logger.debug(f'{options.project_id}-----------------------')
         if not path.exists():
             path.mkdir(parents=True)
 
@@ -88,11 +89,11 @@ class ProcessorServer:
                             p.stop()
                 elif command.get('action') == 'get-status':
                     data = dict()
-                    for k, v in self.processors.items():
-                        if v and v.running:
-                            data[k] = True
-                        else:
-                            data[k] = False
+                    # for k, v in self.processors.items():
+                    #     if v and v.running:
+                    #         data[k] = True
+                    #     else:
+                    #         data[k] = False
 
                     if self.processors['wrf-runner']:
                         for k, v in self.processors['wrf-runner'].status.items():

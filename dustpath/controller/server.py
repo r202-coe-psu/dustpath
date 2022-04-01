@@ -157,6 +157,7 @@ class ControllerServer:
                     pass
                 elif data["action"] == "report-status":
                     status = data.get('status')
+                    logger.debug(f'status-->{status}')
                     project = models.Project.objects.get(id=data.get('project_id'))
                     project.status.copy_project = status['copy-project']
                     project.status.write_namelist_wps = status['write-namelist-wps']
@@ -181,8 +182,9 @@ class ControllerServer:
                     project.status.run_wrf = status['run-wrf']
                     project.status.plot = status['plot']
                     project.status.generate_GIF = status['generate-GIF']
+                    project.status.create_tumbon_table = status['create-tumbon-table']
                     project.save()
-                    logger.debug(f"report-status DONE")
+                    logger.debug(f"report-status done")
                 elif data["action"] != "report":
                     logger.debug("got unproccess report {}".format(str(data)))
             except Exception as e:
