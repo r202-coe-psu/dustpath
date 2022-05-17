@@ -14,6 +14,7 @@ requests
 # flask_jwt_extended
 loginpass
 email_validator
+pandas
 
 
 # Flask-uWSGI-WebSocket
@@ -28,7 +29,7 @@ brython
 
 # wrf
 xarray
-cartopy
+Cartopy
 matplotlib
 openpyxl
 sklearn

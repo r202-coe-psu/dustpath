@@ -6,7 +6,6 @@ from . import (
     dashboard,
     projects,
     users,
-    projects,
     )
 
 
@@ -37,7 +36,6 @@ def register_blueprint(app):
             dashboard,
             users,
             domains,
-            projects,
             projects,
         ])
 
