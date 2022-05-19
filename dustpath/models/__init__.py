@@ -1,5 +1,6 @@
 from flask_mongoengine import MongoEngine
-from .users import User, AuthSecret 
+from .oauth2 import OAuth2Token
+from .users import User 
 from .domains import Domain
 from .projects import Project
 
@@ -26,6 +27,7 @@ __all__ = [
     User, 
     Domain,
     Project,
+    OAuth2Token
 ]
 
 def init_db(app):

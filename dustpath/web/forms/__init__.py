@@ -1,8 +1,9 @@
-from .user import ProfileForm 
+from .users import RegisterForm, LoginForm 
 from .projects import ProjectForm
 
 
 __all__ = [
-    ProfileForm,
+    RegisterForm,
+    LoginForm,
     ProjectForm, 
 ]
