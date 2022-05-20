@@ -18,6 +18,7 @@ email_validator
 pandas
 flask_cors
 flask_caching
+wheel
 
 # Flask-uWSGI-WebSocket
 asyncio-nats-client
@@ -62,5 +63,4 @@ Cartopy
 # xlsxwriter
 # watchdog
 # brython
-# wheel
 # idna==2.5
