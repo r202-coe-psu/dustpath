@@ -13,12 +13,14 @@ from .. import models
 module = Blueprint('domains', __name__, url_prefix='/domains')
 
 @module.route('/')
+@login_required
 def index():
     domains = models.Domain.objects().order_by("-id")
     return render_template('domains/index.html',
                             domains=domains,)
 
 @module.route('/record', methods=['GET', 'POST'])
+@login_required
 def record():
     center = [7.0065949668769205, 100.49891880632555] # lat, long
     zoom = 10

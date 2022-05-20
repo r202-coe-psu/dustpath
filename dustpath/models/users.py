@@ -19,17 +19,5 @@ class User(me.Document, UserMixin):
     )
     meta = {"collection": "users"}
 
-    def set_password(self, password):
-        from werkzeug.security import generate_password_hash
-
-        self.password = generate_password_hash(password)
-
-    def check_password(self, password):
-        from werkzeug.security import check_password_hash
-
-        if check_password_hash(self.password, password):
-            return True
-        return False
-
     def display_name(self):
         return "%s %s" % (self.first_name, self.last_name)

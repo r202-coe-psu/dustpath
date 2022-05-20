@@ -26,12 +26,14 @@ from .. import forms
 module = Blueprint("projects", __name__, url_prefix="/projects")
 
 @module.route('/')
+@login_required
 def index():
     projects = models.Project.objects().order_by("-id")
     return render_template('projects/index.html',
                             projects=projects,)
 
 @module.route('/create', methods=['GET', 'POST'])
+@login_required
 def create():
     form = ProjectForm()
     form.domain.choices = get_domains_choices()
@@ -50,6 +52,7 @@ def create():
     return redirect(url_for('projects.index'))
     
 @module.route("/<project_id>/run_wrf", methods=["POST"])
+@login_required
 def run_wrf(project_id):
     project = models.Project.objects.get(id=project_id)
 
@@ -65,6 +68,7 @@ def run_wrf(project_id):
     return redirect(url_for('projects.result'))
 
 @module.route('<project_id>/result', methods=['GET','POST'])
+@login_required
 def result(project_id):
     project = models.Project.objects.get(id=project_id)
     try:

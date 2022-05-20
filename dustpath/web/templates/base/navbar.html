@@ -17,8 +17,15 @@
     </a>
     <div class="header item">
         <a href="{{ url_for('dashboard.index') }}" style="text-decoration: none;">
-            <span class="title_text">
+            <h1 class="title_text white">
                 {{ config['APP_TITLE'] }}
+            </h1>
+        </a>
+    </div>
+    <div class="right menu">
+        <a href="{{ url_for('accounts.logout') }}" class="ui item" >
+            <span class="white">
+                Logout
             </span>
         </a>
     </div>

@@ -7,48 +7,11 @@ from dustpath.web import oauth2
 
 module = Blueprint("accounts", __name__)
 
-
-@module.route("/register", methods=("GET", "POST"))
-def register():
-    form = forms.RegisterForm()
-    if not form.validate_on_submit():
-        return render_template("/accounts/register.html", form=form)
-    user = models.User.objects(username=form.username.data)
-    if user:
-        error_msg = "Username นี้ถูกใช้งานแล้ว"
-        return render_template(
-            "/accounts/register.html", form=form, error_msg=error_msg
-        )
-    user = models.User.objects(email=form.email.data)
-    if user:
-        error_msg = "Email นี้ถูกใช้งานแล้ว"
-        return render_template(
-            "/accounts/register.html", form=form, error_msg=error_msg
-        )
-    user = models.User()
-    form.populate_obj(user)
-    user.set_password(form.password.data)
-    user.save()
-    return redirect(url_for("accounts.login", messages="success"))
-
-
 @module.route("/login", methods=("GET", "POST"))
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("dashboard.index"))
-    form = forms.LoginForm()
-    if not form.validate_on_submit():
-        return render_template("/accounts/login.html", form=form)
-    user = models.User.objects(username=form.username.data).first()
-    if not user or not user.check_password(form.password.data):
-        error_msg = "โปรดตรวจสอบ username และ password ของท่าน"
-        # print(form.errors)
-        return render_template("/accounts/login.html", form=form, error_msg=error_msg)
-    if user.status == "disactive":
-        error_msg = "โปรดติดต่อผู้ดูแลระบบเพื่อยืนยันบัญชีของท่าน"
-        return render_template("/accounts/login.html", form=form, error_msg=error_msg)
-    login_user(user)
-    return redirect(url_for("dashboard.index", messages="success"))
+    return render_template("/accounts/login.html")
 
 
 @module.route("/login/<name>")
@@ -99,4 +62,4 @@ def update_last_project_view():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("site.index"))
+    return redirect(url_for("main.index"))

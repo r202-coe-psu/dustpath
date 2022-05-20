@@ -2,37 +2,13 @@
 
 {% block body %}
 
-{% include "base/navbar.html" %}
-<div class="ui vertical inverted sidebar">
-  {% include "base/sidebar.html" %}
-</div>
+  {% include "base/navbar.html" %}
+  <div class="ui vertical inverted sidebar">
+    {% include "base/sidebar.html" %}
+  </div>
 
 
-<div class="pusher" style="min-height: 84% !important;">
-  <main class="twelve wide column" style="padding-top: 3em;">
+  <main class="ui vertical masthead segment" style="background-color: rgba(242,245,245,0.8)">
     {% block content %}{% endblock content %}
   </main>
-</div>
-
-<!-- footer -->
-
-<script>
-  var dropdown = document.getElementsByClassName("ui item secondary");
-  var i;
-
-  for (i = 0; i < dropdown.length; i++) {
-    dropdown[i].addEventListener("click", function () {
-      this.classList.toggle("active");
-      var dropdownContent = this.nextElementSibling;
-      if (dropdownContent.style.display === "block") {
-        dropdownContent.style.display = "none";
-      } else {
-        dropdownContent.style.display = "block";
-      }
-    });
-  }
-  if (screen.width <= 699) {
-    document.getElementById("content-desktop");
-  }
-</script>
 {% endblock %}

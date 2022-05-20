@@ -110,7 +110,7 @@ def handle_authorized_oauth2(remote, token):
     if next_uri:
         session.pop("next")
         return redirect(next_uri)
-    return redirect(url_for("projects.index"))
+    return redirect(url_for("dashboard.index"))
 
 
 def init_oauth(app):
