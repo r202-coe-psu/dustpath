@@ -215,8 +215,8 @@ class ControllerServer:
 
             await asyncio.sleep(0.1)
 
-    async def set_up(self, loop):
-        await self.nc.connect(self.settings["DUSTPATH_MESSAGE_NATS_HOST"], loop=loop)
+    async def set_up(self):
+        await self.nc.connect(self.settings["DUSTPATH_MESSAGE_NATS_HOST"])
         logging.basicConfig(
             format="%(asctime)s - %(name)s:%(lineno)d %(levelname)s - %(message)s",
             datefmt="%d-%b-%y %H:%M:%S",
@@ -242,7 +242,7 @@ class ControllerServer:
         self.running = True
         loop = asyncio.get_event_loop()
         # loop.set_debug(True)
-        loop.run_until_complete(self.set_up(loop))
+        asyncio.run(self.set_up())
         cn_report_task = loop.create_task(self.process_compute_node_report())
         processor_command_task = loop.create_task(self.process_processor_command())
         # handle_expired_data_task = loop.create_task(self.process_expired_controller())

@@ -1,47 +1,47 @@
-<div class="ui vertical inverted sidebar large menu left">
-  <div class="item">
-    <span style="font-size: 24px">{{ config['APP_TITLE'] }}</span>
-  </div>
-  <div class="item">
-    <a href="{{ url_for('dashboard.index') }}" class="header" style="text-decoration: none;">
-      <i class="home icon"></i>
-      หน้าหลัก
-    </a>
-  </div>
-  <div class="item">
-    <a class="header" style="text-decoration: none;">
-      <i class="map icon"></i>
-      โดเมน
-    </a>
-    <div class="menu">
-      <a href="{{ url_for('domains.record') }}" class="item">
-        <i class="map marker alternate icon"></i>บันทึกโดเมน
-      </a>
-      <a href="{{ url_for('domains.index') }}" class="item">
-        <i class="map icon"></i>โดเมนทั้งหมด
+  <div class="ui vertical inverted sidebar large menu left">
+    <div class="item">
+      <span style="font-size: 24px">{{ config['APP_TITLE'] }}</span>
+    </div>
+    <div class="item">
+      <a href="{{ url_for('dashboard.index') }}" class="header" style="text-decoration: none;">
+        <i class="home icon"></i>
+        หน้าหลัก
       </a>
     </div>
-  </div>
-  <div class="item">
-    <a class="header" style="text-decoration: none;">
-      <i class="archive icon"></i>
-      โปรเจกต์
-    </a>
-    <div class="menu">
-      <a href="{{ url_for('projects.create') }}" class="item">
-        <i class="file icon"></i>สร้างโปรเจกต์
+    <div class="item">
+      <a class="header" style="text-decoration: none;">
+        <i class="map icon"></i>
+        โดเมน
       </a>
-      <a href="{{url_for('projects.index')}}" class="item">
-        <i class="folder alternate icon"></i>โปรเจกต์ทั้งหมด
+      <div class="menu">
+        <a href="{{ url_for('domains.record') }}" class="item">
+          <i class="map marker alternate icon"></i>บันทึกโดเมน
+        </a>
+        <a href="{{ url_for('domains.index') }}" class="item">
+          <i class="map icon"></i>โดเมนทั้งหมด
+        </a>
+      </div>
+    </div>
+    <div class="item">
+      <a class="header" style="text-decoration: none;">
+        <i class="archive icon"></i>
+        โปรเจกต์
+      </a>
+      <div class="menu">
+        <a href="{{ url_for('projects.create') }}" class="item">
+          <i class="file icon"></i>สร้างโปรเจกต์
+        </a>
+        <a href="{{url_for('projects.index')}}" class="item">
+          <i class="folder alternate icon"></i>โปรเจกต์ทั้งหมด
+        </a>
+      </div>
+    </div>
+    {#
+    <div class="item">
+      <a href="{{ url_for('users.record') }}" class="header" style="text-decoration: none;">
+        <i class="user icon"></i>
+        โปรไฟล์
       </a>
     </div>
+    #}
   </div>
-  {#
-  <div class="item">
-    <a href="{{ url_for('users.record') }}" class="header" style="text-decoration: none;">
-      <i class="user icon"></i>
-      โปรไฟล์
-    </a>
-  </div>
-  #}
-</div>

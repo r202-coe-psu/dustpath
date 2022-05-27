@@ -1,70 +1,7 @@
-@import url(https://fonts.googleapis.com/css?family=Prompt);
-* {
-    font-family: 'Prompt', 'Icons', 'brand-icons' !important;
-}
 
-/* landing */
-.center {
-  text-align: center;
-}
-
-body.pushable>.pusher {
-  background-color: #596D77 !important;
-}
-
-.header1 {
-  height: 80vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.541),
-      rgba(0, 0, 0, 0.541)), url("../images/dustpath_main_bg.png") center top no-repeat;
-  background-size: cover;
-  margin-bottom: -28px;
-}
-
-.title {
-  color: white;
-  padding-top: calc(30vh - 25px);
-}
-
-.title h1 {
-  font-size: 4.5em;
-}
-
-.title h3 {
-  font-size: 1.5em;
-}
 
 .main {
   margin-bottom: 50px;
-}
-
-.main p {
-  font-size: 1.2em;
-}
-
-.main h3 {
-  font-size: 1.5em;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Verdana, sans-serif;
-  min-height: 100%;
-}
-
-.mySlides {
-  display: none;
-}
-
-img {
-  vertical-align: middle;
-}
-
-img.animated-gif{
-  width: 100%;
-  height: auto;
 }
 
 footer {

@@ -3,12 +3,10 @@
 {% block body %}
 
   {% include "base/navbar.html" %}
-  <div class="ui vertical inverted sidebar">
-    {% include "base/sidebar.html" %}
-  </div>
+  {% include "base/sidebar.html" %}
 
 
-  <main class="ui vertical masthead segment" style="background-color: rgba(242,245,245,0.8)">
+  <main class="ui vertical segment">
     {% block content %}{% endblock content %}
   </main>
 {% endblock %}

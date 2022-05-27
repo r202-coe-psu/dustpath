@@ -1,100 +1,98 @@
 {% extends "base/default-page.html" %}
 {% block content %}
-    <div class="ui container">
-      <div class="ui teal segment" style="margin-top:7%;margin-bottom:40%;">
-        <h1>
-          Projects
-          <a class="ui right floated primary button primary"
-             href="{{url_for('projects.create')}}">
-            สร้างโปรเจ็ค
-          </a>
-        </h1>
-        <div class="ui divider">
-        </div>
-        <div class="ui">
-          <table id="mytable" class="ui celled table">
-            <thead>
-              <tr class="center">
-                <th>ชื่อโปรเจ็ค</th>
-                <th>วันที่เริ่ม</th>
-                <th>วันที่สิ้นสุด</th>
-                <th>ชื่อโดเมน</th>
-                <th>ผลลัพธ์</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for project in projects %}
-              <tr>
-                <td>
-                  <div class="center two wide column">
-                    <a class="right aligned content" id="namelist" style="color: black;">
-                      {{ project.name }}
-                    </a>
-                  </div>
-                </td>
-                <td>
-                  <div class="center two wide column">
-                    <a class="right aligned content" id="namelist" style="color: black;">
-                      {{ project.wrf_config.start_date }}
-                    </a>
-                  </div>
-                </td>
-                <td>
-                  <div class="center two wide column">
-                    <a class="right aligned content"  style="color: black;">
-                      {{ project.wrf_config.end_date }}
-                    </a>
-                  </div>
-                </td>
-                <td>
-                  <div class="center two wide column">
-                    <a class="right aligned content"  style="color: black;">
-                      {{ project.wrf_config.domain.name }}
-                    </a>
-                  </div>
-                </td>
-                <td style="table-layout:fixed;
-                            width:300px;
-                            overflow:hidden;
-                            word-wrap:break-word;">
-                  <div class="center two wide column">
-                    <img 
-                    class="animated-gif" 
-                    src="../../static/projects/{{project.id}}/output.gif" 
-                    onerror="this.style.display='none'">
-                  </div>
-                </td>
-                <td>
-                  <div class="center two wide column">
-                    <a class="ui teal icon big button run-wrf" id="project-{{project.id}}" href="{{url_for('projects.result', project_id=project.id )}}">
-                      Run
-                    </a>
-                  </div>
-                </td>
-                <td>
-                  <div class="center two wide column">
-                    <a class="ui grey icon big button"
-                      href="{{url_for('projects.result', project_id=project.id )}}">
-                      show
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
-          </table>
-        </div>
+  <div class="ui container">
+    <div class="ui teal segment" style="margin-top:7%;margin-bottom:40%;">
+      <h1>
+        Projects
+        <a class="ui right floated primary button primary"
+            href="{{url_for('projects.create')}}">
+          สร้างโปรเจ็ค
+        </a>
+      </h1>
+      <div class="ui divider">
+      </div>
+      <div class="ui">
+        <table id="mytable" class="ui celled table">
+          <thead>
+            <tr class="center">
+              <th>ชื่อโปรเจ็ค</th>
+              <th>วันที่เริ่ม</th>
+              <th>วันที่สิ้นสุด</th>
+              <th>ชื่อโดเมน</th>
+              <th>ผลลัพธ์</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for project in projects %}
+            <tr>
+              <td>
+                <div class="center two wide column">
+                  <a class="right aligned content" id="namelist" style="color: black;">
+                    {{ project.name }}
+                  </a>
+                </div>
+              </td>
+              <td>
+                <div class="center two wide column">
+                  <a class="right aligned content" id="namelist" style="color: black;">
+                    {{ project.wrf_config.start_date }}
+                  </a>
+                </div>
+              </td>
+              <td>
+                <div class="center two wide column">
+                  <a class="right aligned content"  style="color: black;">
+                    {{ project.wrf_config.end_date }}
+                  </a>
+                </div>
+              </td>
+              <td>
+                <div class="center two wide column">
+                  <a class="right aligned content"  style="color: black;">
+                    {{ project.wrf_config.domain.name }}
+                  </a>
+                </div>
+              </td>
+              <td style="table-layout:fixed;
+                          width:300px;
+                          overflow:hidden;
+                          word-wrap:break-word;">
+                <div class="center two wide column">
+                  <img 
+                  class="animated-gif" 
+                  src="../../static/projects/{{project.id}}/output.gif" 
+                  onerror="this.style.display='none'">
+                </div>
+              </td>
+              <td>
+                <div class="center two wide column">
+                  <a class="ui teal icon big button run-wrf" id="project-{{project.id}}" href="{{url_for('projects.result', project_id=project.id )}}">
+                    Run
+                  </a>
+                </div>
+              </td>
+              <td>
+                <div class="center two wide column">
+                  <a class="ui grey icon big button"
+                    href="{{url_for('projects.result', project_id=project.id )}}">
+                    show
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+        </table>
       </div>
     </div>
-
-<script type="text/python">
-  from processors import status
-</script>
-
+  </div>
 {% endblock %}
 
 {% block additional_js %}
+  <script type="text/python">
+    from processors import status
+  </script>
   <script type="text/javascript">
     brython(1);
   </script>
