@@ -192,19 +192,22 @@ class ComputeNodeServer:
             if is_sleep:
                 await asyncio.sleep(10)
 
-    async def set_up(self, loop):
-        self.nc = NATS()
-        await self.nc.connect(self.settings["DUSTPATH_MESSAGE_NATS_HOST"], loop=loop)
-
+    async def set_up(self):
         logging.basicConfig(
             format="%(asctime)s - %(name)s:%(lineno)d %(levelname)s - %(message)s",
             datefmt="%d-%b-%y %H:%M:%S",
             level=logging.DEBUG,
         )
+        logger.debug("Logging Configured")
+
+
+        self.nc = NATS()
+        await self.nc.connect(self.settings["DUSTPATH_MESSAGE_NATS_HOST"])
 
         rpc_topic = "dustpath.compute.{}.rpc".format(self.mac_address)
         logger.info("try to subscribe rpc topic: {}".format(rpc_topic))
         rpc_sid = await self.nc.subscribe(rpc_topic, cb=self.handle_rpc_message)
+        logger.debug("Nats connected and Subscribed")
 
         data = dict(
             action="register",
@@ -229,12 +232,18 @@ class ComputeNodeServer:
 
         logger.debug("Register success")
 
-    def run(self):
-        loop = asyncio.get_event_loop()
-        # loop.set_debug(True)
-        self.running = True
+        while True:
+            if self.nc.is_closed:
+                break
+            await asyncio.sleep(1)
 
-        loop.run_until_complete(self.set_up(loop))
+        await self.nc.close()
+        logger.debug(" Nats Closed")
+
+    def run(self):
+        self.running = True
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self.set_up())
         update_output_task = loop.create_task(self.update_processor_output())
         update_process_status_task = loop.create_task(self.update_process_status())
         update_resource_task = loop.create_task(self.update_compute_node_resource())

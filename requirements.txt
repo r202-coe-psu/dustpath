@@ -21,10 +21,8 @@ flask_caching
 wheel
 
 # Flask-uWSGI-WebSocket
-asyncio-nats-client
-
 psutil
-asyncio-nats-client
+nats-py
 
 # brython
 watchdog
