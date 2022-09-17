@@ -95,6 +95,9 @@ class ProcessorServer:
                     #     else:
                     #         data[k] = False
 
+                    if self.processors['wrf-runner'].finish:
+                        self.processors['wrf-runner'].stop()
+
                     if self.processors['wrf-runner']:
                         for k, v in self.processors['wrf-runner'].status.items():
                             data[k] = v

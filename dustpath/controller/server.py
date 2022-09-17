@@ -71,6 +71,7 @@ class ControllerServer:
 
         logger.debug("Received a rpc message on '{subject} {reply}': {data}".format(
                 subject=subject, reply=reply, data=data))
+
         data = json.loads(data)
         await self.processor_command_queue.put(data)
 
@@ -160,35 +161,48 @@ class ControllerServer:
                 logger.exception(e)
 
     async def process_processor_command(self):
+        logger.debug("start prcess processor")
         while self.running:
             data = await self.processor_command_queue.get()
-            # logger.debug(f"process processor command: {data}")
+            logger.debug(f"process processor command: {data}")
 
             result = False
             try:
                 result = await self.processor_controller.process_command(data)
             except Exception as e:
                 logger.exception(e)
-
-    async def set_up(self):
-        logging.basicConfig(
-            format="%(asctime)s - %(name)s:%(lineno)d %(levelname)s - %(message)s",
-            datefmt="%d-%b-%y %H:%M:%S",
-            level=logging.DEBUG,
-        )
-        logger.debug("Logging Configured")
-
+    
+    async def compute_report_listen(self):
         await self.nc.connect(self.settings["DUSTPATH_MESSAGE_NATS_HOST"])
         
         cns_id = await self.nc.subscribe(
             "dustpath.compute.report", 
             cb=self.handle_compute_node_report
         )
+        logger.debug("Nats connected and Subscribed at dustpath.compute.report")
+
         ps_id = await self.nc.subscribe(
             "dustpath.processor.command", 
             cb=self.handle_processor_command
         )
-        logger.debug("Nats connected and Subscribed")
+        logger.debug("Nats connected and Subscribed at dustpath.processor.command")
+
+        while True:
+            if self.nc.is_closed:
+                break
+            await asyncio.sleep(1)
+
+        await self.nc.close()
+        logger.debug(" Nats Closed")
+
+    async def process_command_listen(self):
+        await self.nc.connect(self.settings["DUSTPATH_MESSAGE_NATS_HOST"])
+        
+        ps_id = await self.nc.subscribe(
+            "dustpath.processor.command", 
+            cb=self.handle_processor_command
+        )
+        logger.debug("Nats connected and Subscribed at dustpath.processor.command")
 
         while True:
             if self.nc.is_closed:
@@ -199,10 +213,41 @@ class ControllerServer:
         logger.debug(" Nats Closed")
 
 
+    async def set_up(self):
+        logging.basicConfig(
+            format="%(asctime)s - %(name)s:%(lineno)d %(levelname)s - %(message)s",
+            datefmt="%d-%b-%y %H:%M:%S",
+            level=logging.DEBUG,
+        )
+        logger.debug("Logging Configured")
+
+        # await self.nc.connect(self.settings["DUSTPATH_MESSAGE_NATS_HOST"])
+        
+        # cns_id = await self.nc.subscribe(
+        #     "dustpath.compute.report", 
+        #     cb=self.handle_compute_node_report
+        # )
+        # ps_id = await self.nc.subscribe(
+        #     "dustpath.processor.command", 
+        #     cb=self.handle_processor_command
+        # )
+        # logger.debug("Nats connected and Subscribed")
+
+        # while True:
+        #     if self.nc.is_closed:
+        #         break
+        #     await asyncio.sleep(1)
+
+        # await self.nc.close()
+        # logger.debug(" Nats Closed")
+
+
     def run(self):
         self.running = True
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(self.set_up())
+        asyncio.run(self.set_up())
+        compute_report_listen_task = loop.create_task(self.compute_report_listen())
+        # process_command_listen_task = loop.create_task(self.process_command_listen())
         cn_report_task = loop.create_task(self.process_compute_node_report())
         processor_command_task = loop.create_task(self.process_processor_command())
 

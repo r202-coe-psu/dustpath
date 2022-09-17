@@ -43,15 +43,7 @@ class MessageThread(threading.Thread):
 
     async def initial_nats_client(self):
         self.nc = NATS()
-        await self.nc.connect(current_app.config.get('DUSTPATH_MESSAGE_NATS_HOST'))
-        # await self.nc.connect(current_app.config.get('DUSTPATH_MESSAGE_NATS_HOST'), self.loop)
-
-        # while True:
-        #     if self.nc.is_closed:
-        #         break
-        #     await asyncio.sleep(1)
-
-        # await self.nc.close()
+        await self.nc.connect(current_app.config.get('DUSTPATH_MESSAGE_NATS_HOST'), self.loop)
 
     async def run_async_loop(self):
         await self.initial_nats_client()

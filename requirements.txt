@@ -24,6 +24,7 @@ wheel
 
 # Flask-uWSGI-WebSocket
 psutil
+# why cant install by automate
 nats-py
 
 # brython
@@ -31,12 +32,15 @@ watchdog
 brython
 
 # wrf
+wrf-python
 xarray
-matplotlib
+matplotlib ##if cant import some lib must intall by hand
 openpyxl
 sklearn
 dask
+netCDF4
 Cartopy
+
 
 # old-------------v
 

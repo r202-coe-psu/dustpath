@@ -6,7 +6,7 @@
       <div class="ui teal segment" style="margin-top:7%;margin-bottom:40%;">
         <h1>
           Status
-          <a class="ui right floated teal button primary run-wrf" id="project-{{project.id}}" href="{{url_for('projects.result', project_id=project.id )}}">
+          <a class="ui right floated teal button primary run-wrf" id="project-{{project.id}}" href="{{url_for('projects.run_wrf', project_id=project.id )}}">
             <i class="sync icon"></i>
             รันอีกครั้ง
           </a>
@@ -356,7 +356,7 @@
         <div class="ui divider">
         </div>
         <div class="ui bottom attached tab segment active" data-tab="first">
-          <img class="animated-gif" src="{{ url_for('static', filename='projects/' + project_id + '/output.gif')}}" onerror="this.style.display='none'">
+          <img width="100%" height="100%" class="animated-gif" src="{{ url_for('static', filename='projects/' + project_id + '/output.gif')}}" onerror="this.style.display='none'">
         </div>
         <h1>
           ค่าเฉลี่ย PM2.5 ในแต่ละตำบล

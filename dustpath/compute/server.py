@@ -39,6 +39,7 @@ class ComputeNodeServer:
             settings, self.processor_controller.processor_manager
         )
         self.running = False
+        self.nc = NATS()
         self.is_register = False
         self.id = "compute node server"
         self.storage_controller = storages.StorageController(self.settings)
@@ -192,6 +193,22 @@ class ComputeNodeServer:
             if is_sleep:
                 await asyncio.sleep(10)
 
+    async def rpc_listen(self):
+        await self.nc.connect(self.settings["DUSTPATH_MESSAGE_NATS_HOST"])
+
+        rpc_topic = "dustpath.compute.{}.rpc".format(self.mac_address)
+        logger.info("try to subscribe rpc topic: {}".format(rpc_topic))
+        rpc_sid = await self.nc.subscribe(rpc_topic, cb=self.handle_rpc_message)
+        logger.debug("Nats connected and Subscribed")
+
+        while True:
+            if self.nc.is_closed:
+                break
+            await asyncio.sleep(1)
+
+        await self.nc.close()
+        logger.debug(" Nats Closed")
+
     async def set_up(self):
         logging.basicConfig(
             format="%(asctime)s - %(name)s:%(lineno)d %(levelname)s - %(message)s",
@@ -201,13 +218,12 @@ class ComputeNodeServer:
         logger.debug("Logging Configured")
 
 
-        self.nc = NATS()
         await self.nc.connect(self.settings["DUSTPATH_MESSAGE_NATS_HOST"])
 
-        rpc_topic = "dustpath.compute.{}.rpc".format(self.mac_address)
-        logger.info("try to subscribe rpc topic: {}".format(rpc_topic))
-        rpc_sid = await self.nc.subscribe(rpc_topic, cb=self.handle_rpc_message)
-        logger.debug("Nats connected and Subscribed")
+        # rpc_topic = "dustpath.compute.{}.rpc".format(self.mac_address)
+        # logger.info("try to subscribe rpc topic: {}".format(rpc_topic))
+        # rpc_sid = await self.nc.subscribe(rpc_topic, cb=self.handle_rpc_message)
+        # logger.debug("Nats connected and Subscribed")
 
         data = dict(
             action="register",
@@ -232,18 +248,20 @@ class ComputeNodeServer:
 
         logger.debug("Register success")
 
-        while True:
-            if self.nc.is_closed:
-                break
-            await asyncio.sleep(1)
+        # while True:
+        #     if self.nc.is_closed:
+        #         break
+        #     await asyncio.sleep(1)
 
-        await self.nc.close()
-        logger.debug(" Nats Closed")
+        # await self.nc.close()
+        # logger.debug(" Nats Closed")
 
     def run(self):
         self.running = True
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(self.set_up())
+        asyncio.run(self.set_up())
+        rpc_listen_task = loop.create_task(self.rpc_listen())
+        
         update_output_task = loop.create_task(self.update_processor_output())
         update_process_status_task = loop.create_task(self.update_process_status())
         update_resource_task = loop.create_task(self.update_compute_node_resource())

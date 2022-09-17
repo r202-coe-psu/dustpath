@@ -51,7 +51,7 @@ def create():
     project.save()
     return redirect(url_for('projects.index'))
     
-@module.route("/<project_id>/run_wrf", methods=["POST"])
+@module.route("/<project_id>/run_wrf", methods=["GET", "POST"])
 @login_required
 def run_wrf(project_id):
     project = models.Project.objects.get(id=project_id)
@@ -65,7 +65,7 @@ def run_wrf(project_id):
     }
     nats.nats_client.publish("dustpath.processor.command", data)
     
-    return redirect(url_for('projects.result'))
+    return redirect(url_for('projects.result', project_id=project_id))
 
 @module.route('<project_id>/result', methods=['GET','POST'])
 @login_required

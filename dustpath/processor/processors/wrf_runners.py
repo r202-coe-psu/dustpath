@@ -9,6 +9,7 @@ import logging
 import threading
 import jinja2
 import json
+import time
 
 import numpy as np
 from netCDF4 import Dataset
@@ -26,6 +27,8 @@ import xarray as xr
 from sklearn import preprocessing
 import csv
 
+import asyncio
+
 logger = logging.getLogger(__name__)
 
 
@@ -34,6 +37,7 @@ class WrfRunner(threading.Thread):
         super().__init__()
         self.settings = setting
         self.running = False
+        self.finish = False
         self.user = '${USER}'
         self.status = {
             'copy-project': '',
@@ -80,7 +84,8 @@ class WrfRunner(threading.Thread):
         self.wps_path = self.project_path / 'WPS'
         self.wrf_path = self.project_path / 'WRF/run'
         self.prep_chem_src_path = self.project_path / 'PREP-CHEM-SRC-1.5/bin'
-        self.pic_path = self.project_path / 'WRF/run/pic'
+        self.pic_path = self.project_path / 'pics'
+        self.project_output_path = self.project_path / 'WRF/run/'
         self.output_path = pathlib.Path(
                 self.settings.get("DUSTPATH_OUTPUT_PATH")) / self.project_id
     def stop(self):
@@ -100,7 +105,7 @@ class WrfRunner(threading.Thread):
         except Exception as e:
             logger.debug(e)
             self.status['copy-project'] = 'fail'
-            self.running = False
+            self.finish = True
                     
     def write_namelist_wps(self):
         self.status['write-namelist-wps'] = 'running'
@@ -112,7 +117,7 @@ class WrfRunner(threading.Thread):
         except Exception as e:
             logger.debug(e)
             self.status['write-namelist-wps'] = 'fail'
-            self.running = False
+            self.finish = True
     
     def link_geogrid_table(self):
         self.status['link-geogrid-table'] = 'running'
@@ -135,7 +140,8 @@ class WrfRunner(threading.Thread):
             self.status['link-geogrid-table'] = 'success'
         else:
             self.status['link-geogrid-table'] = 'fail'
-            self.running = False
+            self.finish = True
+
             
     def run_geogrid(self):
         self.status['run-geogrid'] = 'running'
@@ -144,7 +150,7 @@ class WrfRunner(threading.Thread):
             -v {self.project_path}:/home/{self.user}/projects \
             -v {self.data_path}:/home/{self.user}/projects/data \
             wrf-image /bin/sh -c \
-            'cd WPS/ && ./geogrid.exe'",
+            'cd WPS/ && mpirun --oversubscribe -np 20 ./geogrid.exe'",
             shell=True,
             stdout=subprocess.PIPE, 
             stderr=subprocess.PIPE)
@@ -157,7 +163,7 @@ class WrfRunner(threading.Thread):
             self.status['run-geogrid'] = 'success'
         else:
             self.status['run-geogrid'] = 'fail'
-            self.running = False
+            self.finish = True
 
     def link_gfs_file(self):
         self.status['link-gfs-file'] = 'running'
@@ -179,7 +185,7 @@ class WrfRunner(threading.Thread):
             self.status['link-gfs-file'] = 'success'
         else:
             self.status['link-gfs-file'] = 'fail'
-            self.running = False
+            self.finish = True
         
     def link_Vtable(self):
         self.status['link-Vtable'] = 'running'
@@ -201,7 +207,7 @@ class WrfRunner(threading.Thread):
             self.status['link-Vtable'] = 'success'
         else:
             self.status['link-Vtable'] = 'fail'
-            self.running = False
+            self.finish = True
 
     def run_ungrib(self):
         self.status['run-ungrib'] = 'running'
@@ -223,7 +229,7 @@ class WrfRunner(threading.Thread):
             self.status['run-ungrib'] = 'success'
         else:
             self.status['run-ungrib'] = 'fail'
-            self.running = False
+            self.finish = True
 
     def run_metgrid(self):
         self.status['run-metgrid'] = 'running'
@@ -232,7 +238,7 @@ class WrfRunner(threading.Thread):
             -v {self.project_path}:/home/{self.user}/projects \
             -v {self.data_path}:/home/{self.user}/projects/data \
             wrf-image /bin/sh -c \
-            'cd WPS/ && mpirun --oversubscribe -np 7 ./metgrid.exe'",
+            'cd WPS/ && mpirun --oversubscribe -np 20 ./metgrid.exe'",
             shell=True,
             stdout=subprocess.PIPE, 
             stderr=subprocess.PIPE)
@@ -244,7 +250,7 @@ class WrfRunner(threading.Thread):
             self.status['run-metgrid'] = 'success'
         else:
             self.status['run-metgrid'] = 'fail'
-            self.running = False
+            self.finish = True
         
     def link_met_data(self):
         self.status['link-met-data'] = 'running'
@@ -266,7 +272,7 @@ class WrfRunner(threading.Thread):
             self.status['link-met-data'] = 'success'
         else:
             self.status['link-met-data'] = 'fail'
-            self.running = False
+            self.finish = True
                     
     def write_no_emiss_namelist_input(self):
         self.status['write-no-emiss-namelist-input'] = 'running'
@@ -278,7 +284,7 @@ class WrfRunner(threading.Thread):
         except Exception as e:
             logger.debug(e)
             self.status['write-no-emiss-namelist-input'] = 'fail'
-            self.running = False
+            self.finish = True
 
     def run_real_1(self):
         self.status['run-real-1'] = 'running'
@@ -287,7 +293,7 @@ class WrfRunner(threading.Thread):
             -v {self.project_path}:/home/{self.user}/projects \
             -v {self.data_path}:/home/{self.user}/projects/data \
             wrf-image /bin/sh -c \
-            'cd WRF/run/ && ./real.exe'",
+            'cd WRF/run/ && mpirun --oversubscribe -np 20 ./real.exe'",
             shell=True,
             stdout=subprocess.PIPE, 
             stderr=subprocess.PIPE)
@@ -300,7 +306,7 @@ class WrfRunner(threading.Thread):
             self.status['run-real-1'] = 'success'
         else:
             self.status['run-real-1'] = 'fail'
-            self.running = False
+            self.finish = True
 
     def write_prep_chem_src_input(self):
         self.status['write-prep-chem-src-input'] = 'running'
@@ -312,7 +318,7 @@ class WrfRunner(threading.Thread):
         except Exception as e:
             logger.debug(e)
             self.status['write-prep-chem-src-input'] = 'fail'
-            self.running = False
+            self.finish = True
                     
     def run_prep_chem_src(self):
         self.status['run-prep-chem-src'] = 'running'
@@ -336,7 +342,7 @@ class WrfRunner(threading.Thread):
             self.status['run-prep-chem-src'] = 'success'
         else:
             self.status['run-prep-chem-src'] = 'fail'
-            self.running = False
+            self.finish = True
                     
     def link_prep_chem_src(self):
         self.status['link-prep-chem-src'] = 'running'
@@ -361,7 +367,7 @@ class WrfRunner(threading.Thread):
             self.status['link-prep-chem-src'] = 'success'
         else:
             self.status['link-prep-chem-src'] = 'fail'
-            self.running = False
+            self.finish = True
 
     def write_emiss_namelist_input(self):
         self.status['write-emiss-namelist-input'] = 'running'
@@ -373,7 +379,7 @@ class WrfRunner(threading.Thread):
         except Exception as e:
             logger.debug(e)
             self.status['write-emiss-namelist-input'] = 'fail'
-            self.running = False
+            self.finish = True
 
     def convert_emission(self):
         self.status['convert-emission'] = 'running'
@@ -395,7 +401,7 @@ class WrfRunner(threading.Thread):
             self.status['convert-emission'] = 'success'
         else:
             self.status['convert-emission'] = 'fail'
-            self.running = False
+            self.finish = True
                     
     def link_chemi(self):
         self.status['link-chemi'] = 'running'
@@ -419,7 +425,7 @@ class WrfRunner(threading.Thread):
             self.status['link-chemi'] = 'success'
         else:
             self.status['link-chemi'] = 'fail'
-            self.running = False
+            self.finish = True
     
     def run_real_2(self):
         self.status['run-real-2'] = 'running'
@@ -428,7 +434,7 @@ class WrfRunner(threading.Thread):
             -v {self.project_path}:/home/{self.user}/projects \
             -v {self.data_path}:/home/{self.user}/projects/data \
             wrf-image /bin/sh -c \
-            'cd WRF/run/ && ./real.exe'",
+            'cd WRF/run/ && mpirun --oversubscribe -np 20 ./real.exe'",
             shell=True,
             stdout=subprocess.PIPE, 
             stderr=subprocess.PIPE)
@@ -441,7 +447,7 @@ class WrfRunner(threading.Thread):
             self.status['run-real-2'] = 'success'
         else:
             self.status['run-real-2'] = 'fail'
-            self.running = False
+            self.finish = True
 
     def run_wrf(self):
         self.status['run-wrf'] = 'running'
@@ -450,7 +456,7 @@ class WrfRunner(threading.Thread):
             -v {self.project_path}:/home/{self.user}/projects \
             -v {self.data_path}:/home/{self.user}/projects/data \
             wrf-image /bin/sh -c \
-            'cd WRF/run/ && mpirun --oversubscribe -np 7 ./wrf.exe'",
+            'cd WRF/run/ && mpirun --oversubscribe -np 20 ./wrf.exe'",
             shell=True,
             stdout=subprocess.PIPE, 
             stderr=subprocess.PIPE)
@@ -463,7 +469,7 @@ class WrfRunner(threading.Thread):
             self.status['run-wrf'] = 'success'
         else:
             self.status['run-wrf'] = 'fail'
-            self.running = False
+            self.finish = True
     
     def plot(self):
         self.status['plot'] = 'running'
@@ -480,10 +486,7 @@ class WrfRunner(threading.Thread):
                 cart_proj = get_cartopy(PM2_5)
                 lats, lons = latlon_coords(PM2_5)
 
-
                 fig = plt.figure(figsize=(19,12))
-
-
                 ax = plt.axes(projection=crs.PlateCarree())
                 # ax.set_global()
                 # ax.set_extent([90, 110 , 0, 20])
@@ -515,11 +518,12 @@ class WrfRunner(threading.Thread):
                 plt.savefig(
                     pathlib.Path(f"{self.pic_path}") / pathlib.Path(str(i)+'.jpg'))
                 # plt.show()
+                plt.close(fig)
             self.status['plot'] = 'success'
         except Exception as e:
             logger.debug(e)
             self.status['plot'] = 'fail'
-            self.running = False
+            self.finish = True
     
     def genarate_GIF_file(self):
         self.status['generate-GIF'] = 'running'
@@ -544,7 +548,7 @@ class WrfRunner(threading.Thread):
         except Exception as e:
             logger.debug(e)
             self.status['generate-GIF'] = 'fail'
-            self.running = False
+            self.finish = True
     
     def create_tumbon_table(self):
         self.status['create-tumbon-table'] = 'running'
@@ -656,67 +660,118 @@ class WrfRunner(threading.Thread):
         except Exception as e:
             logger.debug(e)
             self.status['create-tumbon-table'] = 'fail'
-            self.running = False
+            self.finish = True
+
+    async def delete_project(self):
+        try:
+            if os.path.exists(self.wps_path):
+                logger.debug("del WPS")
+                await shutil.rmtree(self.wps_path)
+            if os.path.exists(self.wrf_path):
+                logger.debug("del WRF")
+                await shutil.rmtree(self.wrf_path)
+            if os.path.exists(self.project_path / "activate"):
+                logger.debug("del activate")
+                await shutil.rmtree(self.project_path / "activate")
+            if os.path.exists(self.project_path / "data"):
+                logger.debug("del data")
+                await shutil.rmtree(self.project_path / "data")
+            if os.path.exists(self.project_path / "dep-libs"):
+                logger.debug("del dep-libs")
+                await shutil.rmtree(self.project_path / "dep-libs")
+            if os.path.exists(self.project_path / "PREP-CHEM-SRC-1.5"):
+                logger.debug("del PREP-CHEM-SRC-1.5")
+                await shutil.rmtree(self.project_path / "PREP-CHEM-SRC-1.5")
+            if os.path.exists(self.project_path / "tambon.xlsx"):
+                logger.debug("del tambon.xlsx")
+                await shutil.rmtree(self.project_path / "tambon.xlsx")
+            self.finish = True
+            logger.debug("success del")
+        except Exception as e:
+            logger.debug(e)
+            self.finish = True
+            logger.debug("fail del")
 
     def run(self):
         logger.debug("Start Wrf Runner")
         self.running = True
         logger.debug(f'copy_project')
         self.copy_project()
-        if self.status['copy-project'] == 'success':
-            logger.debug(f'write_namelist_wps')
-            self.write_namelist_wps()
-        if self.status['write-namelist-wps'] == 'success':
-            logger.debug(f'link_geogrid_table')
-            self.link_geogrid_table()
-        if self.status['link-geogrid-table'] == 'success':
-            logger.debug(f'run_geogrid')
-            self.run_geogrid()
-        if self.status['run-geogrid'] == 'success':
-            logger.debug(f'link_gfs_file')
-            self.link_gfs_file()
-        if self.status['link-gfs-file'] == 'success':
-            logger.debug(f'link_Vtable')
-            self.link_Vtable()
-        if self.status['link-Vtable'] == 'success':
-            logger.debug(f'run_ungrib')
-            self.run_ungrib()
-        if self.status['run-ungrib'] == 'success':
-            logger.debug(f'run_metgrid')
-            self.run_metgrid()
-        if self.status['run-metgrid'] == 'success':
-            logger.debug(f'link_met_data')
-            self.link_met_data()
-        if self.status['link-met-data'] == 'success':
-            logger.debug(f'write_no_emiss_namelist_input')
-            self.write_no_emiss_namelist_input()
-        if self.status['write-no-emiss-namelist-input'] == 'success':
-            logger.debug(f'run_real_1')
-            self.run_real_1()
-        if self.status['run-real-1'] == 'success':
-            logger.debug(f'write_prep_chem_src_input')
-            self.write_prep_chem_src_input()
-        if self.status['write-prep-chem-src-input'] == 'success':
-            logger.debug(f'run-prep-chem-src')
-            self.run_prep_chem_src()
-        if self.status['run-prep-chem-src'] == 'success':
-            logger.debug(f'link-prep-chem-src')
-            self.link_prep_chem_src()
-        if self.status['link-prep-chem-src'] == 'success':
-            logger.debug(f'write-emiss-namelist-input')
-            self.write_emiss_namelist_input()
-        if self.status['write-emiss-namelist-input'] == 'success':
-            logger.debug(f'convert-emission')
-            self.convert_emission()
-        if self.status['convert-emission'] == 'success':
-            logger.debug(f'link-chemi')
-            self.link_chemi()
-        if self.status['link-chemi'] == 'success':
-            logger.debug(f'run-real-2')
-            self.run_real_2()
-        if self.status['run-real-2'] == 'success':
-            logger.debug(f'run_wrf')
-            self.run_wrf()
+        if not os.path.exists(self.wrf_path / self.output_file):
+            if self.status['copy-project'] == 'success':
+                logger.debug(f'write_namelist_wps')
+                self.write_namelist_wps()
+            if self.status['write-namelist-wps'] == 'success':
+                logger.debug(f'link_geogrid_table')
+                self.link_geogrid_table()
+            if self.status['link-geogrid-table'] == 'success':
+                logger.debug(f'run_geogrid')
+                self.run_geogrid()
+            if self.status['run-geogrid'] == 'success':
+                logger.debug(f'link_gfs_file')
+                self.link_gfs_file()
+            if self.status['link-gfs-file'] == 'success':
+                logger.debug(f'link_Vtable')
+                self.link_Vtable()
+            if self.status['link-Vtable'] == 'success':
+                logger.debug(f'run_ungrib')
+                self.run_ungrib()
+            if self.status['run-ungrib'] == 'success':
+                logger.debug(f'run_metgrid')
+                self.run_metgrid()
+            if self.status['run-metgrid'] == 'success':
+                logger.debug(f'link_met_data')
+                self.link_met_data()
+            if self.status['link-met-data'] == 'success':
+                logger.debug(f'write_no_emiss_namelist_input')
+                self.write_no_emiss_namelist_input()
+            if self.status['write-no-emiss-namelist-input'] == 'success':
+                logger.debug(f'run_real_1')
+                self.run_real_1()
+            if self.status['run-real-1'] == 'success':
+                logger.debug(f'write_prep_chem_src_input')
+                self.write_prep_chem_src_input()
+            if self.status['write-prep-chem-src-input'] == 'success':
+                logger.debug(f'run-prep-chem-src')
+                self.run_prep_chem_src()
+            if self.status['run-prep-chem-src'] == 'success':
+                logger.debug(f'link-prep-chem-src')
+                self.link_prep_chem_src()
+            if self.status['link-prep-chem-src'] == 'success':
+                logger.debug(f'write-emiss-namelist-input')
+                self.write_emiss_namelist_input()
+            if self.status['write-emiss-namelist-input'] == 'success':
+                logger.debug(f'convert-emission')
+                self.convert_emission()
+            if self.status['convert-emission'] == 'success':
+                logger.debug(f'link-chemi')
+                self.link_chemi()
+            if self.status['link-chemi'] == 'success':
+                logger.debug(f'run-real-2')
+                self.run_real_2()
+            if self.status['run-real-2'] == 'success':
+                logger.debug(f'run_wrf')
+                self.run_wrf()
+        else:
+            self.status['write-namelist-wps'] = 'success'
+            self.status['link-geogrid-table'] = 'success'
+            self.status['run-geogrid'] = 'success'
+            self.status['link-gfs-file'] = 'success'
+            self.status['link-Vtable'] = 'success'
+            self.status['run-ungrib'] = 'success'
+            self.status['run-metgrid'] = 'success'
+            self.status['link-met-data'] = 'success'
+            self.status['write-no-emiss-namelist-input'] = 'success'
+            self.status['run-real-1'] = 'success'
+            self.status['write-prep-chem-src-input'] = 'success'
+            self.status['run-prep-chem-src'] = 'success'
+            self.status['link-prep-chem-src'] = 'success'
+            self.status['write-emiss-namelist-input'] = 'success'
+            self.status['convert-emission'] = 'success'
+            self.status['link-chemi'] = 'success'
+            self.status['run-real-2'] = 'success'
+            self.status['run-wrf'] = 'success'
+
         if self.status['run-wrf'] == 'success':
             logger.debug(f'plot')
             self.plot()
@@ -726,5 +781,59 @@ class WrfRunner(threading.Thread):
         if self.status['generate-GIF'] == 'success':
             logger.debug(f'create_tumbon_table')
             self.create_tumbon_table()
-        logger.debug("finish Wrf Runner And wait for get status")
+        if self.status['create-tumbon-table'] == 'success':
+            logger.debug(f'create_tumbon_table')
+            self.delete_project()
+        if self.finish:
+            logger.debug("finish Wrf Runner And wait for get status")
+            while True:
+                asyncio.sleep(1)
+
         
+        # logger.debug(f'copy_project')
+        # asyncio.run(self.copy_project())
+        # if self.status['copy-project'] == 'success':
+        #     logger.debug(f'write_namelist_wps')
+        #     asyncio.run(self.write_namelist_wps())
+        # if self.status['write-namelist-wps'] == 'success':
+        #     logger.debug(f'link_geogrid_table')
+        #     asyncio.run(self.link_geogrid_table())
+        # if self.status['link-geogrid-table'] == 'success':
+        #     logger.debug(f'run_geogrid')
+        #     asyncio.run(self.run_geogrid())
+        # if self.status['run-geogrid'] == 'success':
+        #     logger.debug(f'link_gfs_file')
+        #     asyncio.run(self.link_gfs_file())
+        # if self.status['link-gfs-file'] == 'success':
+        #     logger.debug(f'link_Vtable')
+        #     asyncio.run(self.link_Vtable())
+        # if self.status['link-Vtable'] == 'success':
+        #     logger.debug(f'run_ungrib')
+        #     asyncio.run(self.run_ungrib())
+        # if self.status['run-ungrib'] == 'success':
+        #     logger.debug(f'run_metgrid')
+        #     asyncio.run(self.run_metgrid())
+        # if self.status['run-metgrid'] == 'success':
+        #     logger.debug(f'link_met_data')
+        #     asyncio.run(self.link_met_data())
+        # if self.status['link-met-data'] == 'success':
+        #     logger.debug(f'write_no_emiss_namelist_input')
+        #     asyncio.run(self.write_no_emiss_namelist_input())
+        # if self.status['write-no-emiss-namelist-input'] == 'success':
+        #     logger.debug(f'run_real_1')
+        #     asyncio.run(self.run_real_1())
+        # if self.status['run-real-1'] == 'success':
+        #     logger.debug(f'write_prep_chem_src_input')
+        #     asyncio.run(self.write_prep_chem_src_input())
+        # if self.status['write-prep-chem-src-input'] == 'success':
+        #     logger.debug(f'run-prep-chem-src')
+        #     asyncio.run(self.run_prep_chem_src())
+        # if self.status['run-prep-chem-src'] == 'success':
+        #     logger.debug(f'link-prep-chem-src')
+        #     asyncio.run(self.link_prep_chem_src())
+        # if self.status['link-prep-chem-src'] == 'success':
+        #     logger.debug(f'write-emiss-namelist-input')
+        #     asyncio.run(self.write_emiss_namelist_input())
+        # if self.status['write-emiss-namelist-input'] == 'success':
+        #     logger.debug(f'convert-emission')
+        #     asyncio.run(self.convert_emission())
