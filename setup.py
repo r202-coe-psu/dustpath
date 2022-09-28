@@ -35,4 +35,5 @@ setup(
         "dustpath-compute = dustpath.cmd.compute:main",
         'dustpath-processor = dustpath.cmd.processor:main',
         ]},
+        
 )
