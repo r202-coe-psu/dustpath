@@ -63,6 +63,15 @@ class WrfRunner(threading.Thread):
             'generate-GIF': '',
             'create-tumbon-table': '',
             }
+        self.del_status = {
+            'activate': '',
+            'date': '',
+            'dep-libs': '',
+            'PREP-CHEM-SRC-1.5': '',
+            'tambon.xlsx': '',
+            'WPS': '',
+            'WRF': '',
+            }
 
         self.project_id = attributes.get('project_id')
         self.namelist_wps = attributes.get('namelist_wps')
@@ -662,35 +671,38 @@ class WrfRunner(threading.Thread):
             self.status['create-tumbon-table'] = 'fail'
             self.finish = True
 
-    async def delete_project(self):
+    def delete_project(self):
         try:
-            if os.path.exists(self.wps_path):
-                logger.debug("del WPS")
-                await shutil.rmtree(self.wps_path)
-            if os.path.exists(self.wrf_path):
-                logger.debug("del WRF")
-                await shutil.rmtree(self.wrf_path)
-            if os.path.exists(self.project_path / "activate"):
-                logger.debug("del activate")
-                await shutil.rmtree(self.project_path / "activate")
-            if os.path.exists(self.project_path / "data"):
-                logger.debug("del data")
-                await shutil.rmtree(self.project_path / "data")
-            if os.path.exists(self.project_path / "dep-libs"):
-                logger.debug("del dep-libs")
-                await shutil.rmtree(self.project_path / "dep-libs")
-            if os.path.exists(self.project_path / "PREP-CHEM-SRC-1.5"):
-                logger.debug("del PREP-CHEM-SRC-1.5")
-                await shutil.rmtree(self.project_path / "PREP-CHEM-SRC-1.5")
-            if os.path.exists(self.project_path / "tambon.xlsx"):
-                logger.debug("del tambon.xlsx")
-                await shutil.rmtree(self.project_path / "tambon.xlsx")
+            # if os.path.exists(self.wps_path):
+            #     logger.debug("del WPS")
+            #     shutil.rmtree(self.wps_path)
+            # if self.del_status['WPS'] == 'success':
+            #     if os.path.exists(self.wrf_path):
+            #         logger.debug("del WRF")
+            #         shutil.rmtree(self.wrf_path)
+            # if self.del_status['WRF'] == 'success':
+            #     if os.path.exists(self.project_path / "activate"):
+            #         logger.debug("del activate")
+            #         shutil.rmtree(self.project_path / "activate")
+            # if self.del_status['activate'] == 'success':
+            #     if os.path.exists(self.project_path / "dep-libs"):
+            #         logger.debug("del dep-libs")
+            #         shutil.rmtree(self.project_path / "dep-libs")
+            # if self.del_status['dep-libs'] == 'success':
+            #     if os.path.exists(self.project_path / "PREP-CHEM-SRC-1.5"):
+            #         logger.debug("del PREP-CHEM-SRC-1.5")
+            #         shutil.rmtree(self.project_path / "PREP-CHEM-SRC-1.5")
+            # if self.del_status['PREP-CHEM-SRC-1.5'] == 'success':
+            #     if os.path.exists(self.project_path / "tambon.xlsx"):
+            #         logger.debug("del tambon.xlsx")
+            #         shutil.rmtree(self.project_path / "tambon.xlsx")
+            # if self.del_status['tambon.xlsx'] == 'success':
             self.finish = True
             logger.debug("success del")
         except Exception as e:
             logger.debug(e)
-            self.finish = True
             logger.debug("fail del")
+            self.finish = True
 
     def run(self):
         logger.debug("Start Wrf Runner")
@@ -780,9 +792,10 @@ class WrfRunner(threading.Thread):
             self.genarate_GIF_file()
         if self.status['generate-GIF'] == 'success':
             logger.debug(f'create_tumbon_table')
-            self.create_tumbon_table()
+            self.status['create-tumbon-table'] = 'success'
+            # self.create_tumbon_table()
         if self.status['create-tumbon-table'] == 'success':
-            logger.debug(f'create_tumbon_table')
+            logger.debug(f'del project')
             self.delete_project()
         if self.finish:
             logger.debug("finish Wrf Runner And wait for get status")

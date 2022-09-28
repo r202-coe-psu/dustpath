@@ -15,8 +15,8 @@ DUSTPATH_PROCESSOR_LOG_PATH = "/tmp/dustpath"
 DUSTPATH_PROCESSOR_WRF_CACHE_PATH = "/tmp/dustpath"
 DUSTPATH_PROCESSOR_CMD = "dustpath-processor"
 
-DUSTPATH_PROCESSOR_CACHE_PATH = "/home/pongsathon/storage/wrf-build-script/container/projects"
-DUSTPATH_PROCESSOR_WRF_DATA_PATH = "/home/pongsathon/storage/data"
+DUSTPATH_PROCESSOR_CACHE_PATH = "/srv/storage/pongsathon/wrf-build-script/container/projects"
+DUSTPATH_PROCESSOR_WRF_DATA_PATH = "/srv/storage/pongsathon/data"
 DUSTPATH_OUTPUT_PATH = '/home/pongsathon/storage/code/dustpath/dustpath/web/static/projects' #if dont have must create this directory
 
 DUSTPATH_PROCESSOR_RECORDER_PATH = "/tmp/dustpath" #if dont have must create this directory

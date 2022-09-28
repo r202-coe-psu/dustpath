@@ -15,6 +15,7 @@
         <table id="mytable" class="ui celled table">
           <thead>
             <tr class="center">
+              <th>รหัสโปรเจ็ค</th>
               <th>ชื่อโปรเจ็ค</th>
               <th>วันที่เริ่ม</th>
               <th>วันที่สิ้นสุด</th>
@@ -28,7 +29,14 @@
             {% for project in projects %}
             <tr>
               <td>
-                <div class="center two wide column">
+                <div class="center one wide column">
+                  <a class="right aligned content" id="namelist" style="color: black;">
+                    {{ project.id }}
+                  </a>
+                </div>
+              </td>
+              <td>
+                <div class="center one wide column">
                   <a class="right aligned content" id="namelist" style="color: black;">
                     {{ project.name }}
                   </a>
