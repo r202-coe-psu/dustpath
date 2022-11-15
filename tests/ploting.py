@@ -7,7 +7,7 @@ from wrf import (to_np, getvar, smooth2d, get_cartopy, cartopy_xlim,
 import matplotlib.pyplot as plt
 import cartopy.crs as crs
 
-ncfile = Dataset(pathlib.Path("../../../wrf-build-script/container/projects/630708b2e560554e8fb05a9e/WRF/run/wrfout_d01_2019-09-21_00:00:00"))
+ncfile = Dataset(pathlib.Path("/home/pongsathon/storage/wrf-build-script/container/WRF/run/wrfout_d01_2019-09-24_00:00:00"))
 cm = mpl.colors.LinearSegmentedColormap.from_list('my_colormap', ['#00c7ff' , '#6ee44b', '#f1ff00', '#ffa500', '#ff0024'], 1024)
 hours = np.arange(0, 24)
 
@@ -46,11 +46,30 @@ for i in hours:
     cbar = mpl.colorbar.ColorbarBase(axs, cmap=cm,
                     norm=mpl.colors.Normalize(vmin=-0, vmax=100))
 
-    path = pathlib.Path("../../../wrf-build-script/container/projects/630708b2e560554e8fb05a9e/WRF/run/pic")
+    path = pathlib.Path("/home/pongsathon/storage/wrf-build-script/container/WRF/run/pic")
     if not path.exists() and not path.is_dir():
         path.mkdir(parents=True)
 
     plt.savefig(
-        pathlib.Path("../../../wrf-build-script/container/projects/630708b2e560554e8fb05a9e/WRF/run/pic") / pathlib.Path(str(i)+'.jpg'))
+        pathlib.Path("/home/pongsathon/storage/wrf-build-script/container/WRF/run/pic") / pathlib.Path(str(i)+'.jpg'))
 
     plt.close(fig)
+
+    from PIL import Image, ImageDraw
+
+    image_frames=[]
+
+    hours = np.arange(0, 24*1)
+
+    for i in hours:
+        new_frame = Image.open(
+            pathlib.Path("/home/pongsathon/storage/wrf-build-script/container/WRF/run/pic") / pathlib.Path(str(i)+'.jpg'))
+        image_frames.append(new_frame)
+
+    path = pathlib.Path("/home/pongsathon/storage/wrf-build-script/container/WRF/run/pic")
+    if not path.exists() and not path.is_dir():
+        path.mkdir(parents=True)
+
+    image_frames[0].save(
+        pathlib.Path("/home/pongsathon/storage/wrf-build-script/container/WRF/run/pic/output.gif"), 
+        format = 'GIF', append_images = image_frames[1: ], save_all = True, duration = 300, loop = 0) 

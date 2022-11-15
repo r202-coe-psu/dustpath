@@ -12,22 +12,19 @@
 {%- endmacro %}
 {% block content %}
 <div class="ui container">
-  <div class="ui one column stackable grid">
-    <div class="column harvers" style="padding-top: 0;">
-      <div style="margin-top: 3rem;">
-        <h1 class="ui centeyellow header" style="color:white">
-          สร้างโปรเจ็ค
+  <div class="ui teal segment" style="margin-top:7%;margin-bottom:40%;padding-bottom: 5%;">
+    <div class="column harvers">
+      <div>
+        <h1 class="ui centeyellow header" style="color:black">
+          Create Project
         </h1>
       </div>
-      <h2 class="ui horizontal divider header" style="color:white">
-        ตั้งค่าการจำลองสภาพการเคลื่อนที่
-      </h2>
       <div class="ui vertical segment">
         <form 
           class="ui form error" 
           enctype="multipart/form-data" 
           method="POST"
-          style="color:white">
+          style="color:black">
           {{ form.csrf_token }}
           <div class="field">
             <h3>
@@ -65,7 +62,7 @@
               {% endfor %}
             </div>
           </div>  
-          <button class="ui right floated button green" type="submit">ยืนยัน</button>
+          <button class="ui right floated button green" type="submit">Submit</button>
         </form>
       </div>
     </div>

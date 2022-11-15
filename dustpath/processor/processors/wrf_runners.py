@@ -20,7 +20,8 @@ import cartopy.crs as crs
 from cartopy.feature import NaturalEarthFeature
 from matplotlib.colors import LinearSegmentedColormap
 from wrf import (to_np, getvar, smooth2d, get_cartopy, cartopy_xlim,
-                cartopy_ylim, latlon_coords)
+                cartopy_ylim, latlon_coords, ll_to_xy)
+                
 from PIL import Image, ImageDraw
 import openpyxl
 import xarray as xr 
@@ -567,38 +568,41 @@ class WrfRunner(threading.Thread):
             sheet = wb_obj.active
 
             # data = 'wrfout_d03_2019-09-10_newfirererun.nc'
-            data = pathlib.Path(self.wrf_path / self.output_file)
-            ds = xr.open_mfdataset(data, chunks = {'time': 10})
-            ds
-            PM2_5START = ds.PM2_5_DRY[0][0,:]
+            ncfile = Dataset(pathlib.Path(self.wrf_path / self.output_file))
+            pm2_5 = getvar(ncfile, "PM2_5_DRY", timeidx=48)
             
-            scaler = preprocessing.MinMaxScaler(feature_range=(0, 100))
-            PM2_5 = scaler.fit_transform(ds.PM2_5_DRY[0][0])
+            x, y = ll_to_xy(ncfile, lat, lon).values
+            # ds = xr.open_mfdataset(data, chunks = {'time': 10})
+            # ds
+            # PM2_5START = ds.PM2_5_DRY[0][0,:]
+            
+            # scaler = preprocessing.MinMaxScaler(feature_range=(0, 100))
+            # PM2_5 = scaler.fit_transform(ds.PM2_5_DRY[0][0])
 
-            start = 0
-            stop = 0
-            minlat = np.min(PM2_5START.XLAT.values)
-            maxlat = np.max(PM2_5START.XLAT.values)
-            minlon = np.min(PM2_5START.XLONG.values)
-            maxlon = np.max(PM2_5START.XLONG.values)
-            if(minlat > 11 and maxlat < 17.17 and maxlon < 100.83):
-                start = 1421
-                stop = 3736
-            elif(minlat > 14.34 and minlon > 101.79):
-                start = 4565
-                stop = 7233
-            elif(maxlat < 14.14 and minlon > 100.84):
-                start = 7234
-                stop = 7769
-            elif(maxlat < 11.00):
-                start = 2
-                stop = 1420
-            elif(minlat > 17.81):
-                start = 3737
-                stop = 4564
-            else:
-                start = 2
-                stop = 7769
+            # start = 0
+            # stop = 0
+            # minlat = np.min(PM2_5START.XLAT.values)
+            # maxlat = np.max(PM2_5START.XLAT.values)
+            # minlon = np.min(PM2_5START.XLONG.values)
+            # maxlon = np.max(PM2_5START.XLONG.values)
+            # if(minlat > 11 and maxlat < 17.17 and maxlon < 100.83):
+            #     start = 1421
+            #     stop = 3736
+            # elif(minlat > 14.34 and minlon > 101.79):
+            #     start = 4565
+            #     stop = 7233
+            # elif(maxlat < 14.14 and minlon > 100.84):
+            #     start = 7234
+            #     stop = 7769
+            # elif(maxlat < 11.00):
+            #     start = 2
+            #     stop = 1420
+            # elif(minlat > 17.81):
+            #     start = 3737
+            #     stop = 4564
+            # else:
+            #     start = 2
+            #     stop = 7769
 
             path = pathlib.Path(self.output_path)
             if not path.exists() and not path.is_dir():

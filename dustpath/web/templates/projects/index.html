@@ -6,7 +6,7 @@
         Projects
         <a class="ui right floated primary button primary"
             href="{{url_for('projects.create')}}">
-          สร้างโปรเจ็ค
+          Create
         </a>
       </h1>
       <div class="ui divider">
@@ -15,12 +15,12 @@
         <table id="mytable" class="ui celled table">
           <thead>
             <tr class="center">
-              <th>รหัสโปรเจ็ค</th>
-              <th>ชื่อโปรเจ็ค</th>
-              <th>วันที่เริ่ม</th>
-              <th>วันที่สิ้นสุด</th>
-              <th>ชื่อโดเมน</th>
-              <th>ผลลัพธ์</th>
+              <th>Project ID</th>
+              <th>Project Name</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Domain Name</th>
+              <th>Result</th>
               <th></th>
               <th></th>
             </tr>
@@ -83,9 +83,9 @@
               </td>
               <td>
                 <div class="center two wide column">
-                  <a class="ui grey icon big button"
+                  <a class="ui green icon big button"
                     href="{{url_for('projects.result', project_id=project.id )}}">
-                    show
+                    Show
                   </a>
                 </div>
               </td>

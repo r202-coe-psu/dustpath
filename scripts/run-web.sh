@@ -1,3 +1,3 @@
 #!/bin/sh
 
-FLASK_ENV=development DUSTPATH_SETTINGS=$(pwd)/dustpath.cfg DEBUG=1 dustpath-web -d
+FLASK_DEBUT=true DUSTPATH_SETTINGS=$(pwd)/dustpath.cfg AUTHLIB_INSECURE_TRANSPORT=true dustpath-web -d

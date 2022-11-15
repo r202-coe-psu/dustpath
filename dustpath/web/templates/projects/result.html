@@ -8,7 +8,7 @@
           Status
           <a class="ui right floated teal button primary run-wrf" id="project-{{project.id}}" href="{{url_for('projects.run_wrf', project_id=project.id )}}">
             <i class="sync icon"></i>
-            รันอีกครั้ง
+            Run
           </a>
         </h1>
         <div class="ui divider">
@@ -34,7 +34,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.copy_project == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.copy_project == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.copy_project == 'running' %}
@@ -47,7 +47,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.write_namelist_wps == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.write_namelist_wps == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.write_namelist_wps == 'running' %}
@@ -60,7 +60,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.link_geogrid_table == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.link_geogrid_table == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.link_geogrid_table == 'running' %}
@@ -73,7 +73,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.run_geogrid == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.run_geogrid == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.run_geogrid == 'running' %}
@@ -86,7 +86,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.link_gfs_file == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.link_gfs_file == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.link_gfs_file == 'running' %}
@@ -99,7 +99,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.link_Vtable == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.link_Vtable == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.link_Vtable == 'running' %}
@@ -112,7 +112,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.run_ungrib == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.run_ungrib == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.run_ungrib == 'running' %}
@@ -125,7 +125,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.run_metgrid == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.run_metgrid == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.run_metgrid == 'running' %}
@@ -138,7 +138,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.link_met_data == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.link_met_data == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.link_met_data == 'running' %}
@@ -167,7 +167,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.write_no_emiss_namelist_input == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.write_no_emiss_namelist_input == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.write_no_emiss_namelist_input == 'running' %}
@@ -180,7 +180,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.run_real_1 == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.run_real_1 == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.run_real_1 == 'running' %}
@@ -193,7 +193,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.write_prep_chem_src_input == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.write_prep_chem_src_input == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.write_prep_chem_src_input == 'running' %}
@@ -206,7 +206,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.run_prep_chem_src == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.run_prep_chem_src == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.run_prep_chem_src == 'running' %}
@@ -219,7 +219,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.link_prep_chem_src == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.link_prep_chem_src == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.link_prep_chem_src == 'running' %}
@@ -232,7 +232,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.write_emiss_namelist_input == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.write_emiss_namelist_input == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.write_emiss_namelist_input == 'running' %}
@@ -245,7 +245,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.convert_emission == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.convert_emission == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.convert_emission == 'running' %}
@@ -273,7 +273,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.link_chemi == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.link_chemi == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.link_chemi == 'running' %}
@@ -286,7 +286,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.run_real_2 == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.run_real_2 == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.run_real_2 == 'running' %}
@@ -299,7 +299,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.run_wrf == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.run_wrf == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.run_wrf == 'running' %}
@@ -312,7 +312,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.plot == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.plot == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.plot == 'running' %}
@@ -325,7 +325,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.generate_GIF == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.generate_GIF == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.generate_GIF == 'running' %}
@@ -338,7 +338,7 @@
                   <div class="center aligned two wide column">
                     <a class="right aligned content">
                       {% if project.status.create_tumbon_table == 'success' %}
-                      <i class="green check outline icon"></i>
+                      <i class="green check icon"></i>
                       {% elif project.status.create_tumbon_table == 'fail' %}
                       <i class="red times circle outline icon"></i>
                       {% elif project.status.create_tumbon_table == 'running' %}
@@ -359,15 +359,16 @@
           <img width="100%" height="100%" class="animated-gif" src="{{ url_for('static', filename='projects/' + project_id + '/output.gif')}}" onerror="this.style.display='none'">
         </div>
         <h1>
-          ค่าเฉลี่ย PM2.5 ในแต่ละตำบล
+          Subdistrict PM2.5 Table
         </h1>
         <div class="ui divider">
         </div>
         <table class="ui celled table">
           <thead>
             <tr class="center aligned">
-              <th>อำเภอ</th>
-              <th>ตำบล</th>
+              <th>Subdistrict Name</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
               <th>PM2.5</th>
             </tr>
           </thead>
@@ -388,6 +389,11 @@
                   <td>
                     <div class="center aligned two wide column">
                       {{ value[2] }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="center aligned two wide column">
+                      {{ value[3] }}
                     </div>
                   </td>
                 </tr>

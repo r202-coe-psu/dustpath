@@ -1,4 +1,4 @@
-version: '1'
+version: '3'
 services:
     mongodb:
         image: mongo
@@ -14,29 +14,75 @@ services:
                 max-size: "10m"
                 max-file: "3"
 
-    controller:
+    web:
         build: .
         image: dustpath-image
-        container_name: dustpath-controller
+        container_name: dustpath-web
         volumes:
             - ../deployment:/deployment
+            # - ../maps_resources/khreng/geojsons:/app/khreng/web/static/brython/maps/resources/geojsons
             - /etc/localtime:/etc/localtime:ro
+        ports:
+            - 8080:9000
         links:
-            - mongodb
-            - stan-server
-        depends_on:
-            - stan-server
             - mongodb
         networks:
             - default
         restart: always
         environment:
-            DUSTPATH_SETTINGS: /app/dustpath-production.cfg
-        command: dustpath-controller
+            DUSTPATH_SETTINGS: /app/dustpath.cfg
+        command:
+            # ls scripts/dustpath-uwsgi-web.ini
+            uwsgi --lazy-apps --ini /app/scripts/dustpath-uwsgi-web.ini
         logging:
             options:
                 max-size: "10m"
                 max-file: "3"
+
+    # controller:
+    #     build: .
+    #     image: dustpath-image
+    #     container_name: dustpath-controller
+    #     volumes:
+    #         - ../deployment:/deployment
+    #         - /etc/localtime:/etc/localtime:ro
+    #     links:
+    #         - mongodb
+    #     depends_on:
+    #         - mongodb
+    #     networks:
+    #         - default
+    #     restart: always
+    #     environment:
+    #         DUSTPATH_SETTINGS: /app/dustpath.cfg
+    #     command: nokkhum-controller
+    #     logging:
+    #         options:
+    #             max-size: "10m"
+    #             max-file: "3"
+    
+    # compute:
+    #     build: .
+    #     image: dustpath-image
+    #     container_name: dustpath-compute
+    #     volumes:
+    #         - ../deployment:/deployment
+    #         - ../deployment/dustpath/cache:/deployment/dustpath/cache
+    #         - /etc/localtime:/etc/localtime:ro
+    #     links:
+    #         - controller
+    #     depends_on:
+    #         - controller
+    #     networks:
+    #         - default
+    #     restart: always
+    #     environment:
+    #         DUSTPATH_SETTINGS: /app/dustpath.cfg
+    #     command: dustpath-compute
+    #     logging:
+    #         options:
+    #             max-size: "10m"
+    #             max-file: "3"
 
 networks:
     default:
