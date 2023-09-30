@@ -6,6 +6,7 @@ from flask import Blueprint, abort, jsonify
 
 # from . import sensors
 from . import auth
+
 # from . import devices
 # from . import data_export
 
@@ -13,21 +14,22 @@ from . import auth
 from flask_cors import CORS
 from dustpath import models
 from dustpath.web.caches import cache
-from flask.json import JSONEncoder
+
+# from flask.json import JSONEncoder
 import datetime
 
 
-class CustomJSONEncoder(JSONEncoder):
-    def default(self, obj):
-        try:
-            if isinstance(obj, datetime.datetime):
-                return obj.isoformat()
-            iterable = iter(obj)
-        except TypeError:
-            pass
-        else:
-            return list(iterable)
-        return JSONEncoder.default(self, obj)
+# class CustomJSONEncoder(JSONEncoder):
+#     def default(self, obj):
+#         try:
+#             if isinstance(obj, datetime.datetime):
+#                 return obj.isoformat()
+#             iterable = iter(obj)
+#         except TypeError:
+#             pass
+#         else:
+#             return list(iterable)
+#         return JSONEncoder.default(self, obj)
 
 
 @cache.memoize(3600)
@@ -48,7 +50,7 @@ def init_api(app):
         doc="/doc",
     )
 
-    app.json_encoder = CustomJSONEncoder
+    # app.json_encoder = CustomJSONEncoder
 
     Marshmallow(app)
     jwt = JWTManager(app)
