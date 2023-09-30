@@ -57,7 +57,8 @@ services:
             # - ../maps_resources/khreng/geojsons:/app/khreng/web/static/brython/maps/resources/geojsons
             - /etc/localtime:/etc/localtime:ro
         ports:
-            - '8080:9000'
+            # - '8080:9000'
+            - 8080:8080
         depends_on:
             - nats-server
             - mongodb
@@ -66,8 +67,11 @@ services:
         restart: always
         environment:
             DUSTPATH_SETTINGS: /app/dustpath-development.cfg
+            FLASK_DEBUG: true
+            AUTHLIB_INSECURE_TRANSPORT: true
         command:
-            /venv/bin/uwsgi --lazy-apps --ini /app/scripts/dustpath-uwsgi-web-dev.ini
+            # /venv/bin/uwsgi --lazy-apps --ini /app/scripts/dustpath-uwsgi-web-dev.ini
+            /venv/bin/dustpath-web --port 8080 -d --host 0.0.0.0
         logging:
             options:
                 max-size: "10m"
