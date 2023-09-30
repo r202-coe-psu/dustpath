@@ -9,7 +9,6 @@ app/dist
 static/download
 venv
 *.xlsx
-*.ini
 dustpath/web/static/projects/**/
 *.brython.js
 docker-build.log
