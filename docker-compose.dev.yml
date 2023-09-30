@@ -67,12 +67,32 @@ services:
         environment:
             DUSTPATH_SETTINGS: /app/dustpath-development.cfg
         command:
-            /venv/bin/uwsgi --lazy-apps --ini /app/scripts/dustpath-uwsgi-web.ini
+            /venv/bin/uwsgi --lazy-apps --ini /app/scripts/dustpath-uwsgi-web-dev.ini
         logging:
             options:
                 max-size: "10m"
                 max-file: "3"
 
+    compute:
+        build: .
+        image: dustpath-image
+        volumes:
+            - .:/app
+            - ../deployment:/deployment
+            - ../deployment/dustpath/cache:/deployment/dustpath/cache
+            - /etc/localtime:/etc/localtime:ro
+        depends_on:
+            - controller
+        networks:
+            - default
+        restart: always
+        environment:
+            DUSTPATH_SETTINGS: /app/dustpath-development.cfg
+        command: /venv/bin/dustpath-compute
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
 
 networks:
     default:
