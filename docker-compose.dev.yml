@@ -1,37 +1,78 @@
-version: '1'
+version: '3'
 services:
     mongodb:
         image: mongo
-        container_name: dustpath-mongodb
         volumes:
             - ../deployment/dustpath/mongodb/data/db:/data/db
             - /etc/localtime:/etc/localtime:ro
-        # restart: always
+        restart: always
         ports:
-            - 27017:27017
+            - '27017:27017'
         networks:
             - default
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
 
     controller:
         build: .
-        image: wrf-image
-        container_name: dustpath-controller
+        image: dustpath-image
         volumes:
             - .:/app
             - ../deployment:/deployment
             - /etc/localtime:/etc/localtime:ro
-        links:
-            - mongodb
-            - stan-server
         depends_on:
-            - stan-server
+            - nats-server
             - mongodb
         networks:
             - default
         restart: always
         environment:
             DUSTPATH_SETTINGS: /app/dustpath-development.cfg
-        command: dustpath-controller
+        command: /venv/bin/dustpath-controller
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+
+    nats-server:
+        image: nats
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+        restart: always
+        networks:
+            - default
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+
+    web:
+        build: .
+        image: dustpath-image
+        volumes:
+            - .:/app
+            - ../deployment:/deployment
+            # - ../maps_resources/khreng/geojsons:/app/khreng/web/static/brython/maps/resources/geojsons
+            - /etc/localtime:/etc/localtime:ro
+        ports:
+            - '8080:9000'
+        depends_on:
+            - nats-server
+            - mongodb
+        networks:
+            - default
+        restart: always
+        environment:
+            DUSTPATH_SETTINGS: /app/dustpath-development.cfg
+        command:
+            /venv/bin/uwsgi --lazy-apps --ini /app/scripts/dustpath-uwsgi-web.ini
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+
 
 networks:
     default:
