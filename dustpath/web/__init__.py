@@ -12,6 +12,7 @@ from . import nats
 
 app = Flask(__name__)
 
+
 def create_app():
     app.config.from_object("dustpath.default_settings")
     app.config.from_envvar("DUSTPATH_SETTINGS", silent=True)
@@ -24,8 +25,8 @@ def create_app():
 
     return app
 
-def get_program_options(default_host="127.0.0.1", default_port="8080"):
 
+def get_program_options(default_host="127.0.0.1", default_port="8080"):
     """
     Takes a flask.Flask instance and runs it. Parses
     command-line flags to configure the app.
@@ -67,7 +68,7 @@ def get_program_options(default_host="127.0.0.1", default_port="8080"):
     # If the user selects the profiling option, then we need
     # to do a little extra setup
     if options.profile:
-        from werkzeug.contrib.profiler import ProfilerMiddleware
+        from werkzeug.middleware.profiler import ProfilerMiddleware
 
         app.config["PROFILE"] = True
         app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
