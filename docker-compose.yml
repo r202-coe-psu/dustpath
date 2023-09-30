@@ -28,7 +28,7 @@ services:
             - default
         restart: always
         environment:
-            DUSTPATH_SETTINGS: /app/dustpath-development.cfg
+            DUSTPATH_SETTINGS: /app/dustpath-production.cfg
         command: /venv/bin/dustpath-controller
         logging:
             options:
@@ -64,9 +64,7 @@ services:
             - default
         restart: always
         environment:
-            DUSTPATH_SETTINGS: /app/dustpath-development.cfg
-            FLASK_DEBUG: true
-            AUTHLIB_INSECURE_TRANSPORT: true
+            DUSTPATH_SETTINGS: /app/dustpath-production.cfg
         command:
             /venv/bin/uwsgi --lazy-apps --ini /app/scripts/dustpath-uwsgi-web-dev.ini
         logging:
@@ -87,7 +85,7 @@ services:
             - default
         restart: always
         environment:
-            DUSTPATH_SETTINGS: /app/dustpath-development.cfg
+            DUSTPATH_SETTINGS: /app/dustpath-production.cfg
         command: /venv/bin/dustpath-compute
         logging:
             options:
