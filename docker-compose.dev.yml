@@ -41,6 +41,8 @@ services:
         volumes:
             - /etc/localtime:/etc/localtime:ro
         restart: always
+        ports:
+            - 4222:4222
         networks:
             - default
         logging:
